@@ -8,7 +8,6 @@ const AdminHomePage = () => {
   
   const navigate = useNavigate();
   const [userName, setUserName] = useState("")
-  const [selectedPage, setSelectedPage] = useState(null)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -24,12 +23,21 @@ const AdminHomePage = () => {
     checkAuth()
   }, [navigate])
 
+  const handleLogout = async () => {
+    try {
+      await axios.post("/auth/logout", {}, {withCredentials: true})
+      navigate("/login")
+    } catch (error) {
+      console.error("Logout failed: ", error);
+    }
+  }
+
   return (
-    <div className='w-full h-screen flex font-[Superstore]'>
+    <div className='w-full min-h-screen flex font-[Superstore]'>
 
       {/* Sidebar */}
 
-      <div className='w-[15%] bg-[#D9D143] p-5 h-screen flex justify-evenly text-center'>
+      <div className='w-[15%] bg-[#D9D143] p-5 h-screen flex justify-evenly text-center flex-col'>
         <ul>
 
           <li className='border-b-4 border-white py-5 px-5'>
@@ -45,6 +53,9 @@ const AdminHomePage = () => {
           </li>
 
         </ul>
+        <button
+          onClick={handleLogout} 
+          className='p-4 bg-red-500 text-white rounded-xl transition-colors hover:bg-red-700'>Logout</button>
       </div>
 
       {/* Navbar and main content */}
