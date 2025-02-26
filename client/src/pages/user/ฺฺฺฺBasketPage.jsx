@@ -1,0 +1,123 @@
+//import { useEffect } from 'react'
+//import { useNavigate } from 'react-router-dom'
+//import axios from '../../util/axios.js'
+
+import Navdar from "./components/Navdar";
+import Head from "./components/Head";
+import { ShoppingCart } from "lucide-react";
+import Book from "/src/assets/Book1.jpg";
+
+const BasketPage = () => {
+  /*const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get('/auth/protected', {withCredentials: true})
+        console.log(res);
+      } catch (error) {
+        console.error("User not authenticated", error);
+        navigate("/login"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+      }
+    }
+
+    checkAuth()
+  },[navigate])*/
+  return (
+    <div className="bg-[#F5F5F5] min-h-screen">
+      <Head />
+      <Navdar />
+
+      {/* icon กับ ข้อความ */}
+      <div className="flex flex-col items-start px-6 md:px-10 mt-2 ml-17">
+        <div className="flex items-center mb-4">
+          <div className="text-[#2d3695] py-5">
+            <ShoppingCart className="w-10 h-10" />
+          </div>
+          <h1 className="font-bold text-2xl ml-3">ตะกร้าสินค้า</h1>
+        </div>
+      </div>
+
+      {/* กรอบสีขาว */}
+      <div className="bg-white p-6 rounded-l-lg shadow mx-6 md:mx-10">
+        <div className="grid grid-cols-10 gap-6">
+          <div className="col-span-7">
+
+            {/* ด้านซ้ายข้อมูลสินค้า */}
+            <div className="space-y-4">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className="flex items-start justify-between p-4 rounded-lg shadow-sm">
+                  <input type="checkbox" className="w-5 h-5 mr-3 mt-auto mb-auto" />  {/* checkbox */}
+                  
+                {/* รูปหนังสือ*/}
+                  <img className="w-25 h-30 mr-4" src={Book} alt="หนังสือ" />
+
+                  
+                  <div className="flex-1 ml-4 mt-5"> 
+                {/* ชื่อหนังสือ */}
+                    <p className="font-bold">ชื่อหนังสือ</p> 
+                    <div className="inline-flex items-center mt-2">
+                      <span className="font-bold ">รายละเอียด :</span>
+                {/* รายระเอียด */}
+                      <p className="text-sm text-gray-700 truncate ml-2">ใส่ข้อความมมมมมมมมมมมมมมมมมมมมมมมมมมมม</p> 
+                    </div>
+                    <div className="block mt-2">
+                      <div className="inline-flex items-center">
+                        <span className="font-bold ">ราคา :</span>
+                {/* ราคา */}        
+                        <p className="text-sm text-gray-700 truncate ml-2"> 200 </p> 
+                      </div>
+                    </div>
+                  </div>
+
+                  <button className="bg-[#D93619] hover:bg-red-500 text-white w-25 h-10 rounded-lg">ลบ</button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* สรุปรายการสั่งซื้อ */}
+          <div className="col-span-3 bg-gray-100 p-4 border flex flex-col h-full">
+            <div>
+              <h2 className="text-lg font-bold mb-4 text-center">สรุปรายการสั่งซื้อ</h2>
+              <p className="w-full h-[1px] bg-black" />
+
+              <div className="text-gray-700 space-y-2 mt-5">
+                <div className="grid grid-cols-3 gap-4">
+                  <p className="text-right pr-10">จำนวน</p>
+                  <p className="text-right font-bold rtl">200</p>  {/* ข้อมูลจำนวนหนังสือ */}
+                  <p className="text-left pl-12">ชิ้น</p>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <p className="text-right pr-7">ราคารวม</p>
+                  <p className="text-right font-bold rtl">1,500</p> {/* ข้อมูลราคา */}
+                  <p className="text-left pl-12">บาท</p>
+                </div>
+              </div>
+            </div>
+
+            {/* รวมราคาสุทธิ ติดกับกรอบสี่เหลี่ยม*/}
+            <div className="text-gray-700 space-y-2 mt-auto">
+              <p className="w-full h-[1px] border-t border-dashed border-black" /> {/* เส้นประ */}
+              <div className="grid grid-cols-3 gap-4">
+                <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
+                <p className="text-right font-bold rtl ">1,500</p>
+                <p className="text-left pl-12">บาท</p>
+              </div>
+            </div>
+
+            {/* ปุ่มชำระเงิน */}
+            <div className="mt-5">
+              <button className="w-full bg-[#3D6299] text-white py-2 font-bold hover:bg-[#1e256f]">
+                ดำเนินการชำระเงิน
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BasketPage;
