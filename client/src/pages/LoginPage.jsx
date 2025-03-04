@@ -91,7 +91,7 @@ const LoginPage = () => {
         <h3 className="text-lg font-bold">ซื้อขายหนังสือ</h3>
 
         <form 
-        onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
         className="mt-5 flex flex-col items-center gap-4 w-full">
 
               <div className="flex justify-between w-full items-center" >
@@ -121,9 +121,7 @@ const LoginPage = () => {
 
               </div>
 
-              <span className="text-lg font-semibold">คุณไม่มีบัญชี {" "} <Link to="/signup" className="transition-all hover:text-blue-600 top-0 left-0 right-0 hover:border-b-4 hover:border-blue-600">Sign Up</Link> </span>
-
-              {errorMessage && <p className="text-red-500 text-lg mt-3 font-semibold">{errorMessage}</p>}
+              {errorMessage && <p className="text-red-500 text-lg font-semibold">{errorMessage}</p>}
 
               <button
                 type="submit"

@@ -1,160 +1,114 @@
-import React, { useState } from 'react'
-import axios from '../../util/axios.js'
+import { useEffect, useState } from 'react';
+import axios from '../../util/axios.js';
 import toast from 'react-hot-toast';
+
 const AdminCheckBooks = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [detailBook, setDetailBook] = useState({ books: [] });
+  const [checkStatusBooks, setcheckStatusBooks] = useState('');
 
-  const [values, setValues] = useState({
-    studentId: "",
-    email: "",
-    fullName: "",
-    password: ""
-  })
+  useEffect(() => {
+    const showBooksUnavailable = async () => {
+      setIsLoading(true);
 
+      try {
+        const res = await axios.get('/show-books-unavailable', { withCredentials: true });
+        console.log("API Response:", res.data);
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [emailError, setEmailError] = useState("")
+        if (res.data.books && Array.isArray(res.data.books)) {
+          setDetailBook(res.data);
+          setcheckStatusBooks(res.data.books.map(book => book.checkStatusBooks).join(", "));
+        }
 
-  const handleChanges = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value
-    })
-  }
+      } catch (error) {
+        console.error('Error fetching books unavailable: ', error);
+        setErrorMessage('Error fetching books unavailable');
+        toast.error('Error fetching books unavailable');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true)
-    setErrorMessage("")
-    setEmailError("")
-    
-    if(!values.studentId || !values.email || !values.fullName || !values.password) {
-      setErrorMessage("กรุณากรอกข้อมูลให้ครบ");
-      setIsLoading(false);
-      return;
-    }
+    showBooksUnavailable();
+  }, []);
 
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-
-    if(!regex.test(values.email)) {
-      toast.error("กรูณากรอกอีเมลให้ถูกต้อง")
-      setIsLoading(false);
-      return;
-    }
+  const handleConfirmBook = async (id) => {
+    setIsLoading(true);
 
     try {
+      const res = await axios.put(`/update-status-book/${id}`, { checkStatusBooks: 'available' }, { withCredentials: true });
 
-      const res = await axios.post("/auth/signup", values)
+      if (res.status === 200) {
+        toast.success('ยืนยันการลงขายหนังสือ');
 
-      if(res.status === 201 || res.status === 200) {
-
-        toast.success("ลงทะเบียนสำเร็จ")
-        setValues({
-          studentId: "",
-          email: "",
-          fullName: "",
-          password: ""
-        })
-
-      } else {
-
-        setErrorMessage(res.data.message || "เกิดข้อผิดพลาดในการสมัครสมาชิก")
-
+        // อัปเดตสถานะของหนังสือใน state โดยใช้ map()
+        setDetailBook(prevState => ({
+          ...prevState,
+          books: prevState.books.map(book =>
+            book.id === id ? { ...book, checkStatusBooks: 'available' } : book
+          )
+        }));
       }
+
     } catch (error) {
-
-      if(error.response && error.response.status === 400) {
-            
-        toast.error(error.response.data.message)
-      
-      } else {
-        
-        console.error("Sign Up Page error: ", error);
-        setErrorMessage(error.response?.data?.message || "เกิดข้อผิดพลาด กรุณาลองใหม่")
-      }
-      
+      console.error('Error confirming book: ', error);
+      setErrorMessage('Error confirming book');
     } finally {
-
-      setIsLoading(false)
-
+      setIsLoading(false);
     }
-
-  }
+  };
 
   return (
-    <div className='w-full min-h-screen '>
-        
-      <h3 className='font-semibold text-3xl mb-6 mt-6'>ตรวจสอบหนังสือ</h3>
-      
+    <div className="w-full min-h-screen">
+      <h3 className="font-semibold text-3xl mb-6 mt-6">ตรวจสอบหนังสือ</h3>
+
       {/* แสดงรายการยืนยันหนังสือ */}
-      <div className='relative mx-auto grid grid-cols-5 gap-6 w-full max-h-screen justify-center'>
-          
-          <div className='flex flex-col w-56'>
-            <img className='border-4 p-12 h-40 rounded-2xl'/>
-            <p className='mt-5 mb-5 font-semibold'>ชื่อหนังสือ</p>
-            <p className='mt-5 mb-5 font-semibold'>รา่ยละเอียด</p>
-            <button className='p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white'>
-              ยืนยัน
-            </button>
-            <button className='p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white'>
-              ยกเลิก
-            </button>
-          </div>
+      <div className="relative mx-auto grid grid-cols-4 gap-10 w-full max-h-screen justify-center">
+        
+        {isLoading ? (
 
-          <div className='flex flex-col w-56'>
-            <img className='border-4 p-12 h-40 rounded-2xl'/>
-            <p className='mt-5 mb-5 font-semibold'>ชื่อหนังสือ</p>
-            <p className='mt-5 mb-5 font-semibold'>รา่ยละเอียด</p>
-            <button className='p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white'>
-              ยืนยัน
-            </button>
-            <button className='p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white'>
-              ยกเลิก
-            </button>
-          </div>
+          <p className="text-amber-600 font-semibold animate-bounce">Loading...</p>
 
-          <div className='flex flex-col w-56'>
-            <img className='border-4 p-12 h-40 rounded-2xl'/>
-            <p className='mt-5 mb-5 font-semibold'>ชื่อหนังสือ</p>
-            <p className='mt-5 mb-5 font-semibold'>รา่ยละเอียด</p>
-            <button className='p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white'>
-              ยืนยัน
-            </button>
-            <button className='p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white'>
-              ยกเลิก
-            </button>
-          </div>
+        ) : errorMessage ? (
 
-          <div className='flex flex-col w-56'>
-            <img className='border-4 p-12 h-40 rounded-2xl'/>
-            <p className='mt-5 mb-5 font-semibold'>ชื่อหนังสือ</p>
-            <p className='mt-5 mb-5 font-semibold'>รา่ยละเอียด</p>
-            <button className='p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white'>
-              ยืนยัน
-            </button>
-            <button className='p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white'>
-              ยกเลิก
-            </button>
-          </div>
+          <p className="text-red-500 font-semibold">{errorMessage}</p>
 
-          <div className='flex flex-col w-56'>
-            <img className='border-4 p-12 h-40 rounded-2xl'/>
-            <p className='mt-5 mb-5 font-semibold'>ชื่อหนังสือ</p>
-            <p className='mt-5 mb-5 font-semibold'>รา่ยละเอียด</p>
-            <button className='p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white'>
-              ยืนยัน
-            </button>
-            <button className='p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white'>
-              ยกเลิก
-            </button>
-          </div>
+        ) : detailBook.books && detailBook.books.length > 0 ? (
+
+          detailBook.books.map((book, index) => (
+            
+            <div key={index} className="flex flex-col w-60">
+              
+              <img
+                className="border-4 p-2 w-full rounded-2xl"
+                src={book.bookPic ? `http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}` : "URL_TO_DEFAULT_IMAGE"}
+                alt={book.titleBook || "No Title"}
+              />
+
+              <p className="mt-1 font-semibold">ชื่อหนังสือ: {book.titleBook}</p>
+              <p className="mt-1 font-semibold text-amber-500">สถานะการวางขาย: {book.checkStatusBooks}</p>
+
+              <button
+                className="p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white"
+                onClick={() => handleConfirmBook(book.id)}
+              >
+                ยืนยัน
+              </button>
+
+              <button className="p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white">
+                ยกเลิก
+              </button>
+
+            </div>
+          ))
+        ) : (
+          <p className='text-xl animate-bounce text-fuchsia-800'>ไม่มีหนังสือที่ยังไม่ได้ยืนยัน</p>
+        )}
 
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default AdminCheckBooks
+export default AdminCheckBooks;

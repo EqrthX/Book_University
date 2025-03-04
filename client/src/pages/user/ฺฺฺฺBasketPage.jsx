@@ -1,31 +1,83 @@
-//import { useEffect } from 'react'
-//import { useNavigate } from 'react-router-dom'
-//import axios from '../../util/axios.js'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from '../../util/axios.js'
 
 import Navdar from "./components/Navdar";
 import Head from "./components/Head";
 import { ShoppingCart } from "lucide-react";
-import Book from "/src/assets/Book1.jpg";
 
 const BasketPage = () => {
-  /*const navigate = useNavigate();
+  
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    userId: "",
+    studentId: "",
+  });
 
+  const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const checkAuth = async () => {
       try {
+
         const res = await axios.get('/auth/protected', {withCredentials: true})
-        console.log(res);
+        setUser({
+          userId: res.data.user.id,
+          studentId: res.data.user.studentId,
+        })
+
+        const cartRes = await axios.get('/show-cart',{withCredentials: true})
+        console.log("Cart Response:", cartRes.data);
+        setCartItems(cartRes.data.books || []);
+
       } catch (error) {
+
         console.error("User not authenticated", error);
-        navigate("/login"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+        navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+
+      } finally {
+        setLoading(false)
       }
     }
 
     checkAuth()
-  },[navigate])*/
+  },[navigate])
+
+  const handleCheckboxChange = (cartId) => {
+
+    setSelectedItems((prevSelectedItems) => {
+
+      if(prevSelectedItems.includes(cartId)) {
+        return prevSelectedItems.filter((item) => item !== cartId)
+      } else {
+        return [...prevSelectedItems, cartId]
+      }
+
+    })
+
+  }
+
+  const deleteSelectedItems = async () => {
+    try {
+
+      await axios.delete(`/delete-item-cart/${selectedItems}`, {withCredentials: true})
+      const cartRes = await axios.get('/show-cart',{withCredentials: true})
+      console.log("Cart Response:", cartRes.data);
+      setCartItems(cartRes.data.books)
+
+    } catch (error) {
+      console.error("Error deleting items", error)
+    }
+  }
+
+  if(loading) {
+    return <p className='text-xl text-center text-amber-500 animate-bounce'>Loading...</p>
+  }
+
   return (
     <div className="bg-[#F5F5F5] min-h-screen">
-      <Head />
+      <Head studentId={user.studentId}/>
       <Navdar />
 
       {/* icon กับ ข้อความ */}
@@ -45,32 +97,43 @@ const BasketPage = () => {
 
             {/* ด้านซ้ายข้อมูลสินค้า */}
             <div className="space-y-4">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="flex items-start justify-between p-4 rounded-lg shadow-sm">
-                  <input type="checkbox" className="w-5 h-5 mr-3 mt-auto mb-auto" />  {/* checkbox */}
-                  
+              {cartItems.map((item) => (
+                <div 
+                  key={item.cartId} 
+                  className="flex items-start justify-between p-4 rounded-lg shadow-sm">
+                  <input 
+                    type="checkbox" 
+                    className="w-5 h-5 mr-3 mt-auto mb-auto" 
+                    checked={selectedItems.includes(item.cartId)}
+                    onChange={() => handleCheckboxChange(item.cartId)}
+                    />  {/* checkbox */}
                 {/* รูปหนังสือ*/}
-                  <img className="w-25 h-30 mr-4" src={Book} alt="หนังสือ" />
+                  <img className="w-25 h-30 mr-4" src={`http://localhost:5001/${item.bookPic}`} alt="หนังสือ" />
 
                   
                   <div className="flex-1 ml-4 mt-5"> 
                 {/* ชื่อหนังสือ */}
-                    <p className="font-bold">ชื่อหนังสือ</p> 
+                    <p className="font-bold">{item.titleBook}</p> 
                     <div className="inline-flex items-center mt-2">
                       <span className="font-bold ">รายละเอียด :</span>
                 {/* รายระเอียด */}
-                      <p className="text-sm text-gray-700 truncate ml-2">ใส่ข้อความมมมมมมมมมมมมมมมมมมมมมมมมมมมม</p> 
+                      <p className="text-sm text-gray-700 truncate ml-2">{item.description}</p> 
                     </div>
                     <div className="block mt-2">
                       <div className="inline-flex items-center">
                         <span className="font-bold ">ราคา :</span>
                 {/* ราคา */}        
-                        <p className="text-sm text-gray-700 truncate ml-2"> 200 </p> 
+                        <p className="text-sm text-gray-700 truncate ml-2"> {item.price} </p> 
                       </div>
                     </div>
                   </div>
 
-                  <button className="bg-[#D93619] hover:bg-red-500 text-white w-25 h-10 rounded-lg">ลบ</button>
+                  <button 
+                    onClick={() => deleteSelectedItems(item.cartId)}
+                    className="bg-[#D93619] hover:bg-red-500 text-white w-25 h-10 rounded-lg"
+                    >
+                      ลบ
+                    </button>
                 </div>
               ))}
             </div>
@@ -85,12 +148,12 @@ const BasketPage = () => {
               <div className="text-gray-700 space-y-2 mt-5">
                 <div className="grid grid-cols-3 gap-4">
                   <p className="text-right pr-10">จำนวน</p>
-                  <p className="text-right font-bold rtl">200</p>  {/* ข้อมูลจำนวนหนังสือ */}
+                  <p className="text-right font-bold rtl">{cartItems.length}</p>  {/* ข้อมูลจำนวนหนังสือ */}
                   <p className="text-left pl-12">ชิ้น</p>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <p className="text-right pr-7">ราคารวม</p>
-                  <p className="text-right font-bold rtl">1,500</p> {/* ข้อมูลราคา */}
+                  <p className="text-right font-bold rtl">{cartItems.reduce((total, item) => total + item.price, 0)}</p> {/* ข้อมูลราคา */}
                   <p className="text-left pl-12">บาท</p>
                 </div>
               </div>
@@ -101,7 +164,7 @@ const BasketPage = () => {
               <p className="w-full h-[1px] border-t border-dashed border-black" /> {/* เส้นประ */}
               <div className="grid grid-cols-3 gap-4">
                 <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
-                <p className="text-right font-bold rtl ">1,500</p>
+                <p className="text-right font-bold rtl ">{cartItems.reduce((total, item) => total + item.price, 0)}</p>
                 <p className="text-left pl-12">บาท</p>
               </div>
             </div>

@@ -10,25 +10,26 @@ const AdminHomePage = () => {
   
   const navigate = useNavigate();
   const [userName, setUserName] = useState("")
-
-  /*useEffect(() => {
+  
+  useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await axios.get('/auth/protected', {withCredentials: true})
         setUserName(res.data.user.studentId)
       } catch (error) {
         console.error("User not authenticated", error);
-        navigate("/login"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+        navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
       }
     }
 
     checkAuth()
-  }, [navigate])*/
+  }, [navigate])
+
 
   const handleLogout = async () => {
     try {
       await axios.post("/auth/logout", {}, {withCredentials: true})
-      navigate("/login")
+      navigate("/")
     } catch (error) {
       console.error("Logout failed: ", error);
     }
@@ -56,14 +57,12 @@ const AdminHomePage = () => {
         </ul>
         
         <div className='flex flex-col mt-auto'>
-          <div className="flex items-center justify-center gap-2 py-2   bg-white rounded-sm" style={{ fontFamily: 'Superstore, sans-serif' }}>
-            <h3 className="text-sm font-bold">admin</h3>
-            <p className="w-0.5 h-[20px] bg-black" />
-            <h3 className="text-sm font-bold">101</h3>
+          <div className="flex items-center justify-center gap-2 py-2 bg-white rounded-sm" style={{ fontFamily: 'Superstore, sans-serif' }}>
+            <h3 className="text-sm font-bold">{userName}</h3>
           </div>
           <button
           onClick={handleLogout} 
-          className="flex items-center justify-center gap-2 py-2 mt-4 text-white bg-red-600 rounded-sm "style={{ fontFamily: 'Superstore, sans-serif' }}>
+          className="flex items-center justify-center gap-2 py-2 mt-4 text-white transition-colors bg-red-600 hover:bg-red-400 rounded-sm "style={{ fontFamily: 'Superstore, sans-serif' }}>
             Logout</button>
         </div>
       </div>

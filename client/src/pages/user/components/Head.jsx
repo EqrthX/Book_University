@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, UserRound } from "lucide-react";
 import UTCC from "/src/assets/UTCC.png";
 
-function Head() {
+function Head({studentId, cartCount}) {
   
 
   return (
@@ -24,9 +24,9 @@ function Head() {
           </Link>
 
           {/* โปรไฟล์ */}
-           <h1 className="text-black font-bold hidden md:block">2210511106028</h1> {/*รหัสนักศึกษา*/}
+           <h1 className="text-black font-bold hidden md:block">{studentId}</h1> {/*รหัสนักศึกษา*/}
           <div className="text-black p-3">
-            <UserRound className="w-10 h-10" />
+            <Link to="/user/ProfilePage"><UserRound className="w-10 h-10" /></Link>
           </div>
         </div>
       </nav>
