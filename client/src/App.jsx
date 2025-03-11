@@ -8,12 +8,18 @@ import AdminHomePage from './pages/admin/AdminHomePage'
 import AdminRegister from './pages/admin/AdminRegister'
 import AdminCheckBooks from './pages/admin/AdminCheckBooks'
 import AdminCheckPayment from './pages/admin/AdminCheckPayment'
+import AdminDetailsPayment from './pages/admin/AdminDetailsPayment'
 
 import HomePage from './pages/user/HomePage'
 import AddBook from './pages/user/AddBook'
 import DetailsPage from './pages/user/DetailsPage'
 import BasketPage from './pages/user/ฺฺฺฺBasketPage'
 import ProfilePage from './pages/user/ProfilePage'
+import BuyHistoryPage from './pages/user/BuyHistoryPage'
+import SellHistoryPage from './pages/user/SellHistoryPage'
+import BuyNowPage from './pages/user/BuyNowPage'
+import DeliveryPage from './pages/user/DeliveryPage'
+import PaymentPage from './pages/user/PaymentPage'
 
 import {Toaster} from 'react-hot-toast'
 import UpdateABook from './pages/user/UpdateABook'
@@ -33,6 +39,8 @@ function App() {
           <Route path='register' element={<AdminRegister/>}/>
           <Route path='check-books' element={<AdminCheckBooks/>}/>
           <Route path='check-payment' element={<AdminCheckPayment/>}/>
+          <Route path='details-payment' element={<AdminDetailsPayment/>}/>
+
         
         </Route>
 
@@ -42,6 +50,14 @@ function App() {
         <Route path="/user/BasketPage" element={<BasketPage />} />
         <Route path="/user/ProfilePage" element={<ProfilePage />} />
         <Route path="/user/UpdateABook/:id" element={<UpdateABook/>}/>
+        <Route path="/user/BuyHistoryPage" element={<BuyHistoryPage/>}/>
+        <Route path="/user/SellHistoryPage" element={<SellHistoryPage/>}/>
+        <Route path="/user/BuyNowPage" element={<BuyNowPage/>}/>
+        <Route path="/user/DeliveryPage" element={<DeliveryPage/>}/>
+        <Route path="/user/PaymentPage" element={<PaymentPage/>}/>
+
+
+
         
       </Routes>  
     </>
