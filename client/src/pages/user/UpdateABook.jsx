@@ -126,147 +126,148 @@ const UpdateABook = () => {
         <div className="bg-[#F5F5F5] min-h-screen"> 
             <Head studentId={user.studentId} />
             <Navdar />
-            
-            <div className='container mx-auto px-4 md:px-8 mt-10 flex flex-col justify-center'>
-                <h1 className='text-2xl font-bold text-center mb-5'>แก้ไขรายการหนังสือ</h1>
+            <div className="pt-20">
+                <div className='container mx-auto px-4 md:px-8 mt-10 flex flex-col justify-center'>
+                    <h1 className='text-2xl font-bold text-center mb-5'>แก้ไขรายการหนังสือ</h1>
 
-                <form 
-                    onSubmit={handleSubmit}
-                    className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 grid grid-cols-2 gap-4 justify-center place-items-center'
-                >
-                    
-                    <div className='w-72 h-fit col-span-2 flex justify-center items-center'>
-                        <img 
-                            src={`http://localhost:5001/${valuesBook.bookPic}`} 
-                            alt="book" 
-                            className="w-full h-full object-cover"
-                        />
+                    <form 
+                        onSubmit={handleSubmit}
+                        className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 grid grid-cols-2 gap-4 justify-center place-items-center'
+                    >
+                        
+                        <div className='w-72 h-fit col-span-2 flex justify-center items-center'>
+                            <img 
+                                src={`http://localhost:5001/${valuesBook.bookPic}`} 
+                                alt="book" 
+                                className="w-full h-full object-cover"
+                            />
 
-                    </div>
+                        </div>
 
-                    <div className='mb-4 flex flex-col'>
-                        <label className='flex items-center'>ชื่อหนังสือ</label>
-                        <input 
-                            className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
-                            type="text"
-                            name='titleBook'
-                            value={valuesBook.titleBook}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        <div className='mb-4 flex flex-col'>
+                            <label className='flex items-center'>ชื่อหนังสือ</label>
+                            <input 
+                                className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
+                                type="text"
+                                name='titleBook'
+                                value={valuesBook.titleBook}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                    <div className='mb-4 flex flex-col'>
-                        <label className='flex items-center'>ราคา</label>
-                        <input 
-                            className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
-                            type="number"
-                            name='price'
-                            value={valuesBook.price}
-                            onChange={handleChange} 
-                        />
-                    </div>
+                        <div className='mb-4 flex flex-col'>
+                            <label className='flex items-center'>ราคา</label>
+                            <input 
+                                className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
+                                type="number"
+                                name='price'
+                                value={valuesBook.price}
+                                onChange={handleChange} 
+                            />
+                        </div>
 
-                    <div className='mb-4 flex flex-col'>
-                        <label className='flex items-center'>รายละเอียด</label>
-                        <input 
-                            className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
-                            type="text"
-                            name='description'
-                            value={valuesBook.description}
-                            onChange={handleChange} 
-                        />
-                    </div>
+                        <div className='mb-4 flex flex-col'>
+                            <label className='flex items-center'>รายละเอียด</label>
+                            <input 
+                                className="bg-white w-72 px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
+                                type="text"
+                                name='description'
+                                value={valuesBook.description}
+                                onChange={handleChange} 
+                            />
+                        </div>
 
-                    <div className="flex flex-col">
+                        <div className="flex flex-col">
 
-                        <h1 className="font-bold"> รหัสวิชา <span className="text-red-500">*</span></h1>
+                            <h1 className="font-bold"> รหัสวิชา <span className="text-red-500">*</span></h1>
 
-                        <select 
-                            className="bg-white w-[300px] px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
-                            name='subjectId'
-                            value={valuesBook.subjectId} // ให้ React ควบคุมค่า
-                            onChange={handleChange} // อัปเดตค่าเมื่อเลือก
-                        >
-                            <option value="" disabled>เลือกประเภท</option>
-                                {loading ? (
-                                    <option disabled>กำลังโหลด...</option>
-                                ) : (
-                                     subjects.map((subject) => (
-                                        <option key={subject.id} value={subject.id}>
-                                            {subject.subjectCode}
-                                        </option>
-                                    ))
-                                )}
-                        </select>
-                    </div>
+                            <select 
+                                className="bg-white w-[300px] px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
+                                name='subjectId'
+                                value={valuesBook.subjectId} // ให้ React ควบคุมค่า
+                                onChange={handleChange} // อัปเดตค่าเมื่อเลือก
+                            >
+                                <option value="" disabled>เลือกประเภท</option>
+                                    {loading ? (
+                                        <option disabled>กำลังโหลด...</option>
+                                    ) : (
+                                        subjects.map((subject) => (
+                                            <option key={subject.id} value={subject.id}>
+                                                {subject.subjectCode}
+                                            </option>
+                                        ))
+                                    )}
+                            </select>
+                        </div>
 
-                    <div className="flex flex-col mt-3 items-center text-center">
+                        <div className="flex flex-col mt-3 items-center text-center">
 
-                        <h1 className="font-bold">
-                                        สามารถนัดรับได้หรือไม่ <span className="text-red-500">*</span>
-                        </h1>
+                            <h1 className="font-bold">
+                                            สามารถนัดรับได้หรือไม่ <span className="text-red-500">*</span>
+                            </h1>
 
-                        <div className="flex space-x-4 mt-2">
-                            <label className="flex items-center space-x-2">
-
-                                <input 
-                                    type="radio" 
-                                    name="pickUp"
-                                    value="yes" 
-                                    className="border border-[#B7B7B7] rounded-sm"
-                                    onChange={handleRadioChange}
-                                />
-
-                                    <span className="text-lg">ได้</span>
-
-                                </label>
-
+                            <div className="flex space-x-4 mt-2">
                                 <label className="flex items-center space-x-2">
 
                                     <input 
                                         type="radio" 
                                         name="pickUp"
-                                        value="no" 
+                                        value="yes" 
                                         className="border border-[#B7B7B7] rounded-sm"
                                         onChange={handleRadioChange}
                                     />
 
-                                         <span className="text-lg">ไม่ได้</span>
+                                        <span className="text-lg">ได้</span>
 
                                     </label>
+
+                                    <label className="flex items-center space-x-2">
+
+                                        <input 
+                                            type="radio" 
+                                            name="pickUp"
+                                            value="no" 
+                                            className="border border-[#B7B7B7] rounded-sm"
+                                            onChange={handleRadioChange}
+                                        />
+
+                                            <span className="text-lg">ไม่ได้</span>
+
+                                        </label>
+                            </div>
+
                         </div>
 
-                    </div>
+                        {canPickup === 'yes' && (
+                            <div className="flex flex-col ">
+                                <h1 className="font-bold">
+                                    กรุณากรอกอีเมล <span className="text-red-500">*</span>
+                                </h1>
+                                <input 
+                                    className="bg-white w-[300px] px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
+                                    type="text"
+                                    value={valuesBook.contactInfo}
+                                    name='contactInfo'
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        )}
 
-                    {canPickup === 'yes' && (
-                        <div className="flex flex-col ">
-                            <h1 className="font-bold">
-                                กรุณากรอกอีเมล <span className="text-red-500">*</span>
-                            </h1>
-                            <input 
-                                className="bg-white w-[300px] px-2 py-1 border border-[#B7B7B7] rounded-sm mt-2"
-                                type="text"
-                                value={valuesBook.contactInfo}
-                                name='contactInfo'
-                                onChange={handleChange}
-                            />
+                        {/* ปุ่ม ยืนยัน */}
+                        <div className="mt-4 flex justify-center">
+                            <button 
+                                className={`w-50 py-2 px-4 rounded-lg transition-colors 
+                                    ${canPickup ? 'bg-[#2d3695] text-white hover:bg-blue-700' 
+                                    : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}
+                                disabled={!canPickup} // ปิดใช้งานปุ่มถ้ายังไม่ได้เลือก
+                            >
+                                ยืนยัน
+                            </button>
                         </div>
-                    )}
+    
+                    </form>
 
-                    {/* ปุ่ม ยืนยัน */}
-                    <div className="mt-4 flex justify-center">
-                        <button 
-                            className={`w-50 py-2 px-4 rounded-lg transition-colors 
-                                ${canPickup ? 'bg-[#2d3695] text-white hover:bg-blue-700' 
-                                : 'bg-gray-400 text-gray-200 cursor-not-allowed'}`}
-                            disabled={!canPickup} // ปิดใช้งานปุ่มถ้ายังไม่ได้เลือก
-                        >
-                            ยืนยัน
-                        </button>
-                    </div>
- 
-                </form>
-
+                </div>
             </div>
         </div>
     )

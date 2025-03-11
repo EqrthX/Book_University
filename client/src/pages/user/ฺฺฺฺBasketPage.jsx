@@ -76,9 +76,11 @@ const BasketPage = () => {
   }
 
   return (
-    <div className="bg-[#F5F5F5] min-h-screen">
+    <div className="bg-[#F5F5F5] min-h-screen pb-10">
       <Head studentId={user.studentId}/>
       <Navdar />
+    
+      <div className="pt-25">
 
       {/* icon กับ ข้อความ */}
       <div className="flex flex-col items-start px-6 md:px-10 mt-2 ml-17">
@@ -109,7 +111,6 @@ const BasketPage = () => {
                     />  {/* checkbox */}
                 {/* รูปหนังสือ*/}
                   <img className="w-25 h-30 mr-4" src={`http://localhost:5001/${item.bookPic}`} alt="หนังสือ" />
-
                   
                   <div className="flex-1 ml-4 mt-5"> 
                 {/* ชื่อหนังสือ */}
@@ -179,6 +180,7 @@ const BasketPage = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

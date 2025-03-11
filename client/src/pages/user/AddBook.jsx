@@ -165,10 +165,11 @@ const AddBook = () => {
     }, [user.studentId])
 
     return (
-        <div className="bg-[#F5F5F5] min-h-screen"> 
+        <div className="bg-[#F5F5F5] min-h-screen pb-5"> 
             <Head studentId={user.studentId}/>
             <Navdar />
-            
+        <div className="pt-30">
+
             {/* ข้อความกับ icon */}
             <div className="flex flex-col items-start">
                 <div className="flex items-center mb-4">
@@ -354,6 +355,7 @@ const AddBook = () => {
                 </div>
 
             </div>
+        </div>
 
         </div>
     );

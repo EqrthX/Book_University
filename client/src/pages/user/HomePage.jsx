@@ -51,10 +51,12 @@ const HomePage = () => {
   },[])
 
   return (
-    <div className="bg-[#F5F5F5] min-h-screen">
+  <div className="bg-[#F5F5F5] min-h-screen pb-10">
       
       <Head studentId={studentId}/>
       <Navdar/>
+
+      <div className="pt-20">
       <img className='w-full' src={Promote}/> {/*รูปหนังสืออันใหญ่*/}
 
       <div className="container mx-auto px-4 md:px-8 mt-10">
@@ -76,7 +78,7 @@ const HomePage = () => {
                       รายละเอียด : {book.description}
                     </h5>
 
-                    <p className="mb-3 font-bold text-xl text-gray-700">{book.price}</p>
+                    <p className="mb-3 font-bold text-xl text-gray-700">{book.price} ฿ </p>
 
                   </div>
                 </div>
@@ -86,7 +88,7 @@ const HomePage = () => {
         </div>
 
       </div>
-
+    </div>
     </div>
 
   );
