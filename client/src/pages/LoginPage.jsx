@@ -86,9 +86,15 @@ const LoginPage = () => {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10">
         <h1 className="text-3xl font-bold mb-3">เข้าสู่ระบบ</h1>
 
-        <div className="w-2/3 h-[5px] bg-black mx-auto mb-3"/>
-
-        <h3 className="text-lg font-bold">ซื้อขายหนังสือ</h3>
+        <div className="flex items-center justify-center gap-2 py-2">
+            <h3 className="text-sm font-bold" style={{ fontFamily: 'Superstore, sans-serif' }}>
+                ซื้อขายหนังสือ
+            </h3>
+              <p className="w-0.5 h-[20px] bg-black" />
+            <h3 className="text-sm font-bold" style={{ fontFamily: 'Superstore, sans-serif' }}>
+                Bookstore
+            </h3>
+          </div>
 
         <form 
           onSubmit={handleSubmit}
