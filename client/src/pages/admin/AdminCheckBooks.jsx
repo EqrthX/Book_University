@@ -7,6 +7,8 @@ const AdminCheckBooks = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [detailBook, setDetailBook] = useState({ books: [] });
   const [checkStatusBooks, setcheckStatusBooks] = useState('');
+  const [books, setBooks] = useState([]);
+
 
   useEffect(() => {
     const showBooksUnavailable = async () => {
@@ -58,6 +60,23 @@ const AdminCheckBooks = () => {
       setIsLoading(false);
     }
   };
+  // กดยกเลิก แล้วลบหนังสือ
+  const deleteBook = async (bookId) => {
+    const confirmDelete = window.confirm("ต้องการลบข้อมูลสินค้านี้ใช่ไหม");
+    if (!confirmDelete) return;
+    try {
+      const res = await axios.delete(`/delete-book`, { data: { bookId }, withCredentials: true });
+      if (res.status === 200) {
+        toast.success("ลบสินค้าสำเร็จ");
+        setBooks(books.filter(book => book.id !== bookId));
+      }
+    } catch (error) {
+      console.error('Error deleting book', error);
+    }
+  };
+
+ 
+
 
   return (
     <div className="w-full min-h-screen">
@@ -90,13 +109,14 @@ const AdminCheckBooks = () => {
               <p className="mt-1 font-semibold text-amber-500">สถานะการวางขาย: {book.checkStatusBooks}</p>
 
               <button
-                className="p-2 bg-[#D3E92E] rounded-xl mb-5 transition-all hover:bg-emerald-400 hover:text-white"
+                className="p-2 bg-[#358C1B] rounded-xl mb-5 transition-all hover:bg-[#43633a] text-white "
                 onClick={() => handleConfirmBook(book.id)}
               >
                 ยืนยัน
               </button>
 
-              <button className="p-2 bg-[#EB0000] rounded-xl mb-5 transition-all hover:bg-orange-400 hover:text-white">
+              {/* เพิ่มชังฟันลบแล้ว */}
+              <button onClick={() => deleteBook(book.id)} className="p-2 bg-[#D93619] rounded-xl mb-5 transition-all hover:bg-red-700 text-white">
                 ยกเลิก
               </button>
 

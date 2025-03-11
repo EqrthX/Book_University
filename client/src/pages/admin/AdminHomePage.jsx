@@ -2,6 +2,7 @@ import axios from '../../util/axios.js'
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import UTCC from '../../assets/UTCC.png'
+import { UserRoundPlus,Wallet,BookPlus } from 'lucide-react';
 
 import HeadAdmin from './components/HeadAdmin.jsx'
 
@@ -40,17 +41,23 @@ const AdminHomePage = () => {
 
       {/* Sidebar */}
 
-      <div className='w-[15%] bg-[#163D76] p-5 h-screen flex justify-evenly text-left flex-col'>
+      <div className='w-[17%] bg-[#163D76] p-5 h-screen flex justify-evenly text-left flex-col'>
         <ul className='mt-40'>
-          <li className='py-5 px-5'>
-            <Link to="register" className='font-semibold text-white hover:text-pink-600'>ลงทะเบียนนักศึกษา</Link>
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <UserRoundPlus className='text-white' />
+            <Link to="register" className='font-semibold text-white hover:text-pink-600 '>
+              ลงทะเบียนนักศึกษา
+            </Link>
           </li>
 
-          <li className='py-5 px-5'>
-            <Link to="check-books" className='font-semibold text-white hover:text-pink-600'>ตรวจสอบหนังสือ</Link>
+
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <BookPlus className='text-white '/>
+            <Link to="check-books" className='font-semibold text-white hover:text-pink-600 '>ตรวจสอบหนังสือ</Link>
           </li>
 
-          <li className='py-5 px-5'>
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <Wallet className='text-white'/>
             <Link to="check-payment" className='font-semibold text-white hover:text-pink-600'>ตรวจสอบชำระเงิน</Link>
           </li>
 
@@ -62,7 +69,7 @@ const AdminHomePage = () => {
           </div>
           <button
           onClick={handleLogout} 
-          className="flex items-center justify-center gap-2 py-2 mt-4 text-white transition-colors bg-red-600 hover:bg-red-400 rounded-sm "style={{ fontFamily: 'Superstore, sans-serif' }}>
+          className="flex items-center justify-center gap-2 py-2 mt-4 text-white hover:text-black transition-colors bg-red-600 hover:bg-red-400 rounded-sm "style={{ fontFamily: 'Superstore, sans-serif' }}>
             Logout</button>
         </div>
       </div>

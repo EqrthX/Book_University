@@ -91,12 +91,12 @@ const AdminRegister = () => {
             <div className='flex justify-center items-center w-full'>
                 <form 
                   onSubmit={handleSubmit}
-                  className='w-[50%] bg-white shadow-xl p-6 rounded-lg flex flex-col'>
+                  className='w-[80%] bg-white shadow-xl p-6 rounded-lg flex flex-col'>
                     
                         <div className='mb-4 p-4 flex justify-around gap-2 items-center'>
                             <label className='font-semibold w-[150px]'>รหัสนักศึกษา</label>
                             <input 
-                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-100'
                               type='text'
                               placeholder='22...'
                               name='studentId'
@@ -108,9 +108,9 @@ const AdminRegister = () => {
                         <div className='mb-4 p-4 flex justify-around gap-2 items-center'>
                             <label className='font-semibold w-[150px]'>อีเมล</label>
                             <input 
-                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-100 '
                               type='text'
-                              placeholder='example@email.com'
+                              placeholder='example@live4.utcc.ac.th'
                               name='email'
                               value={values.email}
                               onChange={handleChanges}
@@ -121,7 +121,7 @@ const AdminRegister = () => {
                         <div className='mb-4 p-4 flex justify-around gap-2 items-center'>
                             <label className='font-semibold w-[150px]'>ชื่อ-นามสกุล</label>
                             <input 
-                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                              className='bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-100'
                               type='text'
                               placeholder='A B'
                               name='fullName'
@@ -133,7 +133,7 @@ const AdminRegister = () => {
                         <div className='mb-4 p-4 flex justify-around gap-2 items-center'>
                             <label className='font-semibold w-[150px]'>รหัสผ่าน</label>
                             <input 
-                              className=' bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                              className=' bg-gray-100 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-100'
                               type='password'
                               placeholder='xxxxx'
                               name='password'
@@ -147,7 +147,7 @@ const AdminRegister = () => {
                             <button 
                               type='submit'
                               disabled={isLoading}
-                              className='bg-[#05998A] w-60 p-3 rounded-xl text-white font-semibold transition-colors hover:bg-green-500'>
+                              className='bg-[#05998A] w-60 p-3 rounded-xl text-white font-semibold transition-colors hover:bg-green-500 '>
                                 เพิ่มรายชื่อ
                             </button>
 
