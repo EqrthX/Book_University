@@ -17,9 +17,11 @@ import BasketPage from './pages/user/ฺฺฺฺBasketPage'
 import ProfilePage from './pages/user/ProfilePage'
 import BuyHistoryPage from './pages/user/BuyHistoryPage'
 import SellHistoryPage from './pages/user/SellHistoryPage'
+import OrderPage from './pages/user/OrderPage' //เพิ่มมาใหม่
 import BuyNowPage from './pages/user/BuyNowPage'
 import DeliveryPage from './pages/user/DeliveryPage'
 import PaymentPage from './pages/user/PaymentPage'
+import NotificationPage from './pages/user/NotificationPage'//เพิ่มมาใหม่
 
 import {Toaster} from 'react-hot-toast'
 import UpdateABook from './pages/user/UpdateABook'
@@ -52,9 +54,12 @@ function App() {
         <Route path="/user/UpdateABook/:id" element={<UpdateABook/>}/>
         <Route path="/user/BuyHistoryPage" element={<BuyHistoryPage/>}/>
         <Route path="/user/SellHistoryPage" element={<SellHistoryPage/>}/>
+        <Route path="/user/OrderPage" element={<OrderPage/>}/>
         <Route path="/user/BuyNowPage" element={<BuyNowPage/>}/>
         <Route path="/user/DeliveryPage" element={<DeliveryPage/>}/>
         <Route path="/user/PaymentPage" element={<PaymentPage/>}/>
+        <Route path="/user/NotificationPage" element={<NotificationPage/>}/>
+
 
 
 
