@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, UserRound } from "lucide-react";
+import { Bell, ShoppingCart, UserRound } from "lucide-react";
 import UTCC from "/src/assets/UTCC.png";
 
 function Head({ studentId }) {
@@ -12,13 +12,15 @@ function Head({ studentId }) {
       </Link>
 
       <div className="ml-auto flex items-center space-x-6">
-        
+
         {/* ตะกร้า */}
         <Link to="/user/BasketPage">
           <button className="text-black p-3 rounded-full hover:bg-gray-200">
             <ShoppingCart className="w-6 h-6" />
           </button>
         </Link>
+
+
 
         {/* โปรไฟล์ */}
         <h1 className="text-black font-bold hidden md:block">{studentId}</h1> {/*รหัสนักศึกษา*/}

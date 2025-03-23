@@ -5,7 +5,7 @@ import axios from '../../util/axios.js'
 import Navdar from "./components/Navdar";
 import Head from "./components/Head";
 import { ShoppingCart } from "lucide-react";
-
+import toast from 'react-hot-toast'
 const BasketPage = () => {
   
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const BasketPage = () => {
         const cartRes = await axios.get('/show-cart',{withCredentials: true})
         console.log("Cart Response:", cartRes.data);
         setCartItems(cartRes.data.books || []);
-
+        
       } catch (error) {
 
         console.error("User not authenticated", error);
@@ -70,6 +70,31 @@ const BasketPage = () => {
       console.error("Error deleting items", error)
     }
   }
+
+  const handleSendToPay = async () => {
+    
+    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.cartId))
+
+    if(selectedCartItems.length === 0) {
+
+      toast.error("กรุณาเลือกสินค้าหนึ่งอย่างขึ้นไป")
+      return;
+
+    } 
+
+    const totalPrice =  selectedCartItems.reduce((total, item) => total + item.price, 0)
+    const orderData = selectedCartItems.map(item => ({
+        id: item.cartId,
+        bookId: item.id,
+        titleBook: item.titleBook,
+        price: item.price
+    }))
+  
+    navigate("/user/DeliveryPage", {state: {orderData, totalPrice}})
+
+
+  }
+  
 
   if(loading) {
     return <p className='text-xl text-center text-amber-500 animate-bounce'>Loading...</p>
@@ -115,6 +140,7 @@ const BasketPage = () => {
                   <div className="flex-1 ml-4 mt-5"> 
                 {/* ชื่อหนังสือ */}
                     <p className="font-bold">{item.titleBook}</p> 
+                  
                     <div className="inline-flex items-center mt-2">
                       <span className="font-bold ">รายละเอียด :</span>
                 {/* รายระเอียด */}
@@ -172,7 +198,10 @@ const BasketPage = () => {
 
             {/* ปุ่มชำระเงิน */}
             <div className="mt-5">
-              <button className="w-full bg-[#3D6299] text-white py-2 font-bold hover:bg-[#1e256f]">
+              <button 
+                className="w-full bg-[#3D6299] text-white py-2 font-bold hover:bg-[#1e256f]"
+                onClick={handleSendToPay}
+              >
                 ดำเนินการชำระเงิน
               </button>
             </div>

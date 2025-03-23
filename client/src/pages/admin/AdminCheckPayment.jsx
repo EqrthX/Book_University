@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BGUni from "../../assets/bg.jpeg";
 import { ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from '../../util/axios.js'
+
+const statusColor = [
+  {name: "in_progress", color: "bg-[#3D6299]"},
+  {name: "completed", color: "bg-[#26A334]"},
+  {name: "Not_Approved", color: "bg-[#D93619]"},
+  {name: "ReportAProblem", color: "bg-[#E3CC18]"},
+]
 
 const AdminCheckPayment = () => {
   const [isOpen, setIsOpen] = useState(false); // ใช้ state เพื่อจัดการการแสดงผล
@@ -9,6 +17,21 @@ const AdminCheckPayment = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen); // เปลี่ยนสถานะการแสดงเมนูดรอปดาวน์
   };
+  const navigator = useNavigate()
+  const [statusPayment, setStatusPayment] = useState([])
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const res = await axios.get("/show-status-payment", {withCredentials: true})
+
+      if(res.status === 200) {
+        setStatusPayment(res.data.statusPayment)
+      }
+    }
+
+    fetchStatus()
+  }, [])  
+  
 
   return (
     <div className="w-full min-h-screen relative">
@@ -29,7 +52,7 @@ const AdminCheckPayment = () => {
           <h3 className="font-semibold text-3xl text-black pr-190 mb-6 mt-15 ml-10 ">ตรวจสอบสถานะการเงิน</h3>
         </div>
 
-
+        
       {/* เนื้อหา */}
       <div className="relative w-full min-h-screen flex flex-col items-center p-10 -my-20">
 
@@ -67,31 +90,32 @@ const AdminCheckPayment = () => {
 
         {/* กล่องข้อมูล */}
         <div className="grid grid-cols-2 gap-20 my-10">
-          {[
-            { color: "bg-[#3D6299]" },
-            { color: "bg-[#26A334]" },
-            { color: "bg-[#D93619]" },
-            { color: "bg-[#E3CC18]" },
-          ].map((item, index) => (
-            <Link
-              to="details-payment"
+          {statusPayment.map((item, index) => (
+            <div
+              onClick={() => navigator(`/admin/AdminHomepage/check-payment/details-payment/${item.transaction_id}`)}
               key={index} 
               className="flex justify-between items-center w-100 bg-white p-4 shadow-md cursor-pointer "
-            >
+            > 
               <div>
                 <u>
                   <p>หมายเลขคำสั่งซื้อ</p>
                 </u>
-                <p className="text-gray-600 mt-2 ml-7">2904830125</p>
+                <p className="text-gray-600 mt-2 ml-7">{item.transaction_id}</p>
               </div>
               <div className="flex items-center">
                 <span className="mr-3 ">ตรวจสอบ</span>
-                <span className={`w-4 h-4 rounded-full mr-5 ${item.color}`}></span>{" "}
+                
+                {statusColor.find(status => status.name === item.status) ? (
+                  <span className={`w-4 h-4 rounded-full mr-5 ${statusColor.find(status => status.name === item.status).color}`}></span>
+                ) : (
+                  <span className="text-lg animate-bounce text-red-500">ไม่พบสถานะ</span>
+                )}
 
               </div>
-            </Link>
+            </div>
           ))}
         </div>
+
       </div>
     </div>
   );

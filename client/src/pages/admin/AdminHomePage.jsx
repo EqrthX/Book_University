@@ -1,7 +1,6 @@
 import axios from '../../util/axios.js'
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import UTCC from '../../assets/UTCC.png'
 import { UserRoundPlus,Wallet,BookPlus } from 'lucide-react';
 
 import HeadAdmin from './components/HeadAdmin.jsx'

@@ -1,12 +1,43 @@
 import { useEffect, useState } from 'react';
 import axios from '../../util/axios.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingCart } from "lucide-react";
 import Head from './components/Head.jsx';
 import Navbar from './components/Navdar.jsx';
-import toast from 'react-hot-toast';
+
+const statusColor = [
+  {name: "pending", color: "bg-[#ED1235]"},
+  {name: "completed", color: "bg-[#ED702C]"},
+  {name: "waiting_delivery", color: "bg-[#ED932C]"},
+  {name: "shipping", color: "bg-[#EDD62C]"},
+  {name: "shipped", color: "bg-[#26A334]"},
+  {name: "delivered", color: "bg-[#6BE500]"},
+
+]
+
+const getMessagesStatus = (status) => {
+
+  switch (status) {
+    case "pending":
+      return "กำลังดำเนินการ"
+    case "completed":
+      return "ชำระเงินเสร็จสิ้น"
+    case "waiting_delivery":
+      return "รอจัดส่ง"
+    case "shipping":
+      return "กำลังจัดส่ง" 
+    case "shipped":
+      return "จัดส่งแล้ว"
+    case "delivered":
+      return "จัดส่งเสร็จสิ้น" 
+    default:
+      return "ไม่พบสถานะ"
+  }
+
+}
 
 const SellHistoryPage = () => {
+
   const [studentId, setStudentId] = useState("");
   const [profile, setProfile] = useState(null);
   const [books, setBooks] = useState([]);
@@ -20,6 +51,10 @@ const SellHistoryPage = () => {
         setId(res.data.user.id);
         setStudentId(res.data.user.studentId);
         setProfile(res.data.user);
+
+        const resHistoryBook = await axios.get(`/fetch-history` ,{withCredentials: true})
+        console.log(resHistoryBook);
+        setBooks(resHistoryBook.data.books)
       } catch (error) {
         console.error("Error fetching user profile", error);
         navigate("/");
@@ -27,26 +62,6 @@ const SellHistoryPage = () => {
     };
     fetchUserProfile();
   }, [navigate]);
-
-  useEffect(() => {
-    const handleShowProductWithUser = async () => {
-      if (!id) return;
-      try {
-        const res = await axios.get(`/show-for-user`, { params: { userId: id }, withCredentials: true });
-        if (res.data.books.length === 0) {
-          toast.error("Books not found");
-        } else {
-          setBooks(res.data.books);
-        }
-      } catch (error) {
-        console.error('Error fetching user product', error);
-      }
-    };
-    if (id) {
-      handleShowProductWithUser();
-    }
-  }, [id]);
-
 
     // ประวัติการซื้อ
   return (
@@ -66,6 +81,7 @@ const SellHistoryPage = () => {
           <h1 className='text-lg font-semibold text-center mb-4'>สินค้าที่ซื้อ</h1>
           <div className="space-y-4">
             {books.map((book) => (
+                  
                  <div key={book.id} className="p-4  rounded-lg shadow-sm bg-gray-50 flex justify-between items-center mt-5">
                  <div className="flex items-center">
                    <img className="w-28 h-35 mr-4" src={`http://localhost:5001/${book.bookPic}`} alt="หนังสือ" />
@@ -75,17 +91,16 @@ const SellHistoryPage = () => {
                      <p className="font-bold text-gray-600 mt-1">ราคา: {book.price} บาท</p>
                    </div>
                  </div>
-
                 {/* ข้อมูล สถานะว่าข้อความ และcode สี // ชำระเงินเสร็จสิ้น [#ED702C] / รอจัดส่ง [#ED932C] / กำลังจัดส่ง [#EDD62C] / จัดส่งเสร็จสิ้น [#6BE500]  */}
                 <div className="w-full md:w-1/3 flex flex-col items-center space-y-3 py-2 -mt-10">
                 <h3 className="flex justify-end">สถานะ </h3>
-                  {book.canMeet === "yes" ? (
-                    <div className="bg-[#ED702C] text-white px-6 py-2 w-auto rounded-xl text-center">
-                      ชำระเงินเสร็จสิ้น
+                  {statusColor.find(status => status.name === book.delivery_status) ? (
+                    <div className={`${statusColor.find(status => status.name === book.delivery_status).color} text-white px-6 py-2 w-auto rounded-xl text-center`}>
+                      {getMessagesStatus(book.delivery_status)}
                     </div>
                   ) : (
-                    <div className="bg-[#D93619] text-white px-6 py-2 w-auto rounded-xl text-center">
-                      นัดรับไม่ได้
+                    <div className={`${statusColor.find(status => status.name === book.delivery_status).color} text-white px-6 py-2 w-auto rounded-xl text-center`}>
+                      {getMessagesStatus(book.delivery_status)}
                     </div>
                   )}
                 </div>

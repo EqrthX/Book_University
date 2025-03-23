@@ -1,6 +1,5 @@
 import multer from 'multer'
 import path from 'path'
-import fs from 'fs'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -13,6 +12,9 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage }).single("bookPic"); // รองรับไฟล์เดียว
+const upload = multer({ storage }).fields([
+    {name: "bookPic", maxCount: 1},
+    {name: "paymentSlip", maxCount: 1}
+]); // รองรับไฟล์เดียว
 
 export default upload;

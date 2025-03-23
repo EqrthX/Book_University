@@ -16,14 +16,15 @@ const DetailsPage = () => {
     const [book, setBook] = useState([]);
 
     useEffect(() => {
+      
           const checkAuth = async () => {
-          try {
-              const res = await axios.get('/auth/protected', {withCredentials: true})
-              setStudentId(res.data.user.studentId)
-          } catch (error) {
-              console.error("User not authenticated", error);
-              navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
-          }
+            try {
+                const res = await axios.get('/auth/protected', {withCredentials: true})
+                setStudentId(res.data.user.studentId)
+            } catch (error) {
+                console.error("User not authenticated", error);
+                navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+            }
           }
 
           checkAuth()
@@ -34,7 +35,7 @@ const DetailsPage = () => {
         try {
           const res = await axios.get(`/show-once-book/${id}`, {withCredentials: true})
           setBook(res.data.book)
-          console.log(book);
+          console.log(res.data.book);
         } catch (error) {
           console.error("Error fetching once book", error)
         }
@@ -131,7 +132,7 @@ const DetailsPage = () => {
                 >
                 เพิ่มตะกร้า
               </button>
-              <Link to={`/user/BuyNowPage/`} className="bg-[#D93619] text-white px-6 py-2 rounded-md w-full transition-colors hover:bg-red-700 md:w-auto">
+              <Link to={`/user/BuyNowPage/${book.id}`} className="bg-[#D93619] text-white px-6 py-2 rounded-md w-full transition-colors hover:bg-red-700 md:w-auto">
                   ซื้อหนังสือ
               </Link>
             </div>
