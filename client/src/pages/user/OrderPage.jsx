@@ -30,6 +30,8 @@ const formatTime = (isoString) => {
     minute: "2-digit",
   });
 };
+
+
 const OrderPage = () => {
   
   const [studentId, setStudentId] = useState("");
@@ -107,7 +109,7 @@ const OrderPage = () => {
 
                   <h1 className="font-bold mt-3">ที่อยู่จัดส่ง</h1>
                   <p className="ml-5 break-words">
-                    {book.house_no}, {book.street}, {book.zone}, {book.subdistrict}, {book.district}, {book.province}, {book.zip_code}
+                    {book.house_no || ""}, {book.street || ""}, {book.zone || ""}, {book.subdistrict || ""}, {book.district || ""}, {book.province || ""}, {book.zip_code || ""}
                   </p>
               </div>
               <div className="w-full md:w-1/3 p-4 flex flex-col h-full">
@@ -136,7 +138,7 @@ const OrderPage = () => {
 
 
         {pickupOrders.length === 0 ? (
-          <p className="text-center text-gray-500">ไม่พบรายการสั่งซื้อ</p>
+          <p className="text-center text-gray-500 animate-bounce mt-10">ไม่มีข้อมูลลการนัดรับ</p>
         ) : (
           pickupOrders.map((book) => (
             <div

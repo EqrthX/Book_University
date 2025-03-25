@@ -12,26 +12,34 @@ const statusColor = [
 ]
 
 const AdminCheckPayment = () => {
-  const [isOpen, setIsOpen] = useState(false); // ใช้ state เพื่อจัดการการแสดงผล
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen); // เปลี่ยนสถานะการแสดงเมนูดรอปดาวน์
-  };
+  const [isOpen, setIsOpen] = useState(false); // ใช้ state เพื่อจัดการการแสดงผล
   const navigator = useNavigate()
   const [statusPayment, setStatusPayment] = useState([])
-
+  const [selectedStatus, setSelectedStatus] = useState("")
+  
   useEffect(() => {
     const fetchStatus = async () => {
       const res = await axios.get("/show-status-payment", {withCredentials: true})
-
+      
       if(res.status === 200) {
         setStatusPayment(res.data.statusPayment)
       }
     }
-
+    
     fetchStatus()
   }, [])  
   
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen); // เปลี่ยนสถานะการแสดงเมนูดรอปดาวน์
+    };
+  
+    const handleFilterSelect = (status) => {
+      setSelectedStatus(status)
+      setIsOpen(false)
+    }
+  
+    const filteredPayments = selectedStatus ? statusPayment.filter((item) => item.status === selectedStatus) : statusPayment
 
   return (
     <div className="w-full min-h-screen relative">
@@ -54,43 +62,88 @@ const AdminCheckPayment = () => {
 
         
       {/* เนื้อหา */}
+      
       <div className="relative w-full min-h-screen flex flex-col items-center p-10 -my-20">
-
 
         {/* ปุ่ม Filter */}
         <div className="w-full flex justify-end mb-10">
+          
           <div className="relative">
+
             <button
-              className="flex items-center px-10 py-2 border border-black bg-white text-black rounded-sm mx-30 "
-              onClick={toggleDropdown} 
+              className="flex items-center px-4 py-2 border border-gray-300 rounded bg-white"
+              onClick={() => setIsOpen(!isOpen)} // เปิด/ปิด Dropdown
             >
-              <ChevronDown className="w-4 h-4 ml-1" /> Filter
-            </button>
-            {/* Dropdown */}
-            {isOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg items-center">
-                <ul>
-                  <li className="flex items-center px-4 py-2 hover:bg-gray-300 text-black cursor-pointer mt-1">
-                    <span className="inline-block w-4 h-4 rounded-full bg-[#26A334] mr-2"></span>{" "}
-                    อนุมัติ
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-300 text-black cursor-pointer mt-1">
-                    <span className="inline-block w-4 h-4 rounded-full bg-[#A80F0F] mr-2"></span>{" "}
-                    ไม่อนุมัติ
-                  </li>
-                  <li className="px-4 py-2 hover:bg-gray-300 text-black cursor-pointer mt-1 mb-1">
-                    <span className="inline-block w-4 h-4 rounded-full bg-[#E3CC18] mr-2"></span>{" "}
-                    แจ้งปัญหา
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+              {selectedStatus ? (
+                <>
+                  <span
+                    className={`inline-block w-4 h-4 rounded-full mr-2 ${
+                      statusColor.find((status) => status.name === selectedStatus)?.color
+                    }`}
+                  ></span>
+                  {selectedStatus === "completed"
+                    ? "อนุมัติ"
+                    : selectedStatus === "Not_Approved"
+                    ? "ไม่อนุมัติ"
+                    : "แจ้งปัญหา"}
+                </>
+              ) : (
+                "กรองตามสถานะ"
+              )}
+              <ChevronDown className="w-4 h-4 ml-2" />
+          </button>
+
+          {isOpen && (
+            <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+              <li
+                className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                  setSelectedStatus("completed");
+                  setIsOpen(false);
+                }}
+              >
+                <span className="inline-block w-4 h-4 rounded-full bg-[#26A334] mr-2"></span>
+                อนุมัติ
+              </li>
+              <li
+                className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                  setSelectedStatus("Not_Approved");
+                  setIsOpen(false);
+                }}
+              >
+                <span className="inline-block w-4 h-4 rounded-full bg-[#D93619] mr-2"></span>
+                ไม่อนุมัติ
+              </li>
+              <li
+                className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                  setSelectedStatus("ReportAProblem");
+                  setIsOpen(false);
+                }}
+              >
+                <span className="inline-block w-4 h-4 rounded-full bg-[#E3CC18] mr-2"></span>
+                แจ้งปัญหา
+              </li>
+              <li
+                className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                  setSelectedStatus("");
+                  setIsOpen(false);
+                }}
+              >
+                <span className="inline-block w-4 h-4 rounded-full bg-gray-400 mr-2"></span>
+                ทั้งหมด
+              </li>
+            </ul>
+          )}
+
         </div>
+      </div>
 
         {/* กล่องข้อมูล */}
         <div className="grid grid-cols-2 gap-20 my-10">
-          {statusPayment.map((item, index) => (
+          {filteredPayments.map((item, index) => (
             <div
               onClick={() => navigator(`/admin/AdminHomepage/check-payment/details-payment/${item.transaction_id}`)}
               key={index} 
