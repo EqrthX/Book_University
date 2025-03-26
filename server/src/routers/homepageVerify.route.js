@@ -1,6 +1,6 @@
 import express from "express"
 import { verifyToken } from "../middleware/auth.middleware.js";
-import { addBook, deleteBook, homepage, showBooks, showDetailBook, updateBook, getSubjects, updateStatusBook, showBooksUnavailable, showUserBooks, showBookWithId, addToCart, showBookWithCart, deleteItemCart, addInfomationAndOrder, updatePayment, showStatusPayment, fetchInfomation, updateOrdersStatus, searchKeyword, showHistory, showHistoryOrders } from "../controllers/homepage.controller.js";
+import { addBook, deleteBook, homepage, showBooks, showDetailBook, updateBook, getSubjects, updateStatusBook, showBooksUnavailable, showUserBooks, showBookWithId, addToCart, showBookWithCart, deleteItemCart, addInfomationAndOrder, updatePayment, showStatusPayment, updateOrdersStatus, searchKeyword, showHistory, showHistoryOrders, fetchInfomation } from "../controllers/homepage.controller.js";
 import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();

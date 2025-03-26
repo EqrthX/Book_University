@@ -66,7 +66,6 @@ function AdminDetailsPayment() {
     }
 
   }
-
   
   useEffect(() => {
     const fetchInfomation = async () => {
