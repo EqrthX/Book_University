@@ -20,7 +20,7 @@ const AdminCheckPayment = () => {
   
   useEffect(() => {
     const fetchStatus = async () => {
-      const res = await axios.get("/show-status-payment", {withCredentials: true})
+      const res = await axios.get("/admin/show-status-payment", {withCredentials: true})
       
       if(res.status === 200) {
         setStatusPayment(res.data.statusPayment)

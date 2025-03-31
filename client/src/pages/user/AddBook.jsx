@@ -102,7 +102,7 @@ const AddBook = () => {
 
         try {
             
-            const res = await axios.post("/add-book", formData, {
+            const res = await axios.post("/product/add-book", formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type" : "multipart/form-data"

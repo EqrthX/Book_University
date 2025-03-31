@@ -51,7 +51,7 @@ const SellHistoryPage = () => {
     const confirmDelete = window.confirm("ต้องการลบข้อมูลสินค้านี้ใช่ไหม");
     if (!confirmDelete) return;
     try {
-      const res = await axios.delete(`/delete-book`, { data: { bookId }, withCredentials: true });
+      const res = await axios.delete(`/product/delete-book`, { data: { bookId }, withCredentials: true });
       if (res.status === 200) {
         toast.success("ลบสินค้าสำเร็จ");
         setBooks(books.filter(book => book.id !== bookId));

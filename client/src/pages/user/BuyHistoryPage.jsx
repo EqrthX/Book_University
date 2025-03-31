@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from '../../util/axios.js';
+import { getMessagesStatus } from '../../util/helper.js';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart } from "lucide-react";
 import Head from './components/Head.jsx';
 import Navbar from './components/Navdar.jsx';
 
 const statusColor = [
+  
   {name: "pending", color: "bg-[#ED1235]"},
   {name: "completed", color: "bg-[#ED702C]"},
   {name: "waiting_delivery", color: "bg-[#ED932C]"},
@@ -14,27 +16,6 @@ const statusColor = [
   {name: "delivered", color: "bg-[#6BE500]"},
 
 ]
-
-const getMessagesStatus = (status) => {
-
-  switch (status) {
-    case "pending":
-      return "กำลังดำเนินการ"
-    case "completed":
-      return "ชำระเงินเสร็จสิ้น"
-    case "waiting_delivery":
-      return "รอจัดส่ง"
-    case "shipping":
-      return "กำลังจัดส่ง" 
-    case "shipped":
-      return "จัดส่งแล้ว"
-    case "delivered":
-      return "จัดส่งเสร็จสิ้น" 
-    default:
-      return "ไม่พบสถานะ"
-  }
-
-}
 
 const SellHistoryPage = () => {
 

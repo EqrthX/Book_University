@@ -17,6 +17,7 @@ const BasketPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -27,7 +28,7 @@ const BasketPage = () => {
           studentId: res.data.user.studentId,
         })
 
-        const cartRes = await axios.get('/show-cart',{withCredentials: true})
+        const cartRes = await axios.get('/cart/show-cart',{withCredentials: true})
         console.log("Cart Response:", cartRes.data);
         setCartItems(cartRes.data.books || []);
         
@@ -59,15 +60,46 @@ const BasketPage = () => {
   }
 
   const deleteSelectedItems = async () => {
+
+    if(selectedItems.length === 0) {
+      toast.error("กรุณาเลือกสินค้าหนึ่งอย่างขึ้นไป")
+      return;
+    }
+
+    const confirmDelete = window.confirm("คุณต้องการลบสินค้าที่เลือกหรือไม่?");
+    if (!confirmDelete) {
+        return;
+    }
+
     try {
 
-      await axios.delete(`/delete-item-cart/${selectedItems}`, {withCredentials: true})
-      const cartRes = await axios.get('/show-cart',{withCredentials: true})
-      console.log("Cart Response:", cartRes.data);
+      const deleteresutlt = await axios.delete(`/cart/delete-item-cart`, {
+         data: {cartIds: selectedItems},
+         withCredentials: true
+        })
+      
+      const cartRes = await axios.get('/cart/show-cart',{withCredentials: true})
+      console.log("Cart Response After Deletion:", cartRes.data);
       setCartItems(cartRes.data.books)
+      setSelectedItems([]) 
+      
+      toast.success(deleteresutlt.data.message)
+      
+      navigate("/user/BasketPage")
 
     } catch (error) {
+
       console.error("Error deleting items", error)
+
+      if(error.response && error.response.status === 400) {
+
+        toast.error(error.response.data.message)  
+
+      } else {
+
+        toast.error("Error deleting items", error)
+
+      }
     }
   }
 
@@ -157,10 +189,11 @@ const BasketPage = () => {
 
                   <button 
                     onClick={() => deleteSelectedItems(item.cartId)}
+
                     className="bg-[#D93619] hover:bg-red-500 text-white w-25 h-10 rounded-lg"
                     >
                       ลบ
-                    </button>
+                  </button>
                 </div>
               ))}
             </div>
@@ -171,28 +204,78 @@ const BasketPage = () => {
             <div>
               <h2 className="text-lg font-bold mb-4 text-center">สรุปรายการสั่งซื้อ</h2>
               <p className="w-full h-[1px] bg-black" />
+              {selectedItems.length > 0 ? (
 
-              <div className="text-gray-700 space-y-2 mt-5">
-                <div className="grid grid-cols-3 gap-4">
-                  <p className="text-right pr-10">จำนวน</p>
-                  <p className="text-right font-bold rtl">{cartItems.length}</p>  {/* ข้อมูลจำนวนหนังสือ */}
-                  <p className="text-left pl-12">ชิ้น</p>
+                <>
+                
+                <div className="text-gray-700 space-y-2 mt-5">
+                  <div className="grid grid-cols-3 gap-4">
+                    <p className="text-right pr-10">จำนวน</p>
+                    <p className="text-right font-bold rtl">{selectedItems.length || 0}</p>  {/* ข้อมูลจำนวนหนังสือ */}
+                    <p className="text-left pl-12">ชิ้น</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <p className="text-right pr-7">ราคารวม</p>
+                    <p className="text-right font-bold rtl">
+                      {cartItems
+                        .filter((item) => selectedItems.includes(item.cartId))
+                        .reduce((total, item) => total + item.price, 0)}
+                    </p> {/* ข้อมูลราคา */}
+                    <p className="text-left pl-12">บาท</p>
+                  </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <p className="text-right pr-7">ราคารวม</p>
-                  <p className="text-right font-bold rtl">{cartItems.reduce((total, item) => total + item.price, 0)}</p> {/* ข้อมูลราคา */}
-                  <p className="text-left pl-12">บาท</p>
+
+                </>
+
+              ) : (
+                <>
+                
+                <div className="text-gray-700 space-y-2 mt-5">
+                  <div className="grid grid-cols-3 gap-4">
+                    <p className="text-right pr-10">จำนวน</p>
+                    <p className="text-right font-bold rtl">0</p>  {/* ข้อมูลจำนวนหนังสือ */}
+                    <p className="text-left pl-12">ชิ้น</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <p className="text-right pr-7">ราคารวม</p>
+                    <p className="text-right font-bold rtl">0</p> {/* ข้อมูลราคา */}
+                    <p className="text-left pl-12">บาท</p>
+                  </div>
                 </div>
-              </div>
+
+                </>
+              )}
+             
             </div>
 
             {/* รวมราคาสุทธิ ติดกับกรอบสี่เหลี่ยม*/}
+            
             <div className="text-gray-700 space-y-2 mt-auto">
               <p className="w-full h-[1px] border-t border-dashed border-black" /> {/* เส้นประ */}
               <div className="grid grid-cols-3 gap-4">
-                <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
-                <p className="text-right font-bold rtl ">{cartItems.reduce((total, item) => total + item.price, 0)}</p>
-                <p className="text-left pl-12">บาท</p>
+                {selectedItems.length > 0 ? (
+
+                  <>
+                  
+                  <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
+                  <p className="text-right font-bold rtl ">{
+                    cartItems.filter((item) => selectedItems.includes(item.cartId))
+                    .reduce((total, item) => total + item.price, 0)
+                  }</p>
+                  <p className="text-left pl-12">บาท</p>
+                  
+                  </>
+
+                ) : (
+
+                  <>
+                  <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
+                  <p className="text-right font-bold rtl ">0</p>
+                  <p className="text-left pl-12">บาท</p>
+                  
+                  </>
+                )}
+                
               </div>
             </div>
 

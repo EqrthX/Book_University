@@ -1,36 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "../../util/axios.js";
+import { getMessagePayment } from "../../util/helper.js";
+import { formatDate, formatTime } from "../../util/helper.js";
 import { ShoppingCart } from "lucide-react";
 import Head from "./components/Head.jsx";
 import Navbar from "./components/Navdar.jsx"; 
-
-const getMessagePayment = (paymentStatus) => {
-  switch (paymentStatus) {
-    case "qrCode":
-      return "QR Code"
-    case "Cash":
-      return "เงินสด"
-    default:
-      break;
-  }
-}
-const formatDate = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleDateString("th-TH", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
-
-const formatTime = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleTimeString("th-TH", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
 
 const OrderPage = () => {
   
@@ -129,7 +103,7 @@ const OrderPage = () => {
                 
                 {/* แก้ข้อมูล สถานะการชำระเงิน */}
                   <div className="border border-gray-300 rounded-md px-2 py-1 w-40 mt-2 text-center ml-5">
-                    สถานะการชำระเงิน
+                    {book.status === "completed" ? "ชำระเงินแล้ว" : "ยังไม่ชำระเงิน"}
                   </div>
               </div>
             </div>
@@ -211,7 +185,7 @@ const OrderPage = () => {
                 
                 {/* แก้ข้อมูล สถานะการชำระเงิน */}
                 <div className="border border-gray-300 rounded-md px-2 py-1 w-40 mt-2 text-center ml-5">
-                    สถานะการชำระเงิน
+                    {book.status === "completed" ? "ชำระเงินแล้ว" : "ยังไม่ชำระเงิน"}
                 </div>
 
               </div>

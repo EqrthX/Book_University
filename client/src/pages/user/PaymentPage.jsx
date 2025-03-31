@@ -14,14 +14,15 @@ function PaymentPage() {
     
     const navigate = useNavigate()
     const location = useLocation()
-    const {orderId} = location.state || {}
-    const [isLoading, setIsLoading] = useState(false)
 
+    const {orderId} = location.state || {}
+    const [cost, setCost] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState({
         payment_date: "",
         payment_time: "",
         slip_image: null,
-        orderId: orderId
+        orderId: orderId || ""
     })
 
     const modalRef = useRef(null)
@@ -73,7 +74,7 @@ function PaymentPage() {
 
         setIsLoading(true)
 
-        const updatePayment = await axios.put("/update-payment", formData, {
+        const updatePayment = await axios.put("/payment/update-payment", formData, {
             withCredentials: true,
             headers: {
                 "Content-Type": "multipart/form-data"
@@ -110,7 +111,7 @@ function PaymentPage() {
                 userId: res.data.user.id,
                 studentId: res.data.user.studentId,
                 })
-
+                
             } catch (error) {
                 console.error("User not authenticated", error);
                 navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
@@ -121,7 +122,26 @@ function PaymentPage() {
 
     }, [navigate])
 
-   
+    useEffect(() => {
+
+        const showCost = async () => {
+            try {
+                if(!orderId) {
+                    console.error("Order ID is missing")
+                    return;
+                }
+
+                const res = await axios.post("/payment/show-total-cost",
+                     {orderId}, 
+                     {withCredentials: true})
+                setCost(res.data.totalCost);
+
+            } catch (error) {
+                console.error("Error fetching cost", error)
+            }
+        }
+        showCost()
+    },[orderId])
 
     return (
     <div className="bg-[#F5F5F5] min-h-screen pb-10">
@@ -144,12 +164,15 @@ function PaymentPage() {
                 <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 w-full">
                     
                     {/* รูป QR Code */}
-                    <div className="w-full md:w-1/3 flex justify-start">
+                    <div className="w-full md:w-1/3 flex justify-start flex-col">
                         <div className="w-80 h-auto border-2 border-gray-300 p-5 rounded-2xl flex flex-col items-center justify-center">
                             <img className="w-full h-auto object-cover rounded-lg" src={Qr_code} alt="QrCode" />
                             <h1 className="text-3xl font-bold mt-6 text-center p-5" style={{ fontFamily: 'Superstore, sans-serif' }}>
                                 QR Code
                             </h1>
+                        </div>
+                        <div className='relative bottom-0 left-25 mt-5 text-2xl font-semibold'>
+                            {cost} บาท
                         </div>
                     </div>
 
@@ -179,7 +202,7 @@ function PaymentPage() {
                         </div>
 
                         <h5 className="text-sm text-red-500 mt-2 pr-30">* JPEG, PNG</h5>
-
+                        
                     </div>
 
                     {/* ช่องกรอกข้อมูลโอนเงิน */}
@@ -215,6 +238,7 @@ function PaymentPage() {
                             onClick={handleSubmit}
                             className="bg-[#358C1B] hover:bg-green-700 text-white px-20 py-2 rounded-md w-full md:w-auto ml-7 mt-25"
                         >
+                            
                             ยืนยัน
                         </button>
 

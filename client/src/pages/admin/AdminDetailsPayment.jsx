@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import axios from '../../util/axios.js'
 
 const getStatusMessages = (status) => {
-  console.log(status);
   switch (status) {
 
     case "in_progress" :
@@ -46,7 +45,7 @@ function AdminDetailsPayment() {
         useModal.current.showModal();
       }
 
-      const updateOrdersStatus = await axios.put(`/update-order-status/${id}`, 
+      const updateOrdersStatus = await axios.put(`/admin/update-order-status/${id}`, 
         {status: value}, 
         {withCredentials: true}
       )
@@ -70,7 +69,7 @@ function AdminDetailsPayment() {
   useEffect(() => {
     const fetchInfomation = async () => {
       try {
-        const resInfo = await axios.get(`/show-information/${id}`, {withCredentials: true})
+        const resInfo = await axios.get(`/admin/show-information/${id}`, {withCredentials: true})
 
         console.log(resInfo.data.infomation);
         setPaymentDetails(resInfo.data.infomation)

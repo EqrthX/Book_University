@@ -15,7 +15,7 @@ const AdminCheckBooks = () => {
       setIsLoading(true);
 
       try {
-        const res = await axios.get('/show-books-unavailable', { withCredentials: true });
+        const res = await axios.get('/admin/show-books-unavailable', { withCredentials: true });
         console.log("API Response:", res.data);
 
         if (res.data.books && Array.isArray(res.data.books)) {
@@ -39,7 +39,7 @@ const AdminCheckBooks = () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.put(`/update-status-book/${id}`, { checkStatusBooks: 'available' }, { withCredentials: true });
+      const res = await axios.put(`/admin/update-status-book/${id}`, { checkStatusBooks: 'available' }, { withCredentials: true });
 
       if (res.status === 200) {
         toast.success('ยืนยันการลงขายหนังสือ');
@@ -65,7 +65,7 @@ const AdminCheckBooks = () => {
     const confirmDelete = window.confirm("ต้องการลบข้อมูลสินค้านี้ใช่ไหม");
     if (!confirmDelete) return;
     try {
-      const res = await axios.delete(`/delete-book`, { data: { bookId }, withCredentials: true });
+      const res = await axios.delete(`/product/delete-book`, { data: { bookId }, withCredentials: true });
       if (res.status === 200) {
         toast.success("ลบสินค้าสำเร็จ");
         setBooks(books.filter(book => book.id !== bookId));

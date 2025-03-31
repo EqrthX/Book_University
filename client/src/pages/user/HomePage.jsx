@@ -37,7 +37,7 @@ const HomePage = () => {
 
     const getAllBooks = async () => {
       try {
-        const res = await axios.get('/show-books', {withCredentials: true})
+        const res = await axios.get('/product/show-books', {withCredentials: true})
 
         setBooks(res.data.books)
 

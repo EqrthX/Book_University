@@ -47,9 +47,10 @@ function DeliveryPage() {
       {
         bookId: bookId,     
         quantity: quantity || 1,
-        price: price
+        price: price,
       }
-    ]
+    ],
+    shipping_cost: 40
   })
 
   const [pickupInfo, setPickupInfo] = useState({
@@ -66,14 +67,15 @@ function DeliveryPage() {
     userId: "",
     bookId: bookId,
     quantity: quantity,
-    total_price: totalPrice,
+    total_price: totalPrice || 0  ,
     orderData: Array.isArray(orderData) ? orderData: [
       {
         bookId: bookId,
         quantity: quantity || 1,
         price: price
       }
-    ]
+    ],
+    shipping_cost: 0
 
   })
 
@@ -91,7 +93,7 @@ function DeliveryPage() {
       }));
     }
   }
-
+  
   const handlePayment = async (e) => {
     e.preventDefault();
     
@@ -102,19 +104,24 @@ function DeliveryPage() {
     
     try {
         let res;
-
+        let updatedDeliveryInfo = null
         if(selected === "delivery") {
+          updatedDeliveryInfo = {
+            ...deliveryInfo,
+            totalPrice: deliveryInfo.total_price + deliveryInfo.shipping_cost
+          }
+          res = await axios.post("/payment/add-infomation-order", updatedDeliveryInfo, { withCredentials: true })
 
-          res = await axios.post("/add-infomation-order", deliveryInfo, { withCredentials: true })
-          
         } else if(selected === "pickup") {
           
-          res = await axios.post("/add-infomation-order", pickupInfo, { withCredentials: true })
+          res = await axios.post("/payment/add-infomation-order", pickupInfo, { withCredentials: true })
           
         }
 
         navigate("/user/PaymentPage",{
-          state: {orderId: res.data.orderId}
+          state: { 
+            orderId: res.data.orderId
+          }
         })
         
       } catch (error) {

@@ -111,7 +111,7 @@ const UpdateABook = () => {
         setLoading(true);
 
         try {
-            const res = await axios.put(`/update-book/${id}`, valuesBook, { withCredentials: true });
+            const res = await axios.put(`/product/update-book/${id}`, valuesBook, { withCredentials: true });
             if(res.status === 200) {
                 toast.success("แก้ไขสำเร็จ");
                 navigate('/user/ProfilePage');

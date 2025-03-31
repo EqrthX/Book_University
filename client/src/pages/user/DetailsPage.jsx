@@ -47,15 +47,24 @@ const DetailsPage = () => {
     
     const addToCart = async(id) => {
       try {
-        const res = await axios.post(`/add-to-cart/${id}`, {withCredentials: true})
+        const res = await axios.post(`/cart/add-to-cart/${id}`, {withCredentials: true})
 
-        if(res.status === 201) {
-          toast.success("Added to cart")
+        if (res.status === 201) {
+          toast.success(res.data.message)
           navigate("/user/HomePage")
         }
+
       } catch (error) {
-        console.error("Error adding to cart", error)
-        toast.error("Error adding to cart")
+        if(error.response && error.response.status === 400) {
+
+          toast.error(error.response.data.message)
+          
+        } else {
+
+          console.error("Error adding to cart", error)
+          toast.error("เกิดข้อผิดพลาดในการเพิ่มหนังสือไปยังตะกร้า")
+
+        }
       }
     }
 

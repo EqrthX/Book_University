@@ -3,6 +3,10 @@ import cookieParser from "cookie-parser"
 
 import userRouter from "./routers/user.route.js";
 import homepageVerifyRouter from "./routers/homepageVerify.route.js"
+import productRouter from "./routers/product.route.js"
+import adminRouter from "./routers/admin.route.js"
+import cartRouter from "./routers/cart.route.js"
+import paymentRouter from "./routers/payments.route.js"
 
 import { verifyToken } from "./middleware/auth.middleware.js";
 
@@ -23,7 +27,13 @@ app.use(cors({
 
 app.use("/uploads", express.static('uploads'));
 app.use("/api/auth", userRouter)
+app.use("/api/admin", verifyToken, adminRouter)
+
 app.use("/api",verifyToken, homepageVerifyRouter)
+app.use("/api/product", verifyToken, productRouter)
+app.use("/api/cart", verifyToken, cartRouter)
+app.use("/api/payment", verifyToken, paymentRouter)
+
 
 pool.getConnection()
     .then((connection) => {
