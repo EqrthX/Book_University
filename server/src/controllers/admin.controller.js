@@ -24,7 +24,6 @@ export const showBooksUnavailable = async(req, res) => {
 
 export const showStatusPayment = async(req, res) => {
     try {
-        //"SELECT c.id AS cartId, b.* FROM books AS b INNER JOIN cart AS c ON b.id = c.bookId WHERE c.userId = ?",
 
         const [statusPayment] = await pool.execute(
             `
@@ -48,8 +47,6 @@ export const showStatusPayment = async(req, res) => {
 
 export const fetchInfomation = async(req, res) => {
 
-    // SELECT o.id, o.status, p.* FROM payments AS p 
-    // INNER JOIN orders as o ON p.order_id = o.id
     try {
         const {id} = req.params;
 
@@ -66,16 +63,19 @@ export const fetchInfomation = async(req, res) => {
                 users.fullName AS user_fullName, 
                 users.email AS user_email,
 
-                orders.id AS order_id, 
+                orders.id AS order_id,
                 orders.user_id AS order_user_id,
                 orders.status AS order_status,
-                orders.total_price AS total_price,
+                orders.total_price AS order_totalPrice, 
 
-                order_items.order_id as order_id,
-                order_items.book_id as book_id,
-
-                books.bookPic AS BookPic,
-
+                order_items.order_id AS order_items_order_id,
+                order_items.book_id AS order_items_book_id,
+                    
+                books.id AS book_id,
+                books.titleBook AS book_titleBook,
+                books.price AS book_price,
+                books.bookPic AS book_bookPic,
+                
                 payments.* 
             FROM users
             INNER JOIN orders ON users.id = orders.user_id
@@ -93,38 +93,44 @@ export const fetchInfomation = async(req, res) => {
             })
         }
 
-        const orderInfo = orderResult[0]
+        const bookIds = orderResult.map((book) => book.book_id);
 
-        const [sellerResult] = await pool.execute(
+        // ดึงข้อมูลผู้ขายสำหรับหนังสือทั้งหมด
+        const [sellerResults] = await pool.execute(
             `
             SELECT
                 users.id AS seller_id,
                 users.fullName AS seller_fullName,
-                users.email AS seller_email
+                users.email AS seller_email,
+                books.id AS book_id
             FROM users
-            INNER JOIN books ON books.userId = users.id
-            WHERE books.id = ?
+            INNER JOIN books ON users.id = books.userId
+            INNER JOIN order_items ON books.id = order_items.book_id
+            WHERE order_items.order_id = ?
             `,
-            [orderInfo.book_id]
-        )
+            [orderResult[0].order_id]
+        );
 
-        if(sellerResult.length === 0) {
-            return res.status(404).json({
-                message: "No seller information found for the given book ID"
-            });
-        }
+        // จับคู่ข้อมูลผู้ขายกับหนังสือ
+        const enrichedBooks = orderResult.map((book) => {
+            const seller = sellerResults.find((seller) => seller.book_id === book.book_id);
+            return {
+                ...book,
+                seller: seller || null, // ถ้าไม่มีข้อมูลผู้ขาย ให้เป็น null
+            };
+        });
 
-        const sellerInfo = sellerResult[0]
-
-        const combinedInfo = {
-            ...orderInfo,
-            seller: sellerInfo
-        }
-
+        // ส่งข้อมูลกลับไปยัง Frontend
         return res.status(200).json({
             message: "Fetch orders successfully",
-            infomation: combinedInfo
-        })
+            infomation: enrichedBooks[0], // ข้อมูลคำสั่งซื้อแรก (ถ้าต้องการ)
+            showBooks: enrichedBooks.map((book) => ({
+                book_id: book.book_id,
+                book_titleBook: book.book_titleBook,
+                book_price: book.book_price,
+                book_bookPic: book.book_bookPic,
+            })),
+        });
         
     } catch (error) {
         console.error("Error Fetch Information controller: ", error.message);
@@ -235,3 +241,4 @@ export const updateStatusBook = async(req, res) => {
         
     }
 }
+

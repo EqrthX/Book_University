@@ -32,6 +32,7 @@ function AdminDetailsPayment() {
   const useModal = useRef(null)
 
   const [paymentDeatails, setPaymentDetails] = useState([])
+  const [books, setBooks] = useState([])
   const [updateStatus, setUpdateStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false)
 
@@ -71,8 +72,9 @@ function AdminDetailsPayment() {
       try {
         const resInfo = await axios.get(`/admin/show-information/${id}`, {withCredentials: true})
 
-        console.log(resInfo.data.infomation);
         setPaymentDetails(resInfo.data.infomation)
+        setBooks(resInfo.data.showBooks)
+
       } catch (error) {
         console.error("Error fetching payment details:", error)
       }
@@ -82,7 +84,7 @@ function AdminDetailsPayment() {
   }, [id])
   
   return (
-    <div className="w-full min-h-screen relative flex flex-col items-center p-10 overflow-hidden">
+    <div className="w-full min-h-screen relative flex flex-col items-center p-10 ">
       {/* พื้นหลัง */}
       <div
         className="absolute inset-0"
@@ -108,7 +110,6 @@ function AdminDetailsPayment() {
             >
               
                 อนุมัติ
-            
             </button>
 
             <button 
@@ -131,7 +132,7 @@ function AdminDetailsPayment() {
       </div>
 
       {/* เนื้อหาหลัก */}
-        <div className="relative bg-[#F4F4F4] p-8 shadow-lg w-full h-205 max-w-5xl -my-5 rounded-sm">
+        <div className="relative bg-[#F4F4F4] p-8 shadow-lg w-full max-w-5xl h-auto rounded-sm">
             
                 {/* ข้อมูลคำสั่งซื้อ */}
                 <div className="grid grid-cols-2 gap-4 text-gray-700">
@@ -139,15 +140,25 @@ function AdminDetailsPayment() {
                     <div className="flex flex-col items-center mt-5">
                         <h3 className="mb-2 font-bold ">หนังสือ</h3>
                         {/* รูปหนังสือ */}
-                        <div className="w-50 h-60 bg-white border-2 border-gray-400 rounded flex justify-center items-center ">
-                          <img 
-                            src={paymentDeatails.BookPic ? `http://localhost:5001/${paymentDeatails.BookPic.replace(/\\/g, "/")}` : "URL_TO_DEFAULT_IMAGE"} 
-                            className="w-full h-full object-cover"
-                          />
+                        <div className="carousel w-80 bg-white border-2 border-gray-400 rounded-lg h-80 overflow-hidden">
+                          {books.map((book) => (
+                            <div key={book.book_id} className="carousel-item w-full h-auto flex justify-center items-center">
+                              <img
+                                src={
+                                  book.book_bookPic
+                                    ? `http://localhost:5001/${book.book_bookPic.replace(/\\/g, "/")}`
+                                    : "URL_TO_DEFAULT_IMAGE"
+                                }
+                                alt={book.titleBook || "Book"}
+                                className="w-50 h-auto object-cover"
+                              />
+                            </div>
+                          ))}
                         </div>
+                        
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 my- mt-20 text-black  ">
+                    <div className="grid grid-cols-2 gap-4 my-auto mt-20 text-black  ">
 
                         {/* หมายเลขคำสั่งซื้ออยู่ข้างบน */}
                         <div>
@@ -207,13 +218,13 @@ function AdminDetailsPayment() {
                             <input type="text" className="border-2 border-gray-300 p-2 rounded-sm w-50 mt-3 ml-7"  value={getStatusMessages(paymentDeatails.order_status)}/>
 
                             <p className="font-medium mt-7">ราคาสินค้า</p>
-                            <input type="text" className="border-2 border-gray-300 p-2 rounded-sm w-50 mt-3 ml-7"  value={paymentDeatails.total_price}/>
+                            <input type="text" className="border-2 border-gray-300 p-2 rounded-sm w-50 mt-3 ml-7"  value={paymentDeatails.order_totalPrice}/>
                         </div>
 
                             {/* รูปหลักฐานการโอน */}
                             <div className="flex flex-col -my-30">
                                 <p className="text-lg mb-3 -mx-7 ">หลักฐานการโอน</p>
-                                <div className="w-70 h-80 bg-white border-2 border-gray-400 rounded flex ">
+                                <div className="w-80 h-80 bg-white border-2 border-gray-400 rounded-lg overflow-hidden">
                                   <img 
                                     src={paymentDeatails.slip_image ? `http://localhost:5001/${paymentDeatails.slip_image.replace(/\\/g, "/")}` : "URL_TO_DEFAULT_IMAGE"}
                                     className="w-full h-full object-contain"
