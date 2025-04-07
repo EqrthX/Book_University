@@ -20,12 +20,14 @@ import SellHistoryPage from './pages/user/SellHistoryPage'
 import BuyNowPage from './pages/user/BuyNowPage'
 import DeliveryPage from './pages/user/DeliveryPage'
 import PaymentPage from './pages/user/PaymentPage'
+import NotificationPage from './pages/user/NotificationPage'//เพิ่มมาใหม่
+
 
 import {Toaster} from 'react-hot-toast'
 import UpdateABook from './pages/user/UpdateABook'
 import SearchPage from './pages/user/SearchPage'
 import OrderPage from './pages/user/OrderPage'
-import ChatPage from './pages/user/ChatPage'
+
 function App() {
   
   return (
@@ -54,8 +56,9 @@ function App() {
         <Route path="/user/DeliveryPage" element={<DeliveryPage/>}/>
         <Route path="/user/PaymentPage" element={<PaymentPage/>}/>
         <Route path="/user/search" element={<SearchPage/>}/>
+        <Route path="/user/NotificationPage" element={<NotificationPage/>}/>
+
         <Route path='/user/OrderPage' element={<OrderPage/>}/>
-        <Route path='/user/Chat' element={<ChatPage/>}/>
         
       </Routes>  
     </>
