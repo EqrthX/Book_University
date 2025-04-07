@@ -44,7 +44,7 @@ function Navdar() {
       {/* เมนูหลัก (แสดงปกติบนเดสก์ท็อป) */}
       <div className="hidden md:flex ml-auto pr-20">
         <ul className="flex space-x-10 relative">
-          <li><Link to="" className="text-white font-bold hover:underline">แชทพูดคุย</Link></li>
+          <li><Link to="/user/Chat" className="text-white font-bold hover:underline">แชทพูดคุย</Link></li>
           <li><Link to="/user/AddBook" className="text-white font-bold hover:underline">ต้องการขาย</Link></li>
 
           <li className="relative">
@@ -67,7 +67,7 @@ function Navdar() {
       {menuOpen && (
         <div className="absolute top-20 left-0 w-full bg-[#2F5792] p-4 md:hidden">
           <ul className="space-y-4 text-center text-white font-bold">
-            <li><Link to="" onClick={toggleMenu}>แชทพูดคุย</Link></li>
+            <li><Link to="/user/Chat" onClick={toggleMenu}>แชทพูดคุย</Link></li>
             <li><Link to="/user/AddBook" onClick={toggleMenu}>ต้องการขาย</Link></li>
             <li>
               <button onClick={toggleHistory} className="flex items-center justify-center w-full">

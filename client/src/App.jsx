@@ -25,7 +25,7 @@ import {Toaster} from 'react-hot-toast'
 import UpdateABook from './pages/user/UpdateABook'
 import SearchPage from './pages/user/SearchPage'
 import OrderPage from './pages/user/OrderPage'
-
+import ChatPage from './pages/user/ChatPage'
 function App() {
   
   return (
@@ -54,8 +54,8 @@ function App() {
         <Route path="/user/DeliveryPage" element={<DeliveryPage/>}/>
         <Route path="/user/PaymentPage" element={<PaymentPage/>}/>
         <Route path="/user/search" element={<SearchPage/>}/>
-
         <Route path='/user/OrderPage' element={<OrderPage/>}/>
+        <Route path='/user/Chat' element={<ChatPage/>}/>
         
       </Routes>  
     </>
