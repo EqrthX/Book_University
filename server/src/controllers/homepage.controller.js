@@ -297,3 +297,45 @@ export const searchKeyword = async(req, res) => {
         })
     }
 }
+
+export const showHistoryBook_WithId = async(req, res) => {
+    try {
+        const bookId = req.params.id
+
+        const [history] = await pool.execute(
+            `
+                SELECT 
+                    sold_books.book_id AS book_id,
+                    sold_books.titleBook AS titleBook,
+                    sold_books.price AS price,
+                    sold_books.bookPic AS bookPic,
+                    sold_books.buyerId AS buyerId,
+
+                    orders.user_id AS user_id,
+                    orders.delivery_status AS delivery_status
+
+                FROM sold_books 
+                INNER JOIN orders ON sold_books.buyerId = orders.user_id
+                WHERE sold_books.book_id = ?
+            `,
+            [bookId]
+        );
+
+        if(history.length === 0) {
+            return res.status(404).json({
+                message: "ไม่พบข้อมูลการซื้อหนังสือ"
+            })
+        }
+
+        return res.status(200).json({
+            message: "แสดงประวัติการซื้อหนังสือ: " + bookId,
+            history: history[0]
+        })
+        
+    } catch (error) {
+        console.error("Error Show History Book With Id Controller: ", error.message)
+        return res.status(500).json({
+            message: error.message
+        })
+    }
+}

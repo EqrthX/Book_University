@@ -8,6 +8,9 @@ import adminRouter from "./routers/admin.route.js"
 import cartRouter from "./routers/cart.route.js"
 import paymentRouter from "./routers/payments.route.js"
 import messagesRouter from "./routers/messages.route.js"
+import notificationRouter from "./routers/notification.route.js"
+
+
 import { verifyToken } from "./middleware/auth.middleware.js";
 
 import cors from "cors";
@@ -46,7 +49,7 @@ app.use("/api/product", verifyToken, productRouter)
 app.use("/api/cart", verifyToken, cartRouter)
 app.use("/api/payment", verifyToken, paymentRouter)
 app.use("/api/messages", verifyToken, messagesRouter)
-
+app.use("/api/notifications", verifyToken, notificationRouter)
 const users = {}; // เก็บ mapping ระหว่าง userId และ socketId
 
 // scoket Logic
@@ -71,6 +74,12 @@ io.on("connection", (socket) => {
         const receiverSocketId = users[msg.receiver]; // หา socket id ของผู้รับ
         if (receiverSocketId) {
             console.log(`Sending message to receiver with socket ID: ${receiverSocketId}`);
+
+            // ตรวจสอบว่ามีรูปภาพหรือไม่
+            if (msg.picture && msg.picture !== "uploaded") {
+                console.warn("Picture data is not a valid URL. Ensure it is uploaded.");
+            }
+
             io.to(receiverSocketId).emit("receive_message", msg); // ส่งข้อความไปยังผู้รับ
         } else {
             console.log(`Receiver not connected or not registered. Receiver ID: ${msg.receiver}`);

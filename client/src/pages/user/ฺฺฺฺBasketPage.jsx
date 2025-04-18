@@ -27,7 +27,7 @@ const BasketPage = () => {
           studentId: res.data.user.studentId,
         })
 
-        const cartRes = await axios.get('/show-cart',{withCredentials: true})
+        const cartRes = await axios.get('/cart/show-cart',{withCredentials: true})
         console.log("Cart Response:", cartRes.data);
         setCartItems(cartRes.data.books || []);
         

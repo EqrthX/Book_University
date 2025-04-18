@@ -111,10 +111,12 @@ export const addInfomationAndOrder = async(req, res) => {
         })
 
     } catch (error) {
+
         console.error("Error controller Add Information and Order ", error)
         res.status(500).json({
             message:error.message || error
         })
+        
     }
 }
 

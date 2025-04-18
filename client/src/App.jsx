@@ -27,6 +27,9 @@ import {Toaster} from 'react-hot-toast'
 import UpdateABook from './pages/user/UpdateABook'
 import SearchPage from './pages/user/SearchPage'
 import OrderPage from './pages/user/OrderPage'
+import ChatPage from './pages/user/ChatPage'
+import BookDetail from './pages/user/BookDetail'
+import UpdateSlip from './pages/user/UpdateSlip'
 
 function App() {
   
@@ -57,8 +60,10 @@ function App() {
         <Route path="/user/PaymentPage" element={<PaymentPage/>}/>
         <Route path="/user/search" element={<SearchPage/>}/>
         <Route path="/user/NotificationPage" element={<NotificationPage/>}/>
-
+        <Route path="/user/BookDetail/:id" element={<BookDetail/>}/>
         <Route path='/user/OrderPage' element={<OrderPage/>}/>
+        <Route path='/user/Chat' element={<ChatPage/>}/>
+        <Route path='/user/UpdateSlip/:id' element={<UpdateSlip/>} />
         
       </Routes>  
     </>

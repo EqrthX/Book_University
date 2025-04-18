@@ -29,14 +29,15 @@ export const showAllUsersToChat = async (req, res) => {
 export const sendMessage = async (req, res) => {
     try {
         const { sender, receiver, text: message } = req.body;
+        const picture = req.files?.picture_message?.[0]?.path.replace(/\\/g, "/") || null; // แก้ไขให้ใช้ req.files
 
-        if (!sender || !receiver || !message) {
+        if (!sender || !receiver || (!message && !picture)) {
             return res.status(400).json({ message: "ไม่พบข้อมูล" });
         }
 
         const [result] = await pool.execute(
-            `INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)`,
-            [sender, receiver, message]
+            `INSERT INTO messages (sender_id, receiver_id, message, img) VALUES (?, ?, ?, ?)`,
+            [sender, receiver, message || "", picture]
         );
 
         // ส่งข้อความที่เพิ่งบันทึกกลับไปยังไคลเอนต์
@@ -47,6 +48,7 @@ export const sendMessage = async (req, res) => {
                 sender,
                 receiver,
                 text: message,
+                picture,
                 created_at: new Date(), // เพิ่ม timestamp
             },
         });
@@ -66,7 +68,7 @@ export const getMessages = async (req, res) => {
 
         const [rows] = await pool.execute(
             `
-            SELECT id, sender_id AS sender, receiver_id AS receiver, message AS text, created_at
+            SELECT id, sender_id AS sender, receiver_id AS receiver, img AS picture, message AS text, created_at
             FROM messages
             WHERE (sender_id = ? AND receiver_id = ?)
             OR (sender_id = ? AND receiver_id = ?)

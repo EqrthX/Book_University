@@ -35,6 +35,8 @@ function AdminDetailsPayment() {
   const [books, setBooks] = useState([])
   const [updateStatus, setUpdateStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false)
+  const [title_message, setTitleMessage] = useState("")
+  const [message, setMessage] = useState("")
 
   const handleChangeStatus = async (value) => {
 
@@ -47,7 +49,13 @@ function AdminDetailsPayment() {
       }
 
       const updateOrdersStatus = await axios.put(`/admin/update-order-status/${id}`, 
-        {status: value}, 
+        {
+          
+          Title_message: title_message,
+          message: message,
+          status: value,
+
+        }, 
         {withCredentials: true}
       )
 
@@ -233,6 +241,53 @@ function AdminDetailsPayment() {
                             </div>
                         </div>
                 </div>
+
+                <form
+                  className="flex flex-col items-center mt-5 justify-around" 
+                >
+                  <div className="flex flex-col mb-5 w-[500px]">
+                    
+                    
+                    <select 
+                      className="border-2 bg-white border-gray-300 p-2 rounded-sm w-[500px] mt-2" 
+                      onChange={(e) => setTitleMessage(e.target.value)}
+                    >
+                      <option value="" disabled selected>เลือกหัวข้อ</option>
+                      <option 
+                        value="ยังไม่ได้รับการชำระเงิน" 
+                      >
+                        ยังไม่ได้รับการชำระเงิน 
+                      </option>
+                      <option 
+                        value="ยอดชำระไม่ถูกต้อง" 
+                      >
+                        ยอดชำระไม่ถูกต้อง
+                      </option>
+                      <option 
+                        value="ข้อมูลวันเวลาไม่ถูกต้อง" 
+                      >
+                        ข้อมูลวันเวลาไม่ถูกต้อง
+                      </option>
+                      <option 
+                        value="อื่นๆ" 
+                      >
+                        อื่นๆ
+                      </option>
+                    </select>
+
+                  </div>
+
+                  <div className="flex flex-col mb-5 w-[500px]">
+                    <label className="font-medium text-lg">คำอธิบาย</label>
+                    <input 
+                      type="text" 
+                      className="border-2 bg-white border-gray-300 p-2 rounded-sm w-[500px] mt-2"
+                      onChange={(e) => setMessage(e.target.value)}
+                      value={message}
+                      name="message"
+                    />
+                  </div>
+                </form>
 
                 <dialog ref={useModal} id="my_modal_1" className="modal">
                   <div className="modal-box bg-white rounded-xl flex flex-col justify-center items-center text-center">
