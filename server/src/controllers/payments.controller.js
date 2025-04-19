@@ -5,8 +5,7 @@ export const addInfomationAndOrder = async(req, res) => {
 
     try {
 
-        const paymentDateTime_New = new Date()
-        
+        const paymentDateTime_New = new Date() 
         
         let {
 
@@ -171,6 +170,57 @@ export const showTotalCost = async(req, res) => {
         console.error("Error Show Total Cost Controller: ", error)
         return res.status(500).json({
             message: error.message || error
+        })
+    }
+}
+
+export const editPayment = async(req, res) => {
+    try {
+
+        const {id} = req.params
+        const {payment_date, payment_time} = req.body
+        const slip_image = req.files?.paymentSlip?.[0]
+
+        const filePath = slip_image ? slip_image.path : null;
+
+        console.log("payment data: ", payment_date);
+        console.log("payment time: ", payment_time);
+        console.log("image: ", slip_image);
+
+        const [getStatusPayment_orders] = await pool.execute(
+            `
+                SELECT order_id FROM notifications WHERE id = ?
+            `,
+            [id]
+        )
+        const order_id = getStatusPayment_orders[0]?.order_id
+        const paymentDateTime = payment_date + " " + payment_time
+
+        const [result] = await pool.execute(
+            `
+            UPDATE
+                payments
+            SET 
+                payment_datetime = ?,
+                slip_image = ?
+            WHERE
+                order_id = ?
+            `,
+            [paymentDateTime, filePath, order_id]
+        )
+
+        await pool.execute(
+            `DELETE FROM notifications WHERE order_id = ?`, [order_id]
+        )
+
+        return res.status(200).json({
+            data: result
+        })
+
+    } catch (error) {
+        console.error("Error editPayment Controller: ", error.message)
+        return res.status(500).json({
+            message: error.message
         })
     }
 }

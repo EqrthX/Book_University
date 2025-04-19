@@ -3,10 +3,13 @@ import Head from "./components/Head.jsx";
 import Navbar from "./components/Navdar.jsx";
 import { Bell, X, Check, ShoppingCart } from 'lucide-react';
 import axios from '../../util/axios.js';
+import { useNavigate } from 'react-router-dom';
 
 function NotificationPage() {
   const [notification, setNotification] = useState([]);
   const [user, setUser] = useState({ userId: "", studentId: "" });
+  const navigator = useNavigate()
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -38,6 +41,13 @@ function NotificationPage() {
       setNotification((prev) =>
         prev.map((item) => (item.id === id ? { ...item, status: "read" } : item))
       );
+      
+      const thisNoti = notification.find((item) => item.id === id)
+
+      if(thisNoti?.order_status?.includes("Not_Approved")) {
+        navigator(`/user/UpdateSlip/${id}`);
+      }
+      
     } catch (error) {
       console.error("Error updating notification status:", error);
     }

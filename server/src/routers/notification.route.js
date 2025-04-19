@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { verifyToken } from '../middleware/auth.middleware.js'
-import { getNotifications, getStatusForNotifications, updateNotificationStatus } from '../controllers/notification.controller.js'
+import { getNotifications, updateNotificationStatus } from '../controllers/notification.controller.js'
 
 const router = express.Router()
 
