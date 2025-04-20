@@ -160,7 +160,7 @@ const BasketPage = () => {
                     className="bg-[#D93619] hover:bg-red-500 text-white w-25 h-10 rounded-lg"
                     >
                       ลบ
-                    </button>
+                  </button>
                 </div>
               ))}
             </div>
@@ -183,7 +183,13 @@ const BasketPage = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-4">
                     <p className="text-right pr-7">ราคารวม</p>
-                    <p className="text-right font-bold rtl">{cartItems.reduce((total, item) => total + item.price, 0)}</p> {/* ข้อมูลราคา */}
+                    <p className="text-right font-bold rtl">
+                      {
+                        cartItems
+                        .filter((item) => selectedItems.includes(item.cartId))
+                        .reduce((total, item) => total + item.price, 0)
+                      }
+                    </p> {/* ข้อมูลราคา */}
                     <p className="text-left pl-12">บาท</p>
                   </div>
                 </div>
@@ -216,7 +222,13 @@ const BasketPage = () => {
               <p className="w-full h-[1px] border-t border-dashed border-black" /> {/* เส้นประ */}
               <div className="grid grid-cols-3 gap-4">
                 <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
-                <p className="text-right font-bold rtl ">{cartItems.reduce((total, item) => total + item.price, 0)}</p>
+                <p className="text-right font-bold rtl ">
+                  {
+                    cartItems
+                    .filter((item) => selectedItems.includes(item.cartId))
+                    .reduce((total, item) => total + item.price, 0)
+                  }
+                </p>
                 <p className="text-left pl-12">บาท</p>
               </div>
             </div>
