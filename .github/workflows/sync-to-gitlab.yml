@@ -15,4 +15,5 @@ jobs:
       - name: Push GitLab
         run: |
           git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/EqrthX/Book_University.git
+          git pull
           git push gitlab main:main
