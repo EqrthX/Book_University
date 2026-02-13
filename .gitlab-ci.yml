@@ -7,11 +7,12 @@ stages:
 cache:
   paths:
     - node_modules/
-jobs:
-  build-job:
+
+build-job:
     stage: build
     script:
       - echo "⚙️ กำลังจำลองการ Build และติดตั้ง Dependencies..."
+      - cd server
       - npm install
     artifacts:
       paths:
@@ -24,5 +25,6 @@ jobs:
       - build-job
     script:
       - echo "🧪 กำลังตรวจสอบโค้ด..."
+      - cd server
       - npm run test || echo "ยังไม่ได้เขียนไฟล์ Test ข้ามขั้นตอนนี้ไปก่อน..."
     allow_failure: true
