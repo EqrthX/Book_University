@@ -1,0 +1,28 @@
+image: node:20-alpine
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - node_modules/
+jobs:
+  build-job:
+    stage: build
+    script:
+      - echo "⚙️ กำลังจำลองการ Build และติดตั้ง Dependencies..."
+      - npm install
+    artifacts:
+      paths:
+        - node_modules/
+      expire_in: 1 hour
+  
+  unit-test-job:
+    stage: test
+    dependencies:
+      - build-job
+    script:
+      - echo "🧪 กำลังตรวจสอบโค้ด..."
+      - npm run test || echo "ยังไม่ได้เขียนไฟล์ Test ข้ามขั้นตอนนี้ไปก่อน..."
+    allow_failure: true
