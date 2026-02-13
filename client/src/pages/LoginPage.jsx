@@ -86,12 +86,18 @@ const LoginPage = () => {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10">
         <h1 className="text-3xl font-bold mb-3">เข้าสู่ระบบ</h1>
 
-        <div className="w-2/3 h-[5px] bg-black mx-auto mb-3"/>
-
-        <h3 className="text-lg font-bold">ซื้อขายหนังสือ</h3>
+        <div className="flex items-center justify-center gap-2 py-2">
+            <h3 className="text-sm font-bold" style={{ fontFamily: 'Superstore, sans-serif' }}>
+                ซื้อขายหนังสือ
+            </h3>
+              <p className="w-0.5 h-[20px] bg-black" />
+            <h3 className="text-sm font-bold" style={{ fontFamily: 'Superstore, sans-serif' }}>
+                Bookstore
+            </h3>
+          </div>
 
         <form 
-        onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
         className="mt-5 flex flex-col items-center gap-4 w-full">
 
               <div className="flex justify-between w-full items-center" >
@@ -121,9 +127,7 @@ const LoginPage = () => {
 
               </div>
 
-              <span className="text-lg font-semibold">คุณไม่มีบัญชี {" "} <Link to="/signup" className="transition-all hover:text-blue-600 top-0 left-0 right-0 hover:border-b-4 hover:border-blue-600">Sign Up</Link> </span>
-
-              {errorMessage && <p className="text-red-500 text-lg mt-3 font-semibold">{errorMessage}</p>}
+              {errorMessage && <p className="text-red-500 text-lg font-semibold">{errorMessage}</p>}
 
               <button
                 type="submit"

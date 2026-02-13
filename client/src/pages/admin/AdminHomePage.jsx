@@ -1,15 +1,16 @@
 import axios from '../../util/axios.js'
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import UTCC from '../../assets/UTCC.png'
+import { UserRoundPlus,Wallet,BookPlus } from 'lucide-react';
+
+import HeadAdmin from './components/HeadAdmin.jsx'
 
 
 const AdminHomePage = () => {
   
   const navigate = useNavigate();
   const [userName, setUserName] = useState("")
-  const [selectedPage, setSelectedPage] = useState(null)
-
+  
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -17,45 +18,66 @@ const AdminHomePage = () => {
         setUserName(res.data.user.studentId)
       } catch (error) {
         console.error("User not authenticated", error);
-        navigate("/login"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
+        navigate("/"); // ถ้าไม่มี Token ให้กลับไปหน้า Login
       }
     }
 
     checkAuth()
   }, [navigate])
 
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/auth/logout", {}, {withCredentials: true})
+      navigate("/")
+    } catch (error) {
+      console.error("Logout failed: ", error);
+    }
+  }
+
   return (
-    <div className='w-full h-screen flex font-[Superstore]'>
+    <div className='w-full min-h-screen flex font-[Superstore]'>
 
       {/* Sidebar */}
 
-      <div className='w-[15%] bg-[#D9D143] p-5 h-screen flex justify-evenly text-center'>
-        <ul>
-
-          <li className='border-b-4 border-white py-5 px-5'>
-            <Link to="register" className='font-semibold hover:text-pink-600'>ลงทะเบียนนักศึกษา</Link>
+      <div className='w-[17%] bg-[#163D76] p-5 h-screen flex justify-evenly text-left flex-col'>
+        <ul className='mt-40'>
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <UserRoundPlus className='text-white' />
+            <Link to="register" className='font-semibold text-white hover:text-pink-600 '>
+              ลงทะเบียนนักศึกษา
+            </Link>
           </li>
 
-          <li className='border-b-4 border-white py-5 px-5'>
-            <Link to="check-books" className='font-semibold hover:text-pink-600'>ตรวจสอบหนังสือ</Link>
+
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <BookPlus className='text-white '/>
+            <Link to="check-books" className='font-semibold text-white hover:text-pink-600 '>ตรวจสอบหนังสือ</Link>
           </li>
 
-          <li className='border-b-4 border-white py-5 px-5'>
-            <Link to="check-payment" className='font-semibold hover:text-pink-600'>ตรวจสอบชำระเงิน</Link>
+          <li className='py-5 px-5 flex items-center space-x-2'>
+            <Wallet className='text-white'/>
+            <Link to="check-payment" className='font-semibold text-white hover:text-pink-600'>ตรวจสอบชำระเงิน</Link>
           </li>
 
         </ul>
+        
+        <div className='flex flex-col mt-auto'>
+          <div className="flex items-center justify-center gap-2 py-2 bg-white rounded-sm" style={{ fontFamily: 'Superstore, sans-serif' }}>
+            <h3 className="text-sm font-bold">{userName}</h3>
+          </div>
+          <button
+          onClick={handleLogout} 
+          className="flex items-center justify-center gap-2 py-2 mt-4 text-white hover:text-black transition-colors bg-red-600 hover:bg-red-400 rounded-sm "style={{ fontFamily: 'Superstore, sans-serif' }}>
+            Logout</button>
+        </div>
       </div>
 
       {/* Navbar and main content */}
       
       <div className='w-[85%] h-screen bg-gray-100 p-5 overflow-auto'>
         
-        <nav className='bg-[#D9D14378] w-full h-[80px] flex justify-between items-center px-10'>
-          <img src={UTCC} className="h-full w-auto object-contain"/>
-          <h3 className='text-xl font-semibold'>{userName}</h3>
-        </nav>
-
+      <HeadAdmin/>
         {/* แสดงเนื้อตาม route ภายใน admin */}
         <div>
 
