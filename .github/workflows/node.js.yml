@@ -29,10 +29,10 @@ jobs:
         cache-dependency-path: ./server/package-lock.json
     - name: npm depency
       run: npm install
-      working-directory: ./server/package-lock.json
+      working-directory: ./server
     - run: npm ci
-      working-directory: ./server/package-lock.json
+      working-directory: ./server
     - run: npm run build --if-present
-      working-directory: ./server/package-lock.json
+      working-directory: ./server
     - run: npm test
-      working-directory: ./server/package-lock.json
+      working-directory: ./server
