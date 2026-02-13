@@ -10,28 +10,46 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  server-ci:
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          node-version: [18.x, 20.x, 22.x]
+          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  
+      steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ./server/package-lock.json
+      - name: npm depency
+        run: npm install
+        working-directory: ./server
+      - run: npm ci
+        working-directory: ./server
+      - run: npm run build --if-present
+        working-directory: ./server
+  client-ci:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: ./server/package-lock.json
-    - name: npm depency
-      run: npm install
-      working-directory: ./server
-    - run: npm ci
-      working-directory: ./server
-    - run: npm run build --if-present
-      working-directory: ./server
-
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ./client/package-lock.json
+      - name: npm depency
+        run: npm install
+        working-directory: ./client
+      - run: npm ci
+        working-directory: ./client
+      - run: npm run build --if-present
+        working-directory: ./client
