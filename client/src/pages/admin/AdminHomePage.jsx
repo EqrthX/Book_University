@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { UserRoundPlus,Wallet,BookPlus } from 'lucide-react';
 
-import HeadAdmin from './components/HeadAdmin.jsx'
+import HeadAdmin from '../../components/admin/HeadAdmin.jsx'
 
 
 const AdminHomePage = () => {
@@ -14,7 +14,7 @@ const AdminHomePage = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get('/auth/protected', {withCredentials: true})
+        const res = await axios.get('/auth/check-auth', {withCredentials: true})
         setUserName(res.data.user.studentId)
       } catch (error) {
         console.error("User not authenticated", error);

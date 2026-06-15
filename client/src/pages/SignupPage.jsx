@@ -41,7 +41,7 @@ const SignupPage = () => {
           if(res.status === 201 || res.status === 200) {
             
             toast.success("Sign Up Successfully");
-            navigate("/login");
+            navigate("/");
             
           } else {
 

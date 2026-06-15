@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import axios from '../../util/axios.js'
+import axios from '../../../util/axios.js'
 
 import { Link } from 'react-router-dom';
 import Promote from "/src/assets/Promote.png";
-import Navdar from "./components/Navdar";
-import Head from "./components/Head";
+import Navdar from "../../../components/user/Navdar.jsx";
+import Head from "../../../components/user/Head.jsx";
 
 const SearchPage = () => {
 

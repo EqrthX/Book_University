@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "../../util/axios.js";
-import { getMessagePayment } from "../../util/helper.js";
-import { formatDate, formatTime } from "../../util/helper.js";
+import axios from "../../../util/axios.js";
+import { getMessagePayment } from "../../../util/helper.js";
+import { formatDate, formatTime } from "../../../util/helper.js";
 import { ShoppingCart } from "lucide-react";
-import Head from "./components/Head.jsx";
-import Navbar from "./components/Navdar.jsx"; 
+import Head from "../../../components/user/Head.jsx";
+import Navbar from "../../../components/user/Navdar.jsx"; 
 
 const OrderPage = () => {
   

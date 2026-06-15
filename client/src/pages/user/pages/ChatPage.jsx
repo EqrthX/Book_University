@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from 'react'; // เพิ่ม useRef
-import socket from "../../util/socket.socket.js";
-import axios from '../../util/axios.js';
-import Head from './components/Head.jsx';
-import Navdar from './components/Navdar.jsx';
+import socket from "../../../util/socket.socket.js";
+import axios from '../../../util/axios.js';
+import Head from '../../../components/user/Head.jsx';
+import Navdar from '../../../components/user/Navdar.jsx';
 import { UserRound, Menu, Handshake, Upload, X } from 'lucide-react';
-import { formatTime } from '../../util/helper.js';
+import { formatTime } from '../../../util/helper.js';
 
 const ChatPage = () => {
   const [message, setMessage] = useState("");

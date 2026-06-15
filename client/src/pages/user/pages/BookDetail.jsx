@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from '../../util/axios.js'
-import Head from './components/Head.jsx';
-import Navdar from './components/Navdar.jsx';
+import axios from '../../../util/axios.js'
+import Head from '../../../components/user/Head.jsx';
+import Navdar from '../../../components/user/Navdar.jsx';
 
 const BookDetail = () => {
 

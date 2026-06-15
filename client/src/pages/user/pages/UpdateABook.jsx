@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios from '../../../util/axios.js';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import Head from './components/Head.jsx';
-import Navdar from './components/Navdar.jsx';
+import Head from '../../../components/user/Head.jsx';
+import Navdar from '../../../components/user/Navdar.jsx';
 import toast from 'react-hot-toast';
 
 

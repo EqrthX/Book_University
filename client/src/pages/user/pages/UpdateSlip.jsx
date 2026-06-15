@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from '../../util/axios.js'
-import Head from './components/Head.jsx'
-import Navbar from "./components/Navdar.jsx";
+import axios from '../../../util/axios.js'
+import Head from '../../../components/user/Head.jsx'
+import Navbar from "../../../components/user/Navdar.jsx";
 import { FileDown, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
