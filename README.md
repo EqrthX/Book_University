@@ -62,9 +62,11 @@ Book_University/
 │   ├── src/
 │   │   ├── config/         # การตั้งค่า Database (DB.config.js)
 │   │   ├── controllers/    # Logic การทำงานของ API
-│   │   ├── routers/        # กำหนด Route API
+│   │   ├── routes/         # กำหนด Route API และ mount รวม
 │   │   ├── middleware/     # Auth & Upload Middleware
-│   │   └── index.js        # Entry point และ Socket.io Logic
+│   │   ├── socket/         # Socket.io Logic
+│   │   ├── app.js          # Express app setup
+│   │   └── index.js        # Entry point
 │   ├── uploads/            # โฟลเดอร์เก็บรูปที่อัปโหลด
 │   └── ...
 └── README.md
