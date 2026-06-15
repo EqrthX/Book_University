@@ -1,6 +1,4 @@
 import pool from "../config/DB.config.js";
-import multer from "multer";
-const upload = multer({ dest: 'uploads/' }).single('bookPic');
 
 export const homepage = async(req, res) => {
     res.json({

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import cartRouter from '../src/routers/cart.route.js';
+import cartRouter from '../src/routes/cart.route.js';
 
 const app = express();
 app.use(express.json());

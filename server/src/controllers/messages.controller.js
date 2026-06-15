@@ -1,5 +1,4 @@
 import pool from '../config/DB.config.js';
-import multer from 'multer';
 
 export const showAllUsersToChat = async (req, res) => {
     try {

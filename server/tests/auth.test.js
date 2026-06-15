@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import userRouter from '../src/routers/user.route.js';
+import userRouter from '../src/routes/user.route.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();

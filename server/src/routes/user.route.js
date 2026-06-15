@@ -6,6 +6,7 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
-router.get("/check-auth", protectedToken); // Route สำหรับตรวจสอบ Token ฝั่ง Frontend
+router.get("/check-auth", protectedToken);
+router.get("/protected", protectedToken);
 
 export default router;

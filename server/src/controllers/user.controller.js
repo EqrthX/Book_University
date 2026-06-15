@@ -50,7 +50,7 @@ export const login = async (req, res) => {
 
         const {email, studentId, password} = req.body
 
-        if(!email, !studentId) {
+        if(!email && !studentId) {
             return res.status(400).json({message: "Email or Student ID are required!"});
         }
 
