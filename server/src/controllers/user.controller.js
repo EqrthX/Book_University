@@ -43,9 +43,12 @@ export const login = async (req, res) => {
             { expiresIn: "7d" }
         );
 
+        const isProduction = process.env.NODE_ENV === "production" || !process.env.DB_HOST?.includes("localhost");
+
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: isProduction ? "none" : "strict",
+            secure: isProduction,
             maxAge: 3 * 60 * 60 * 1000
         });
 
