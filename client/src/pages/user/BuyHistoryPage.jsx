@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { getMessagesStatus } from '../../util/helper.js';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, Calendar } from "lucide-react";
@@ -66,7 +66,7 @@ const BuyHistoryPage = () => {
             ) : (
               books.map((book) => {
                 const bookPic = book.bookPic 
-                  ? `http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}` 
+                  ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
                   : "https://via.placeholder.com/150";
 
                 const currentStatus = statusColor.find(status => status.name === book.delivery_status) || {

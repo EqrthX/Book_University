@@ -1,3 +1,4 @@
+import { SERVER_URL } from '../../util/axios.js';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../util/axios.js'
@@ -57,7 +58,7 @@ const BookDetail = () => {
                     <h1 className='text-lg font-semibold text-center mb-4'>รายละเอียดหนังสือ</h1>
                     <h1 className='text-lg font-semibold text-center mb-4'>ชื่อหนังสือ {book.titleBook}</h1>
                     <h1 className='text-lg font-semibold text-center mb-4'>ราคา {book.price} บาท</h1>
-                    <img className="w-50 h-70 mr-4 shadow-2xl" src={`http://localhost:5001/${book.bookPic}`} alt="หนังสือ" />
+                    <img className="w-50 h-70 mr-4 shadow-2xl" src={`${SERVER_URL}/${book.bookPic}`} alt="หนังสือ" />
                 </div>
 
                 <div className="w-1/2 flex mt-auto mb-auto">

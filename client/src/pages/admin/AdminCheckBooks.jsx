@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import toast from 'react-hot-toast';
 import { Book, Check, Trash2, ShieldAlert, BookOpen } from "lucide-react";
 
@@ -95,7 +95,7 @@ const AdminCheckBooks = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {detailBook.books.map((book) => {
             const coverImage = book.bookPic 
-              ? `http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}` 
+              ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
               : "https://via.placeholder.com/150";
 
             return (

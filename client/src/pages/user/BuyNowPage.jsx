@@ -1,7 +1,7 @@
 import { ShoppingCart } from 'lucide-react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 
 function BuyNowPage() {
 
@@ -61,7 +61,7 @@ function BuyNowPage() {
 
                             {/* รูปหนังสือ */}
                             <img className="w-70 h-100 object-cover rounded-2xl " 
-                                src={book.bookPic ? `http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}` : "URL_TO_DEFAULT_IMAGE"} 
+                                src={book.bookPic ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` : "URL_TO_DEFAULT_IMAGE"} 
                                 alt="หนังสือ" />
 
                             {/* กล่องรายละเอียดหนังสือ */}

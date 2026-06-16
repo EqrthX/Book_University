@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { FileDown, Archive } from 'lucide-react';
@@ -166,7 +166,7 @@ const UpdateABook = () => {
                             <div className="w-full h-80 rounded-2xl bg-slate-50 border border-slate-200 p-4 flex items-center justify-center shadow-inner overflow-hidden">
                                 {valuesBook.bookPic ? (
                                     <img 
-                                        src={`http://localhost:5001/${valuesBook.bookPic.replace(/\\/g, "/")}`} 
+                                        src={`${SERVER_URL}/${valuesBook.bookPic.replace(/\\/g, "/")}`} 
                                         alt="Book Cover Preview" 
                                         className="w-full h-full object-contain rounded-xl hover:scale-105 transition-transform duration-300"
                                     />

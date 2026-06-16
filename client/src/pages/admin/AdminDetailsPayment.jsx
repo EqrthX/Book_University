@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { ChevronLeft, Check, X, AlertTriangle, ArrowRight, User, ShoppingBag, CreditCard, Image, FileText } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -144,7 +144,7 @@ function AdminDetailsPayment() {
             <div className="space-y-4">
               {books.map((book) => {
                 const bookCover = book.book_bookPic
-                  ? `http://localhost:5001/${book.book_bookPic.replace(/\\/g, "/")}`
+                  ? `${SERVER_URL}/${book.book_bookPic.replace(/\\/g, "/")}`
                   : "https://via.placeholder.com/150";
 
                 return (
@@ -219,10 +219,10 @@ function AdminDetailsPayment() {
             <div className="bg-white border border-slate-200/60 rounded-xl p-3 flex justify-center items-center relative group overflow-hidden aspect-square shadow-inner">
               {paymentDeatails.slip_image ? (
                 <img 
-                  src={`http://localhost:5001/${paymentDeatails.slip_image.replace(/\\/g, "/")}`}
+                  src={`${SERVER_URL}/${paymentDeatails.slip_image.replace(/\\/g, "/")}`}
                   className="max-h-full max-w-full object-contain rounded-lg shadow-sm hover:scale-102 transition-transform duration-300 cursor-zoom-in"
                   alt="Transfer Slip"
-                  onClick={() => window.open(`http://localhost:5001/${paymentDeatails.slip_image.replace(/\\/g, "/")}`, "_blank")}
+                  onClick={() => window.open(`${SERVER_URL}/${paymentDeatails.slip_image.replace(/\\/g, "/")}`, "_blank")}
                 />
               ) : (
                 <div className="flex flex-col items-center justify-center text-slate-300 py-20">

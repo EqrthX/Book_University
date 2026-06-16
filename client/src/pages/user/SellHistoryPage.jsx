@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Trash2, Edit2, ShoppingBag, Plus } from "lucide-react";
 import toast from 'react-hot-toast';
@@ -84,7 +84,7 @@ const SellHistoryPage = () => {
             ) : (
               books.map((book) => {
                 const bookPic = book.bookPic 
-                  ? `http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}` 
+                  ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
                   : "https://via.placeholder.com/150";
 
                 return (

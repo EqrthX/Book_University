@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import socket from "../../util/socket.socket.js";
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { UserRound, Menu, Handshake, Paperclip, X, Send, MessageSquare } from 'lucide-react';
 import { formatTime } from '../../util/helper.js';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -19,7 +19,15 @@ const ChatPage = () => {
   // Register socket and fetch user list when authenticated user is loaded
   useEffect(() => {
     if (user?.id) {
-      socket.emit("register_user", user.id);
+      if (socket.connected) {
+        socket.emit("register_user", user.id);
+      }
+
+      const handleConnect = () => {
+        socket.emit("register_user", user.id);
+      };
+
+      socket.on("connect", handleConnect);
       
       const fetchUsers = async () => {
         try {
@@ -30,6 +38,10 @@ const ChatPage = () => {
         }
       };
       fetchUsers();
+
+      return () => {
+        socket.off("connect", handleConnect);
+      };
     }
   }, [user]);
 
@@ -90,8 +102,6 @@ const ChatPage = () => {
         formDataMessage.append("picture_message", picture);
       }
 
-      socket.emit("send_message", { ...newMessage, picture: picture ? "uploaded" : "" });
-
       try {
         const response = await axios.post("/messages/send", formDataMessage, {
           withCredentials: true,
@@ -99,7 +109,11 @@ const ChatPage = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        setMessages((prev) => [...prev, { ...newMessage, picture: response.data.data.picture }]);
+        
+        const finalMessage = { ...newMessage, picture: response.data.data.picture };
+        
+        socket.emit("send_message", finalMessage);
+        setMessages((prev) => [...prev, finalMessage]);
       } catch (error) {
         console.error("Error sending message:", error.response?.data || error.message);
       }
@@ -235,10 +249,10 @@ const ChatPage = () => {
                           {msg.text}
                           {msg.picture && (
                             <img
-                              src={`http://localhost:5001/${msg.picture.replace(/\\/g, "/")}`}
+                              src={`${SERVER_URL}/${msg.picture.replace(/\\/g, "/")}`}
                               alt="Attached evidence"
                               className="mt-2 rounded-lg max-h-48 w-full object-contain cursor-zoom-in"
-                              onClick={() => window.open(`http://localhost:5001/${msg.picture.replace(/\\/g, "/")}`, "_blank")}
+                              onClick={() => window.open(`${SERVER_URL}/${msg.picture.replace(/\\/g, "/")}`, "_blank")}
                             />
                           )}
                         </div>

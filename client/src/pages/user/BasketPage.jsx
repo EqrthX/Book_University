@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../util/axios.js';
+import axios, { SERVER_URL } from '../../util/axios.js';
 import { ShoppingCart, Trash2, ShieldAlert, CreditCard, ChevronRight } from "lucide-react";
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -133,7 +133,7 @@ const BasketPage = () => {
               {cartItems.map((item) => {
                 const isChecked = selectedItems.includes(item.cartId);
                 const cover = item.bookPic 
-                  ? `http://localhost:5001/${item.bookPic.replace(/\\/g, "/")}` 
+                  ? `${SERVER_URL}/${item.bookPic.replace(/\\/g, "/")}` 
                   : "https://via.placeholder.com/150";
 
                 return (

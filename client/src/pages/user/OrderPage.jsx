@@ -1,3 +1,4 @@
+import { SERVER_URL } from '../../util/axios.js';
 import { useEffect, useState } from "react";
 import axios from "../../util/axios.js";
 import { getMessagePayment } from "../../util/helper.js";
@@ -105,7 +106,7 @@ const OrderPage = () => {
                         <div className="relative w-32 h-40 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                           <img
                             className="w-full h-full object-contain"
-                            src={`http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}`}
+                            src={`${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}`}
                             alt={book.titleBook}
                           />
                         </div>
@@ -206,7 +207,7 @@ const OrderPage = () => {
                         <div className="relative w-32 h-40 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                           <img
                             className="w-full h-full object-contain"
-                            src={`http://localhost:5001/${book.bookPic.replace(/\\/g, "/")}`}
+                            src={`${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}`}
                             alt={book.titleBook}
                           />
                         </div>
