@@ -11,7 +11,11 @@ export const createApp = () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
+
+    // Handle CORS preflight requests ก่อน middleware อื่นทั้งหมด
+    app.options("*", cors(corsOptions));
     app.use(cors(corsOptions));
+
     app.use("/uploads", express.static("uploads"));
 
     // Health check endpoint สำหรับ Railway
