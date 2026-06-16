@@ -23,9 +23,6 @@ export const allowedClientOrigins = [
     ...new Set([...envClientOrigins, ...defaultClientOrigins]),
 ];
 
-// Debug: แสดง allowed origins ตอน Server เริ่มทำงาน
-console.log("✅ Allowed CORS Origins:", allowedClientOrigins);
-
 const isAllowedOrigin = (origin) => {
     if (!origin) {
         return true;

@@ -12,7 +12,6 @@ export const showBooks = async(req, res) => {
         });
 
     } catch (error) {
-        console.log("Error in showBooks: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -21,8 +20,6 @@ export const showBooks = async(req, res) => {
 
 export const addBook = async(req, res) => {
     try {
-        console.log("File uploaded:", req.files);
-
         const { titleBook, price, description, contactInfo, subjectId } = req.body;
         const userId = req.user?.id;
         const canMeet = req.body.pickUp;
@@ -46,18 +43,13 @@ export const addBook = async(req, res) => {
             userId
         };
 
-        console.log("📌 Book Data:", bookData);
-
         const result = await productService.addNewBook(bookData);
-
-        console.log("📌 SQL Result:", result);
 
         res.status(201).json({
             message: "Add Book Successfully",
             book: result
         });
     } catch (error) {
-        console.log("Error in add book controller: ", error.message);
         if (!res.headersSent) {
             return res.status(500).json({
                 error: error.message || error
@@ -80,7 +72,6 @@ export const updateBook = async(req, res) => {
             book: result
         });
     } catch (error) {
-        console.log("Error in updateBook Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error Updating book"
         });
@@ -102,7 +93,6 @@ export const deleteBook = async (req, res) => {
             books: result.bookId
         });
     } catch (error) {
-        console.log("Error in Delete Book Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error Delete book"
         });

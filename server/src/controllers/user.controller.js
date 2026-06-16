@@ -16,7 +16,6 @@ export const signup = async (req, res) => {
             newStudent: newUser
         });
     } catch (error) {
-        console.log("Error to signup controller: ", error.message);
         res.status(500).json({
             error: error.message || error
         });
@@ -62,7 +61,6 @@ export const login = async (req, res) => {
             },
         });
     } catch (error) {
-        console.log("Error to login controller: ", error.message);
         res.status(500).json({
             error: error.message || error
         });

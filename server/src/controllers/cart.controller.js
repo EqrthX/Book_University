@@ -9,7 +9,6 @@ export const addToCart = async(req, res) => {
         
         return res.status(201).json(result);
     } catch (error) {
-        console.error("Error in addToCart Controller: ", error.message);
         const statusCode = error.message === "มีหนังสือเล่มนี้อยู่ในตะกร้าอยู่แล้ว" ? 400 : 500;
         res.status(statusCode).json({
             error: error.message || "Error Adding to Cart"
@@ -34,7 +33,6 @@ export const showBookWithCart = async(req, res) => {
             books: books
         });
     } catch (error) {
-        console.error("Error in showBookWithCart Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -52,7 +50,6 @@ export const deleteItemCart = async(req, res) => {
         const result = await cartService.removeFromCart(cartIds);
         res.status(200).json(result);
     } catch (error) {
-        console.error("Error in deleteItemCart Controller: ", error.message);
         const statusCode = error.message === "ไม่พบรายการในตะกร้า" ? 400 : 500;
         res.status(statusCode).json({
             error: error.message || "Error Delete Item Cart"

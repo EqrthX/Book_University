@@ -17,7 +17,6 @@ export const getSubjects = async(req, res) => {
             subjectCode: fetchSubjectsAll
         });
     } catch (error) {
-        console.log("Error in getSubjects controller: ", error.message);
         if (!res.headersSent) {
             return res.status(500).json({
                 error: error.message || error
@@ -41,7 +40,6 @@ export const showBooks = async(req, res) => {
             books: books
         });
     } catch (error) {
-        console.log("Error in showBooks: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -52,14 +50,12 @@ export const showBooks = async(req, res) => {
 export const showBooksUnavailable = async(req, res) => {
     try {
         const books = await homepageService.getUnavailableBooks();
-        console.log("Database Query Result:", books);
 
         res.status(200).json({
             message: "Show All Books are unavailable",
             books: books
         });
     } catch (error) {
-        console.error("Error controller showBooksUnavailable: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -78,7 +74,6 @@ export const showDetailBook = async(req, res) => {
             book: result
         });
     } catch (error) {
-        console.log("Error in show detail book: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetch one book"
         });
@@ -100,7 +95,6 @@ export const showUserBooks = async(req, res) => {
             books: books
         });
     } catch (error) {
-        console.log("Error in showUserBooks Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -122,7 +116,6 @@ export const showBookWithId = async(req, res) => {
             books: book
         });
     } catch (error) {
-        console.log("Error in showBookWithId Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
@@ -140,7 +133,6 @@ export const showHistory = async(req, res) => {
             books: history
         });
     } catch (error) {
-        console.error("Error Show History Controller: ", error.message);
         return res.status(500).json({
             message: error.message
         });
@@ -160,7 +152,6 @@ export const showHistoryOrders = async(req, res) => {
             });
         }
     } catch (error) {
-        console.error("Error Show History Orders Controller: ", error.message);
         return res.status(500).json({
             message: error.message
         });
@@ -178,7 +169,6 @@ export const searchKeyword = async(req, res) => {
             books: search
         });
     } catch (error) {
-        console.error("Error Search keyword controller: ", error.message);
         return res.status(500).json({
             message: error.message
         });
@@ -202,7 +192,6 @@ export const showHistoryBook_WithId = async(req, res) => {
             history: history[0]
         });
     } catch (error) {
-        console.error("Error Show History Book With Id Controller: ", error.message);
         return res.status(500).json({
             message: error.message
         });

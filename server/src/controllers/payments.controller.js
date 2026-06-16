@@ -54,7 +54,6 @@ export const addInfomationAndOrder = async(req, res) => {
         });
 
     } catch (error) {
-        console.error("Error controller Add Information and Order ", error);
         res.status(500).json({
             message: error.message || error
         });
@@ -74,7 +73,6 @@ export const updatePayment = async(req, res) => {
         });
 
     } catch (error) {
-        console.error("Error UpdatePayment Controller: ", error);
         return res.status(500).json({
             message: error.message || error
         });
@@ -97,7 +95,6 @@ export const showTotalCost = async(req, res) => {
         });
         
     } catch (error) {
-        console.error("Error Show Total Cost Controller: ", error);
         return res.status(500).json({
             message: error.message || error
         });
@@ -111,10 +108,6 @@ export const editPayment = async(req, res) => {
         const slip_image = req.files?.paymentSlip?.[0];
         const filePath = slip_image ? slip_image.path : null;
 
-        console.log("payment data: ", payment_date);
-        console.log("payment time: ", payment_time);
-        console.log("image: ", slip_image);
-
         const result = await paymentsService.editPaymentDetails(id, payment_date, payment_time, filePath);
 
         return res.status(200).json({
@@ -122,7 +115,6 @@ export const editPayment = async(req, res) => {
         });
 
     } catch (error) {
-        console.error("Error editPayment Controller: ", error.message);
         return res.status(500).json({
             message: error.message
         });

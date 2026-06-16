@@ -12,7 +12,6 @@ export const verifyToken = (req, res, next) => {
         req.user = decoded; // เก็บข้อมูล User ไว้ใน req เพื่อใช้ต่อใน Controller
         next();
     } catch (error) {
-        console.error("Token verification failed:", error.message);
         return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
 };

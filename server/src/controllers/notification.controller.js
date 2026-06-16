@@ -22,7 +22,6 @@ export const getNotifications = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error fetching notifications: ", error.message);
         return res.status(500).json({
             message: error.message
         });
@@ -48,7 +47,6 @@ export const updateNotificationStatus = async (req, res) => {
         });
         
     } catch (error) {
-        console.error("Error updating notification status: ", error.message);
         return res.status(500).json({
             message: error.message
         });
