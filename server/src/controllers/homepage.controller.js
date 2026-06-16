@@ -1,45 +1,36 @@
-import pool from "../config/DB.config.js";
+import * as homepageService from "../services/homepage.service.js";
 
 export const homepage = async(req, res) => {
     res.json({
         message: "Welcome to Homepage",
         user: req.user
-    })
-}
+    });
+};
 
 // แสดงรายชื่อวิชาทั้งหมด
 export const getSubjects = async(req, res) => {
     try {
-
-        const [fetchSubjectsAll] = await pool.execute(
-            "SELECT * FROM subjects"
-        )
+        const fetchSubjectsAll = await homepageService.getAllSubjects();
 
         res.status(200).json({
             message: "Show All subjects",
             subjectCode: fetchSubjectsAll
-        })
-
+        });
     } catch (error) {
-        console.log("Error in add book controller: ",error.message);
+        console.log("Error in getSubjects controller: ", error.message);
         if (!res.headersSent) {
             return res.status(500).json({
                 error: error.message || error
             });
         }
     }
-}
-
+};
 
 // แสดงหนังสือที่ได้รับการยืนยันแล้วและไม่ใช่ของตัวเอง
 export const showBooks = async(req, res) => {
     try {
         const userId = req.user?.id;
-
-        const [books] = await pool.execute(
-            "SELECT * FROM books WHERE status = 'available' AND checkStatusBooks = 'available' AND userId != ?",
-            [userId]
-        )
+        const books = await homepageService.getAvailableBooksExcludingUser(userId);
 
         if(books.length === 0) {
             return res.status(404).json({ message: "Books not found" });
@@ -48,72 +39,57 @@ export const showBooks = async(req, res) => {
         res.status(200).json({
             message: "Show All Books",
             books: books
-        })
-
+        });
     } catch (error) {
         console.log("Error in showBooks: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
         });
     }
-}
+};
 
 // แสดงหนังสือที่ยังไม่ได้รับการยืนยันสำหรับ Admin
 export const showBooksUnavailable = async(req, res) => {
-
     try {
-        const [books] = await pool.execute(
-            "SELECT * FROM books WHERE checkStatusBooks = 'unavailable'"
-        )
+        const books = await homepageService.getUnavailableBooks();
         console.log("Database Query Result:", books);
 
         res.status(200).json({
             message: "Show All Books are unavailable",
             books: books
-        })
+        });
     } catch (error) {
         console.error("Error controller showBooksUnavailable: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
-        })
+        });
     }
-
-}
+};
 
 // แสดงรายละเอียดหนังสือของแต่ละเล่มโดยมีการเชื่อมโยงกับตาราง subjects
 export const showDetailBook = async(req, res) => {
-    const bookId = req.params.id
+    const bookId = req.params.id;
 
     try {
-
-        const [result] = await pool.execute(
-            "SELECT b.*, s.subjectCode FROM books AS b INNER JOIN subjects AS s ON b.subjectId = s.id WHERE b.id = ?",
-            [bookId]
-        )  
+        const result = await homepageService.getBookDetails(bookId);  
 
         res.status(200).json({
             message: "Selected one book!",
-            book: result[0]
-        })
-
+            book: result
+        });
     } catch (error) {
         console.log("Error in show detail book: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetch one book"
-        })
+        });
     }
-}
+};
 
 // แสดงสินค้าสำหรับ User คนนั้นๆด้วย userId ที่ลงขาย
 export const showUserBooks = async(req, res) => {
     try {
-
         const userId = req.user?.id;
-
-        const [books] = await pool.execute(
-            "SELECT * FROM books WHERE userId = ?",
-            [userId]
-        )
+        const books = await homepageService.getUserBooks(userId);
 
         if(books.length === 0) {
             return res.status(404).json({ message: "Books not found" });
@@ -122,218 +98,113 @@ export const showUserBooks = async(req, res) => {
         res.status(200).json({
             message: "Show All Books",
             books: books
-        })
-
+        });
     } catch (error) {
         console.log("Error in showUserBooks Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
-        })
+        });
     }
-}
+};
 
 // แสดงหนังสือที่เลือกและของ user คนนั้นๆ โดยใช้ userId และ bookId
 export const showBookWithId = async(req, res) => {
     try {
-        
         const bookId = req.params.id;
+        const book = await homepageService.getBookById(bookId);
 
-        const [books] = await pool.execute(
-            "SELECT * FROM books WHERE id = ?",
-            [bookId]
-        )
-
-        if(books.length === 0) {
+        if(!book) {
             return res.status(404).json({ message: "Books not found" });
         }
 
         res.status(200).json({
             message: "Show Book with Id it table",
-            books: books[0]
-        })
-
+            books: book
+        });
     } catch (error) {
-        
         console.log("Error in showBookWithId Controller: ", error.message);
         res.status(500).json({
             error: error.message || "Error fetching books"
-        })
-        
+        });
     }
-}
+};
 
+// แสดงประวัติคำสั่งซื้อ
 export const showHistory = async(req, res) => {
     try {
-        
-        const userId = req.user?.id
-
-        const [history] = await pool.execute(
-            `
-            SELECT
-                users.id AS id,
-
-                orders.id AS order_id,
-                orders.user_id AS user_id,
-                orders.type AS type,
-                orders.status AS status,
-                orders.delivery_status AS delivery_status,
-
-                books.id AS bookId,
-                books.titleBook AS titleBook,
-                books.description AS description,
-                books.price AS price,
-                books.bookPic AS bookPic,
-
-                order_items.book_id AS book_id
-
-            FROM users
-            INNER JOIN orders ON orders.user_id = users.id
-            INNER JOIN order_items ON order_items.order_id = orders.id
-            INNER JOIN books ON books.id = order_items.book_id
-            WHERE orders.status = 'completed' AND orders.user_id = ?
-            
-            `,
-            [userId]
-        )
+        const userId = req.user?.id;
+        const history = await homepageService.getCompletedOrderHistory(userId);
 
         return res.status(200).json({
-            message:"Fetech History",
+            message: "Fetech History",
             books: history
-        })
-
+        });
     } catch (error) {
-        console.error("Error Show History Controller: ", error.message)
+        console.error("Error Show History Controller: ", error.message);
         return res.status(500).json({
             message: error.message
-        })
+        });
     }
-}
+};
 
+// แสดงประวัติคำสั่งซื้อแบบละเอียด
 export const showHistoryOrders = async(req, res) => {
     try {
-        const userId = req.user?.id
-
-        const [result] = await pool.execute(
-            `
-            SELECT  
-                users.id AS id,
-                
-                orders.id AS order_id,
-                orders.user_id AS user_id,
-                orders.type AS type,
-                orders.status AS status,
-                
-                addresses.order_id AS Address_order_id,
-                addresses.full_name AS Address_full_name,
-                addresses.house_no AS house_no,
-                addresses.street AS street,
-                addresses.zone AS zone,
-                addresses.subdistrict AS subdistrict,
-                addresses.district AS district,
-                addresses.province AS province,
-                addresses.zip_code AS zip_code,
-                addresses.email AS Address_email,
-
-                pickups.order_id AS pickup_order_id,
-                pickups.full_name AS fullName,
-                pickups.pickup_datetime AS pickup_datetime,
-                pickups.location AS location,
-                pickups.email AS email,
-
-                payments.order_id AS p_order_id,    
-                payments.payment_method AS payment_method,
-                payments.payment_datetime AS payment_datetime,
-
-                order_items.book_id AS book_id,
-                books.id AS bookId,
-                books.bookPic AS bookPic,
-                books.titleBook AS titleBook
-
-            FROM users
-            INNER JOIN orders ON orders.user_id = users.id
-            LEFT JOIN addresses ON addresses.order_id = orders.id
-            LEFT JOIN pickups ON pickups.order_id = orders.id
-            INNER JOIN payments ON payments.order_id = orders.id
-            INNER JOIN order_items ON order_items.order_id = orders.id
-            INNER JOIN books ON books.id = order_items.book_id
-            WHERE orders.status = 'completed' AND users.id = ?
-            `,
-            [userId]
-        )
+        const userId = req.user?.id;
+        const result = await homepageService.getCompletedOrderDetails(userId);
 
         if(result) {
             return res.status(200).json({
                 message: "Show History Orders",
                 historyOrder: result
-            })
+            });
         }
     } catch (error) {
-        console.error("Error Show History Orders Controller: ", error.message)
+        console.error("Error Show History Orders Controller: ", error.message);
         return res.status(500).json({
             message: error.message
-        })
+        });
     }
-}
+};
 
+// ค้นหาคำสำคัญ
 export const searchKeyword = async(req, res) => {
     try {
-        const {book} = req.query || ""
-
-        const [search] = await pool.execute(
-            "SELECT * FROM books WHERE status = 'available' AND titleBook LIKE ?",
-            [`%${book}%`]
-        )
+        const {book} = req.query || "";
+        const search = await homepageService.searchBooksByKeyword(book);
 
         return res.status(200).json({
             message: `Search keyword ${book}`,
             books: search
-        })
+        });
     } catch (error) {
-        console.error("Error Search keyword controller: ", error.message)
+        console.error("Error Search keyword controller: ", error.message);
         return res.status(500).json({
             message: error.message
-        })
+        });
     }
-}
+};
 
+// แสดงประวัติการซื้อเฉพาะหนังสือเล่มนั้นๆ
 export const showHistoryBook_WithId = async(req, res) => {
     try {
-        const bookId = req.params.id
-
-        const [history] = await pool.execute(
-            `
-                SELECT 
-                    sold_books.book_id AS book_id,
-                    sold_books.titleBook AS titleBook,
-                    sold_books.price AS price,
-                    sold_books.bookPic AS bookPic,
-                    sold_books.buyerId AS buyerId,
-
-                    orders.user_id AS user_id,
-                    orders.delivery_status AS delivery_status
-
-                FROM sold_books 
-                INNER JOIN orders ON sold_books.buyerId = orders.user_id
-                WHERE sold_books.book_id = ?
-            `,
-            [bookId]
-        );
+        const bookId = req.params.id;
+        const history = await homepageService.getBookPurchaseHistory(bookId);
 
         if(history.length === 0) {
             return res.status(404).json({
                 message: "ไม่พบข้อมูลการซื้อหนังสือ"
-            })
+            });
         }
 
         return res.status(200).json({
             message: "แสดงประวัติการซื้อหนังสือ: " + bookId,
             history: history[0]
-        })
-        
+        });
     } catch (error) {
-        console.error("Error Show History Book With Id Controller: ", error.message)
+        console.error("Error Show History Book With Id Controller: ", error.message);
         return res.status(500).json({
             message: error.message
-        })
+        });
     }
-}
+};

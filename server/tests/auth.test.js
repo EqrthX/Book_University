@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import userRouter from '../src/routes/user.route.js';
 import cookieParser from 'cookie-parser';
+import pool from '../src/config/DB.config.js';
 
 const app = express();
 app.use(express.json());
@@ -17,4 +18,9 @@ describe('Authentication API', () => {
         expect(res.statusCode).toBe(400);
         expect(res.body.message).toBe("All fields are required!");
     });
+});
+
+afterAll(async () => {
+    // Close the database pool to ensure Jest can exit gracefully
+    await pool.end();
 });

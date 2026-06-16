@@ -1,6 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import cartRouter from '../src/routes/cart.route.js';
+import pool from '../src/config/DB.config.js';
 
 const app = express();
 app.use(express.json());
@@ -17,4 +18,9 @@ describe('Cart API', () => {
         expect(res.statusCode).toBe(200);
         expect(Array.isArray(res.body.books)).toBe(true);
     });
+});
+
+afterAll(async () => {
+    // Close the database pool to ensure Jest can exit gracefully
+    await pool.end();
 });
