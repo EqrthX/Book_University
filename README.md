@@ -1,57 +1,95 @@
 # Book University 📚
-เว็บแอปพลิเคชันซื้อขายแลกเปลี่ยนหนังสือในมหาวิทยาลัย (University Book Marketplace) พัฒนาด้วย JavaScript ทั้งระบบ (Full Stack JavaScript) มีระบบแชท Real-time และระบบอนุมัติเอกสารการโอนโดยผู้ดูแลระบบแบบเบ็ดเสร็จ
+เว็บแอปพลิเคชันซื้อขายแลกเปลี่ยนหนังสือในมหาวิทยาลัย (University Book Marketplace) พัฒนาด้วยระบบ Full Stack JavaScript ครบวงจร พร้อมระบบแชทแบบ Real-time และระบบอนุมัติการตรวจสอบความปลอดภัยโดยผู้ดูแลระบบ (Admin Control Panel)
 
 ---
 
-## 🖼️ ภาพรวมโปรเจกต์ (Project Overview)
-**Book University** เป็นแพลตฟอร์มที่เชื่อมโยงนักศึกษาเพื่อการซื้อขายและแลกเปลี่ยนตำราเรียนมือสองภายในมหาวิทยาลัย ช่วยแก้ปัญหาค่าใช้จ่ายด้านสื่อการเรียนการสอน ตัวระบบรองรับฟังก์ชันการลงขายหนังสือ, ตะกร้าสินค้า, การแจ้งโอนเงินผ่านระบบหลักฐาน (Slip Image Upload), การแชทเพื่อตกลงเงื่อนไขการส่งมอบ และระบบควบคุมดูแล (Admin Approval System) สำหรับแอดมิน เพื่อตรวจสอบความเรียบร้อยของรายการหนังสือและยืนยันยอดเงินที่โอนเข้ามา
+## ⚡ Tech Stack & Badges
+[![React](https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.1.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.21.2-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Socket.io](https://img.shields.io/badge/Socket.io-4.8.1-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Jest](https://img.shields.io/badge/Jest-30.2.0-C21325?style=for-the-badge&logo=jest&logoColor=white)](https://jestjs.io/)
+
+---
+
+## 📌 สารบัญ (Table of Contents)
+1. [🖼️ ภาพรวมและ Demo (Overview & Demo)](#️-ภาพรวมและ-demo-overview--demo)
+2. [✨ ฟีเจอร์หลัก (Key Features)](#-ฟีเจอร์หลัก-key-features)
+3. [🛠️ เทคโนโลยีที่ใช้ (Tech Stack)](#️-เทคโนโลยีที่ใช้-tech-stack)
+4. [📂 โครงสร้างโปรเจกต์ (Folder Structure)](#-โครงสร้างโปรเจกต์-folder-structure)
+5. [⚙️ วิธีการติดตั้งและใช้งาน (Installation & Setup)](#️-วิธีการติดตั้งและใช้งาน-installation--setup)
+6. [🧪 การรันชุดทดสอบ (Automated Testing)](#-การรันชุดทดสอบ-automated-testing)
+7. [🛣️ โครงสร้าง API Endpoints (API Reference)](#️-โครงสร้าง-api-endpoints-api-reference)
+8. [💬 ระบบแชทและการทำงานแบบ Real-time](#-ระบบแชทและการทำงานแบบ-real-time)
+
+---
+
+## 🖼️ ภาพรวมและ Demo (Overview & Demo)
+
+**Book University** พัฒนาขึ้นมาเพื่อแก้ปัญหาค่าใช้จ่ายด้านตำราเรียนของนักศึกษา โดยเป็นสื่อกลางในการเชื่อมโยงนักศึกษาภายในมหาวิทยาลัยให้สามารถซื้อ-ขาย หรือแลกเปลี่ยนตำราเรียนมือสองกันได้โดยตรง สะดวกรวดเร็ว และปลอดภัยผ่านการตรวจสอบของแอดมิน
+
+### 📸 ภาพตัวอย่างการใช้งานระบบ (Screenshots & Demos)
+
+| **หน้าแรก & การโปรโมต (Student Portal)** | **ระบบนัดรับสินค้า (Delivery & Pickup)** |
+|:---:|:---:|
+| <img src="client/src/assets/Banner.png" width="380" alt="Banner Preview" /> | <img src="client/src/assets/CountAndReceive.png" width="380" alt="Delivery Flow" /> |
+| แหล่งรวมหนังสือเรียนแยกตามหมวดหมู่และวิชา | ขั้นตอนรับหนังสือ/เช็คของและนัดรับที่สะดวก |
+
+| **หน้าแอดมินตรวจสอบระบบ (Admin Dashboard)** | **โปรโมชั่นและกิจกรรม (University Promote)** |
+|:---:|:---:|
+| <img src="client/src/assets/AdminUtcc.png" width="380" alt="Admin Dashboard" /> | <img src="client/src/assets/Promote.png" width="380" alt="Promotions" /> |
+| จัดการอนุมัติสลิปโอนเงินและตรวจสอบความถูกต้องของสติกเกอร์/หนังสือ | หน้าแบนเนอร์ประชาสัมพันธ์ภายในมหาวิทยาลัย |
+
+> 💡 **คำแนะนำเพิ่มเติมสำหรับการแปะ Demo:** คุณสามารถนำไฟล์บันทึกหน้าจอ (.mp4 หรือ .gif) มาอัปโหลดไว้ในโปรเจกต์นี้ หรือแปลงวิดีโอเป็น GIF แล้วนำมาแปะแทนเพื่อแสดงระบบแชทแบบ Real-time และระบบแจ้งเตือนแบบสดได้ทันที!
 
 ---
 
 ## ✨ ฟีเจอร์หลัก (Key Features)
 
 ### 👤 สำหรับผู้ใช้งานทั่วไป (Student / User)
-*   **ระบบสมาชิก (Authentication):** สมัครสมาชิก (Sign up) ด้วยรหัสนักศึกษาและอีเมล และลงชื่อเข้าใช้งาน (Login) พร้อมระบบตรวจสอบสิทธิ์ผ่าน JWT
-*   **การจัดการโปรไฟล์ (Profile Management):** จัดการและอัปเดตข้อมูลส่วนตัวของผู้ใช้งาน
-*   **ซื้อ-ขายหนังสือ (Marketplace Operations):**
-    *   ค้นหาหนังสือ (Search) ตามรหัสวิชาหรือชื่อเรื่อง พร้อมระบบแนะนำหนังสือแยกตามหมวดหมู่/รหัสวิชา
-    *   ดูรายละเอียดหนังสือ (Book Detail) ข้อมูลผู้ขาย ราคา รูปภาพ และรายละเอียด
-    *   ตะกร้าสินค้า (Shopping Cart) เพิ่ม/ลบหนังสือที่ต้องการ
-    *   สั่งซื้อสินค้า (Order & Checkout) รองรับการเลือกประเภทการจัดส่ง (Delivery) หรือนัดรับสินค้า (Pickup)
-    *   ลงขายหนังสือ (Add/Update Book) อัปโหลดรูปภาพและกำหนดรายละเอียดหนังสือเพื่อลงประกาศขาย
-*   **การชำระเงิน (Payment Workflow):** แนบสลิปและข้อมูลวันเวลาในการทำธุรกรรมโอนเงินผ่านระบบอัปโหลดรูปภาพ (Multer)
-*   **แชทสด Real-time (Chat System):** พูดคุยสอบถามข้อมูลกับผู้ซื้อ/ผู้ขายโดยตรงผ่าน WebSockets (Socket.io)
-*   **การแจ้งเตือนแบบทันที (Real-time Notifications):** รับข่าวสารอัปเดตสถานะคำสั่งซื้อและการอนุมัติหนังสือจากแอดมิน
-*   **ประวัติการทำรายการ (History Logs):** ตรวจสอบประวัติการซื้อ (Buy History) และประวัติการขาย (Sell History)
+*   **ระบบสมาชิกและการรักษาความปลอดภัย (Authentication):**
+    *   สมัครสมาชิกด้วยรหัสนักศึกษาและอีเมลของมหาวิทยาลัย
+    *   เข้าสู่ระบบอย่างปลอดภัยโดยใช้รหัสผ่านที่เข้ารหัสด้วย **Bcryptjs** และตรวจสอบสิทธิ์ผ่าน **JWT (JSON Web Token)**
+*   **การจัดการโปรไฟล์ (Profile Management):** อัปเดตข้อมูลการติดต่อ ข้อมูลส่วนตัว และช่องทางการรับเงิน/ส่งของ
+*   **ระบบตลาดซื้อขายตำราเรียน (Marketplace Operations):**
+    *   **ค้นหาแบบอัจฉริยะ (Search & Filter):** ค้นหาหนังสือผ่านชื่อเรื่อง รหัสวิชา หรือคณะที่เรียน
+    *   **รายละเอียดหนังสือ (Book Details):** แสดงรูปภาพหนังสือ สภาพ ราคา และข้อมูลการติดต่อผู้ขายอย่างครบถ้วน
+    *   **ตะกร้าสินค้า (Shopping Cart):** เพิ่ม/ลบ และสรุปราคารวมก่อนสั่งซื้อ
+    *   **การสั่งซื้อ (Checkout Process):** เลือกวิธีรับของได้หลากหลาย ทั้งแบบนัดรับภายในมหาวิทยาลัย (Pickup) หรือจัดส่งพัสดุ (Delivery)
+    *   **การลงขาย (Add/Update Book):** ผู้ใช้อัปโหลดรูปภาพหนังสือ กำหนดราคา และรายละเอียดหนังสือผ่านระบบอัปโหลดรูปภาพ
+*   **ระบบแจ้งยอดและแนบหลักฐาน (Payment Upload):** อัปโหลดภาพสลิปโอนเงินพร้อมบันทึกวันเวลา เพื่อส่งให้แอดมินตรวจสอบความถูกต้อง
+*   **ระบบแชท Real-time (Chat System):** แชทสอบถามข้อมูล นัดรับ หรือพูดคุยตกลงราคาผ่าน WebSockets แบบเรียลไทม์
+*   **การแจ้งเตือนทันที (Live Notifications):** กระดิ่งแจ้งเตือนสว่างขึ้นเมื่อสถานะหนังสือหรือสลิปการโอนได้รับการอัปเดตจากแอดมิน
 
 ### 🛡️ สำหรับผู้ดูแลระบบ (Admin)
-*   **Dashboard สรุปผล:** ตรวจสอบข้อมูลสถิติเบื้องต้นและภาพรวมของระบบ
-*   **ตรวจสอบและอนุมัติหนังสือ (Verify Book Listings):** ตรวจสอบข้อมูลหนังสือที่ผู้ใช้งานลงขาย ก่อนจะอนุญาตให้แสดงบนแพลตฟอร์ม (เปลี่ยนสถานะจาก `unavailable` เป็น `available`)
-*   **ตรวจสอบสลิปโอนเงิน (Verify Payments):** ตรวจเช็คข้อมูลสลิปโอนเงินกับรายการสั่งซื้อ เพื่ออนุมัติคำสั่งซื้อ (Completed) หรือปฏิเสธกรณีสลิปมีปัญหา (Not Approved)
-*   **ระบบเพิ่มแอดมิน (Admin Provisioning):** ลงทะเบียนเพื่อเพิ่มสิทธิ์ให้ผู้ดูแลระบบรายใหม่ (Admin Register)
+*   **Dashboard สรุปผล:** แสดงข้อมูลสถิติยอดสั่งซื้อ สมาชิก และรายการหนังสือแบบ Real-time
+*   **อนุมัติหนังสือลงขาย (Verify Book Listings):** ตรวจสอบความเหมาะสมและข้อมูลของหนังสือที่ลงขายใหม่เพื่อป้องกัน Spam ก่อนอนุญาตให้ขึ้นแสดงบนแพลตฟอร์ม
+*   **ตรวจสอบและอนุมัติสลิปโอนเงิน (Verify Payments):** ตรวจสลิปโอนเงินของคำสั่งซื้อเพื่ออนุมัติจัดส่ง (Completed) หรือปฏิเสธ (Not Approved)
+*   **การเพิ่มแอดมิน (Admin Provisioning):** ลงทะเบียนเพื่อเพิ่มสิทธิ์ให้ทีมผู้ดูแลระบบคนอื่นเข้ามาช่วยจัดการข้อมูลได้
 
 ---
 
 ## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
 
-### Frontend (Client)
-*   **Core Library:** React (v19)
-*   **Build Tool:** Vite (v6)
-*   **Styling:** Tailwind CSS (v4) + DaisyUI (v5) + Lucide React (Icons)
-*   **Routing:** React Router DOM (v7)
-*   **HTTP Client:** Axios (เชื่อมต่อ REST API)
-*   **Real-time Client:** Socket.io Client
-*   **State / UI Helpers:** React Hot Toast (แจ้งเตือนความปลอดภัยของ UI), React Confirm Alert
+### 💻 Frontend (Client)
+*   **Library:** React 19 (Functional Components & Hooks)
+*   **Build Tool:** Vite 6 (รวดเร็วในการบิวด์และพัฒนา)
+*   **Styling:** Tailwind CSS v4 + DaisyUI v5 (สไตล์โมเดิร์น สวยงามสไตล์ Glassmorphism และรองรับ Responsive Design)
+*   **Routing:** React Router DOM v7 (จัดการการเปลี่ยนหน้าอย่างลื่นไหล)
+*   **API Client:** Axios (เชื่อมต่อและรับส่งข้อมูล REST API)
+*   **Real-time & UX:** Socket.io-client, React Hot Toast (แจ้งเตือนลอย), React Confirm Alert
 
-### Backend (Server)
+### 🖥️ Backend (Server)
 *   **Runtime:** Node.js
 *   **Framework:** Express.js (v4)
-*   **Database Engine:** MySQL
-*   **Database ORM/Query:** Sequelize (v6) & `mysql2` (Connection Pool)
-*   **Authentication:** JSON Web Token (JWT) & Bcryptjs (เข้ารหัสผ่าน)
-*   **File Upload:** Multer (เก็บรูปภาพหนังสือและสลิปเงินโอนลงเครื่องเซิร์ฟเวอร์)
-*   **Real-time Communication:** Socket.io (WebSockets)
-*   **Testing Framework:** Jest (v30) & Supertest (v7)
+*   **Database ORM:** Sequelize (v6) ร่วมกับไดรเวอร์ `mysql2` (Connection Pool)
+*   **Security:** JSON Web Token (JWT) สำหรับระบุตัวตน และ bcryptjs สำหรับ Hash รหัสผ่าน
+*   **File Storage:** Multer สำหรับรับไฟล์อัปโหลดและจัดเก็บภาพสลิปกับภาพหนังสือลงในเครื่องเซิร์ฟเวอร์
+*   **Real-time Server:** Socket.io
+*   **Testing:** Jest & Supertest สำหรับการทำ API Integration Testing
 
 ---
 
@@ -61,147 +99,172 @@
 Book_University/
 ├── client/                     # ส่วนของ Frontend (React App)
 │   ├── src/
-│   │   ├── assets/             # ไฟล์ Static (รูปภาพ, โลโก้)
-│   │   ├── components/         # คอมโพเนนต์ที่ใช้ซ้ำ (Navbar, Chat, Layouts)
-│   │   ├── features/           # ฟีเจอร์ย่อยของแอปพลิเคชัน (เช่น books, auth)
-│   │   ├── pages/              # หน้าเว็บหลักแบ่งตามบทบาทผู้ใช้
-│   │   │   ├── admin/          # หน้าสำหรับ Admin (Check Payment, Check Books, Register Admin)
-│   │   │   ├── user/           # หน้าสำหรับ User (Home, Details, Chat, Basket, Order, Profile)
-│   │   │   ├── LoginPage.jsx   # หน้าลงชื่อเข้าใช้
-│   │   │   └── SignupPage.jsx  # หน้าสมัครสมาชิก
-│   │   ├── util/               # ฟังก์ชันช่วยเหลือและตั้งค่า API (Axios, Socket)
-│   │   ├── main.jsx            # Entry point ของ React
-│   │   └── index.css           # สไตล์หลักระดับแอป
-│   ├── vite.config.js          # ตั้งค่าการ Build ของ Vite
-│   └── package.json            # ไฟล์ระบุ dependencies ของ Client
+│   │   ├── assets/             # ไฟล์รูปภาพประกอบ, โลโก้ และ Font หลัก
+│   │   ├── components/         # คอมโพเนนต์ส่วนกลาง (Navbar, Chat Window, Layouts)
+│   │   ├── features/           # ฟังก์ชันการทำงานแยกตามโมดูล (เช่น books, auth)
+│   │   ├── pages/              # หน้าหลักของแอปพลิเคชัน
+│   │   │   ├── admin/          # หน้าสำหรับฝั่งแอดมิน (ตรวจสลิป, ตรวจหนังสือ, สมัครแอดมิน)
+│   │   │   ├── user/           # หน้าสำหรับฝั่งผู้ใช้งาน (Home, Book Detail, Chat, Cart, Order)
+│   │   │   ├── LoginPage.jsx   # หน้าลงชื่อเข้าใช้งาน
+│   │   │   └── SignupPage.jsx  # หน้าลงทะเบียนผู้ใช้ใหม่
+│   │   ├── util/               # ฟังก์ชันการเชื่อมต่อ API (Axios instance และ Socket socket)
+│   │   ├── main.jsx            # Entry point แรกของ React
+│   │   └── index.css           # สไตล์หลักระดับแอปและการนำเข้า Tailwind v4
+│   ├── vite.config.js          # ไฟล์คอนฟิกของ Vite
+│   └── package.json            # รายการ Dependencies และ Scripts ของ Frontend
 │
 ├── server/                     # ส่วนของ Backend (Express API)
 │   ├── src/
-│   │   ├── config/             # ตั้งค่า DB Connection และ SQL Initial file
-│   │   │   ├── DB.config.js    # กำหนด Connection Pool ของ MySQL
-│   │   │   ├── app.config.js   # ตั้งค่าแอปพลิเคชันหลัก
-│   │   │   └── book_university.sql # ไฟล์สกีมาฐานข้อมูลเริ่มต้น
-│   │   ├── controllers/        # ตัวควบคุมประมวลผล Logic ของ Route ต่างๆ
-│   │   ├── middleware/         # มิดเดิลแวร์สำหรับความปลอดภัย (JWT Auth, Uploads)
-│   │   ├── routes/             # ส่วนกำหนด Path ของ API
-│   │   ├── services/           # ฟังก์ชันติดต่อประมวลผลข้อมูลใน Database
-│   │   ├── socket/             # ควบคุมการทำงานของ Socket.io (แชทและการแจ้งเตือน)
-│   │   ├── app.js              # โครงสร้างหลักของแอป Express
-│   │   └── index.js            # ไฟล์ Entry point ของเซิร์ฟเวอร์
-│   ├── tests/                  # ชุดคำสั่งการทดสอบระบบ (Jest & Supertest)
-│   ├── uploads/                # โฟลเดอร์จัดเก็บรูปภาพอัปโหลด
-│   ├── package.json            # ไฟล์ระบุ dependencies ของ Server
-│   └── TESTS.md                # คู่มือเกี่ยวกับการรันการทดสอบ Unit Tests
+│   │   ├── config/             # การตั้งค่าระบบเชื่อมต่อฐานข้อมูล
+│   │   │   ├── DB.config.js    # กำหนด Connection Pool ของ MySQL ด้วย Sequelize/MySQL2
+│   │   │   ├── app.config.js   # ไฟล์เก็บค่า Config หลักของระบบ
+│   │   │   └── book_university.sql # ไฟล์ Schema และข้อมูลตั้งต้นของฐานข้อมูล
+│   │   ├── controllers/        # ประมวลผล Logic และคำสั่ง SQL ผ่าน Sequelize
+│   │   ├── middleware/         # มิดเดิลแวร์คัดกรองคำขอ (JWT Verification, Multer Uploads)
+│   │   ├── routes/             # กำหนดเส้นทาง (Endpoints) ของ API
+│   │   ├── services/           # ฟังก์ชันสืบค้นฐานข้อมูลติดต่อกับ Sequelize Models
+│   │   ├── socket/             # ควบคุม Event ของ WebSockets (Real-time Chat & Notifications)
+│   │   ├── app.js              # ตัวสร้างและตั้งค่า Express App
+│   │   └── index.js            # Entry point เริ่มต้นรันเซิร์ฟเวอร์
+│   ├── tests/                  # โฟลเดอร์เก็บโค้ดทดสอบ (Jest & Supertest)
+│   ├── uploads/                # โฟลเดอร์จัดเก็บภาพที่ผู้ใช้งานอัปโหลดเข้ามาจริง
+│   ├── package.json            # รายการ Dependencies และ Scripts ของ Backend
+│   └── TESTS.md                # คู่มือสอนเขียนและรันชุดทดสอบระบบหลังบ้าน
 │
-└── README.md                   # เอกสารประกอบโครงการ
+└── README.md                   # เอกสารประกอบโครงการหลัก
 ```
 
 ---
 
 ## ⚙️ วิธีการติดตั้งและใช้งาน (Installation & Setup)
 
-### 1. โคลนโปรเจกต์ (Clone Project)
+### 1. โคลนคลังโค้ด (Clone Project)
 ```bash
 git clone https://github.com/EqrthX/Book_University.git
 cd Book_University
 ```
 
 ### 2. ตั้งค่าระบบฐานข้อมูล (Database Setup)
-1. ติดตั้ง **MySQL** หรือโปรแกรมจำลองเซิร์ฟเวอร์ฐานข้อมูล (เช่น XAMPP, Laragon, Docker หรือใช้ Cloud SQL เช่น Aiven)
-2. สร้าง Database ขึ้นมาใหม่ เช่นตั้งชื่อว่า `book_university`
-3. นำเข้า (Import) โครงสร้างตารางและข้อมูลเริ่มต้นจากไฟล์:
-   `server/src/config/book_university.sql` ไปยัง Database ที่สร้างไว้
+1. ติดตั้ง **MySQL Server** ในเครื่อง หรือใช้งานผ่าน Docker / Cloud Database (เช่น Aiven, PlanetScale)
+2. สร้าง Database เปล่าขึ้นมาใน MySQL ของคุณ:
+   ```sql
+   CREATE DATABASE book_university;
+   ```
+3. นำเข้าข้อมูลและตารางเริ่มต้นโดยใช้คำสั่งด้านล่าง หรือ Import ไฟล์ผ่านเครื่องมือเช่น **phpMyAdmin**, **DBeaver**, หรือ **HeidiSQL**:
+   * นำเข้าไฟล์จาก: `server/src/config/book_university.sql`
 
-### 3. ติดตั้งและเริ่มรัน Backend Server
-เข้าไปที่โฟลเดอร์ `server` และติดตั้ง Packages ทั้งหมด:
-```bash
-cd server
-npm install
-```
+### 3. ตั้งค่าระบบหลังบ้าน (Backend Server Setup)
+1. เปิด Terminal แล้วเข้าไปยังโฟลเดอร์ `server`:
+   ```bash
+   cd server
+   ```
+2. ติดตั้ง Node Packages ทั้งหมด:
+   ```bash
+   npm install
+   ```
+3. สร้างไฟล์ `.env` ในโฟลเดอร์ `server` และนำค่าคอนฟิกนี้ไปใส่ พร้อมระบุรหัสผ่านของคุณ:
+   ```env
+   PORT=5001
+   DB_PORT=3306
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=ใส่รหัสผ่านฐานข้อมูลของคุณที่นี่
+   DB_NAME=book_university
+   JWT_SECRET=ใส่คีย์ลับของคุณสำหรับสร้างโทเค็นความปลอดภัย
+   REACT_URL=http://localhost:5173
+   ```
+4. เริ่มรันระบบเซิร์ฟเวอร์หลังบ้านในโหมดพัฒนา:
+   ```bash
+   npm run dev
+   # เซิร์ฟเวอร์จะเริ่มทำงานที่ http://localhost:5001
+   ```
 
-สร้างไฟล์ `.env` ภายในโฟลเดอร์ `server` แล้วระบุค่าคอนฟิกดังตัวอย่าง:
-```env
-PORT=5001
-DB_PORT=3306
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=รหัสผ่านฐานข้อมูลของคุณ
-DB_NAME=book_university
-JWT_SECRET=คีย์ลับของคุณสำหรับสร้างโทเค็นความปลอดภัย
-REACT_URL=http://localhost:5173
-```
-
-เริ่มรันระบบเซิร์ฟเวอร์ในโหมดพัฒนา (Development Mode):
-```bash
-npm run dev
-# เซิร์ฟเวอร์จะเปิดใช้งานที่ http://localhost:5001
-```
-
-### 4. ติดตั้งและเริ่มรัน Frontend Client
-เปิดเทอร์มินัลใหม่ ไปที่โฟลเดอร์ `client` และติดตั้ง Packages ทั้งหมด:
-```bash
-cd client
-npm install
-```
-
-สร้างไฟล์ `.env` ภายในโฟลเดอร์ `client` แล้วระบุค่า Server API URL:
-```env
-VITE_URL_SERVER=http://localhost:5001/api
-```
-
-เริ่มรันระบบ Client ในโหมดพัฒนา:
-```bash
-npm run dev
-# เว็บไซต์จะเปิดใช้งานที่ http://localhost:5173 (หรือพอร์ตอื่นตามที่ Vite แสดง)
-```
+### 4. ตั้งค่าระบบหน้าบ้าน (Frontend Client Setup)
+1. เปิด Terminal อีกหนึ่งหน้าต่าง แล้วเข้าไปยังโฟลเดอร์ `client`:
+   ```bash
+   cd ../client
+   ```
+2. ติดตั้ง Node Packages ทั้งหมด:
+   ```bash
+   npm install
+   ```
+3. สร้างไฟล์ `.env` ในโฟลเดอร์ `client` และระบุลิงก์ปลายทางของ API:
+   ```env
+   VITE_URL_SERVER=http://localhost:5001/api
+   ```
+4. เริ่มรันระบบหน้าบ้านในโหมดพัฒนา:
+   ```bash
+   npm run dev
+   # เว็บไซต์จะเปิดทำงานและเข้าถึงได้จากบราวเซอร์ที่ http://localhost:5173
+   ```
 
 ---
 
 ## 🧪 การรันชุดทดสอบ (Automated Testing)
-โปรเจกต์นี้มีชุดทดสอบ (Unit Tests / Integration Tests) สำหรับส่วนของ Server โดยใช้เฟรมเวิร์ก Jest และ Supertest สามารถเข้าศึกษาดูวิธีเขียนได้เพิ่มเติมที่ [TESTS.md](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/TESTS.md)
 
-*   **คำสั่งรันเทสปกติ:**
+โปรเจกต์นี้รองรับการทำ **Automated Integration Testing** สำหรับระบบหลังบ้านเพื่อตรวจสอบความถูกต้องของ API ในส่วนของการตรวจสอบความถูกต้องสิทธิ์การเข้าถึง, ตะกร้าสินค้า และหน้าแรก
+
+*   **รันการทดสอบทั้งหมด (Run Jest):**
     ```bash
     cd server
     npm run test
     ```
-*   **คำสั่งตรวจสอบความครอบคลุมของเทส (Code Coverage):**
+*   **รันการทดสอบพร้อมดู Test Coverage:**
     ```bash
     cd server
     npm run test:coverage
     ```
-    *เมื่อประมวลผลเสร็จจะมีการสร้างโฟลเดอร์ `coverage/` ขึ้นมา สามารถเปิดไฟล์ `server/coverage/lcov-report/index.html` บนบราวเซอร์เพื่อดูรายงานแบบละเอียดได้*
+    *หลังจากคำสั่งรันเสร็จสิ้น คุณสามารถเปิดดู HTML Report แบบละเอียดได้ที่ `server/coverage/lcov-report/index.html`*
+
+สามารถอ่านคำแนะนำในการเขียนและรันชุดทดสอบเพิ่มเติมได้ที่ 📄 [TESTS.md](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/TESTS.md)
 
 ---
 
-## 🛣️ โครงสร้าง API Endpoints (คร่าวๆ)
+## 🛣️ โครงสร้าง API Endpoints (API Reference)
 
-ระบบหลังบ้านแบ่งเส้นทางของ API (Routing Paths) ออกเป็นกลุ่มหลักๆ ดังตารางด้านล่าง:
-
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|:---:|
-| **POST** | `/api/auth/register` | ลงทะเบียนนักศึกษาใหม่ | ❌ |
-| **POST** | `/api/auth/login` | เข้าสู่ระบบ (รับ JWT Token) | ❌ |
-| **GET** | `/api/homepage` | ดึงข้อมูลวิชาและหนังสือเพื่อแสดงหน้าแรก |  |
-| **GET** | `/api/product` | ดึงข้อมูลหนังสือที่พร้อมใช้งานทั้งหมด |  |
-| **POST** | `/api/product` | ลงทะเบียนหนังสือเล่มใหม่สำหรับขาย |  |
-| **PUT** | `/api/product/:id` | แก้ไขข้อมูลหนังสือ |  |
-| **DELETE** | `/api/product/:id` | ลบหนังสือออกจากระบบ |  |
-| **GET** | `/api/cart` | ดึงหนังสือในตะกร้า |  |
-| **POST** | `/api/cart` | เพิ่มหนังสือลงตะกร้า |  |
-| **DELETE** | `/api/cart/:id` | ลบหนังสือจากตะกร้า |  |
-| **POST** | `/api/payment` | สร้างใบสั่งซื้อและการโอนเงิน (แจ้งยอด) |  |
-| **PUT** | `/api/payment` | แนบ/อัปเดตสลิปยืนยันการโอนเงิน |  |
-| **GET** | `/api/messages/:roomId` | ดึงประวัติการแชทระหว่างผู้รับ-ผู้ส่ง |  |
-| **GET** | `/api/notifications` | ดึงการแจ้งเตือนของตนเอง |  |
-| **GET** | `/api/admin/books` | ดึงรายการหนังสือที่รอการอนุมัติ (สำหรับแอดมิน) |  |
-| **PUT** | `/api/admin/books/:id` | อนุมัติหนังสือเล่มใหม่ให้แสดงบนระบบ |  |
-| **GET** | `/api/admin/payments` | ดึงคำสั่งซื้อและสลิปที่ต้องตรวจสอบ |  |
-| **PUT** | `/api/admin/order-status` | อนุมัติ (Completed) หรือปฏิเสธสลิปสั่งซื้อ |  |
+| Method | Endpoint | Description (รายละเอียดการใช้งาน) | Auth Required |
+|:---:|---|---|:---:|
+| **POST** | `/api/auth/register` | ลงทะเบียนบัญชีสมาชิกใหม่สำหรับนักศึกษา | ❌ |
+| **POST** | `/api/auth/login` | ตรวจสอบข้อมูลรหัสเพื่อรับ JWT Token เข้าระบบ | ❌ |
+| **GET** | `/api/homepage` | ดึงหนังสือแนะนำและหมวดหมู่สำหรับแสดงหน้าแรก | ❌ |
+| **GET** | `/api/product` | ดึงข้อมูลหนังสือที่ผ่านการอนุมัติและวางขายอยู่ทั้งหมด | ❌ |
+| **POST** | `/api/product` | ส่งคำขอลงขายหนังสือใหม่ (รอแอดมินอนุมัติ) | ✔️ |
+| **PUT** | `/api/product/:id` | แก้ไขข้อมูลรูปภาพและเนื้อหารายละเอียดหนังสือ | ✔️ |
+| **DELETE**| `/api/product/:id` | ลบหนังสือเล่มดังกล่าวออกจากระบบฐานข้อมูล | ✔️ |
+| **GET** | `/api/cart` | แสดงรายการหนังสือในตะกร้าปัจจุบันของผู้ใช้งาน | ✔️ |
+| **POST** | `/api/cart` | เพิ่มหนังสือเข้าตะกร้าสินค้า | ✔️ |
+| **DELETE**| `/api/cart/:id` | นำหนังสือออกจากตะกร้าสินค้า | ✔️ |
+| **POST** | `/api/payment` | สร้างใบคำสั่งซื้อและยอดชำระเงิน | ✔️ |
+| **PUT** | `/api/payment` | อัปโหลดหลักฐานสลิปและระบุวันเวลาโอนเงิน | ✔️ |
+| **GET** | `/api/messages/:roomId`| ดึงประวัติการแชทระหว่างคู่สนทนาในห้องนั้นๆ | ✔️ |
+| **GET** | `/api/notifications` | เรียกดูประวัติแจ้งเตือนเกี่ยวกับกิจกรรมของผู้ใช้ | ✔️ |
+| **GET** | `/api/admin/books` | เรียกดูหนังสือใหม่ทั้งหมดที่ยังไม่อนุมัติ (แอดมินเท่านั้น) | ✔️ Admin |
+| **PUT** | `/api/admin/books/:id` | อนุมัติหนังสือให้แสดงผลบนหน้าตลาดแอป | ✔️ Admin |
+| **GET** | `/api/admin/payments`| ดึงรายการคำสั่งซื้อพร้อมรูปสลิปเพื่อตรวจสอบเงิน | ✔️ Admin |
+| **PUT** | `/api/admin/order-status`| กดยืนยัน (Completed) หรือปฏิเสธรายการโอนเงิน | ✔️ Admin |
 
 ---
 
-## 💬 การทำงานแบบ Real-time (Socket.io Connection)
-ระบบแชทสดและระบบแจ้งเตือนแบบเรียลไทม์ ใช้ความสามารถของ **WebSocket** ผ่านไลบรารี **Socket.io**
-*   **การสนทนา (Chat Messages):** ข้อมูลจะถูกบันทึกลงฐานข้อมูลในตาราง `messages` และส่งกระจายไปยังห้องแชทของคู่สนทนาทันที
-*   **การแจ้งเตือน (Live Notifications):** เมื่อแอดมินอนุมัติสลิปโอนเงินหรือมีความเปลี่ยนแปลงเกี่ยวกับคำสั่งซื้อ ระบบจะยิงข้อมูล Event ไปอัปเดตกระดิ่งแจ้งเตือนของผู้ใช้โดยตรงแบบไม่ต้องโหลดหน้าเว็บใหม่
+## 💬 ระบบแชทและการทำงานแบบ Real-time
+
+เพื่อให้การซื้อขายเป็นไปได้อย่างรวดเร็ว ระบบจึงใช้ **Socket.io** เข้ามาเสริมการทำงานดังนี้:
+
+```mermaid
+sequenceDiagram
+    participant U1 as Student (Buyer)
+    participant S as Socket.io Server
+    participant U2 as Student (Seller)
+    participant A as Admin
+
+    U1->>S: ส่งข้อความแชท (join room / send message)
+    S-->>U2: ข้อความแชทเด้งทันที (real-time message)
+    
+    A->>S: อัปเดตสถานะการอนุมัติหนังสือ / สลิปโอนเงิน
+    S-->>U1: กระดิ่งแจ้งเตือนสว่างแจ้งเปลี่ยนสถานะทันที (live notification)
+```
+
+1. **ระบบข้อความทันที (Instant Chat):** เมื่อเปิดหน้าแชท ระบบจะทำการเชื่อมโยงห้องแชท (Room) ระหว่างผู้ซื้อและผู้ขายผ่าน ID การสั่งซื้อ ข้อความจะส่งหากันโดยไม่ต้องกดรีเฟรชหน้าจอ และบันทึกลงใน Database ตาราง `messages` ไปพร้อมๆ กัน
+2. **ระบบการแจ้งเตือนสด (Live Notifications):** ทุกครั้งที่ผู้ใช้อัปเดตสลิป หรือแอดมินทำการอนุมัติคำสั่งซื้อ เซิร์ฟเวอร์จะทำการปล่อย Event ไปยังคู่สนทนาหรือผู้ใช้ปลายทางแบบสดๆ ทำให้ระบบมีความโต้ตอบสูงและน่าใช้งาน
+
+---
+พัฒนาโดยทีมงาน **Book University** (Nontprawitch, Chaianun, Chanidapha) 📚✨
