@@ -14,6 +14,11 @@ export const createApp = () => {
     app.use(cors(corsOptions));
     app.use("/uploads", express.static("uploads"));
 
+    // Health check endpoint สำหรับ Railway
+    app.get("/", (req, res) => {
+        res.status(200).json({ status: "ok", message: "Book University API is running 🚀" });
+    });
+
     registerRoutes(app);
 
     return app;
