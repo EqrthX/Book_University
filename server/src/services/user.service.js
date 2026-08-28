@@ -50,7 +50,7 @@ export const authenticateUser = async (email, studentId, password) => {
 
     if (conditions.length === 0) {
         const error = new Error("Invalid Student ID or Email");
-        error.statusCode = 401;
+        error.statusCode = 400;
         throw error;
     }
 
@@ -62,7 +62,7 @@ export const authenticateUser = async (email, studentId, password) => {
 
     if (!user) {
         const error = new Error("Invalid Student ID or Email");
-        error.statusCode = 401;
+        error.statusCode = 400;
         throw error;
     }
 
@@ -71,7 +71,7 @@ export const authenticateUser = async (email, studentId, password) => {
 
     if (!isPasswordValid) {
         const error = new Error("Password not match");
-        error.statusCode = 401;
+        error.statusCode = 400;
         throw error;
     }
 
