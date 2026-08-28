@@ -9,7 +9,9 @@ export const addBookToCart = async (userId, bookId) => {
     );
 
     if (existingCart.length > 0) {
-        throw new Error("มีหนังสือเล่มนี้อยู่ในตะกร้าอยู่แล้ว");
+        const error = new Error("มีหนังสือเล่มนี้อยู่ในตะกร้าอยู่แล้ว");
+        error.statusCode = 409;
+        throw error;
     }
 
     await pool.execute(
@@ -21,33 +23,42 @@ export const addBookToCart = async (userId, bookId) => {
 };
 
 // ดึงหนังสือในตะกร้า
-export const getCartBooks = async (userId) => {
-    const [books] = await pool.execute(
-        "SELECT c.id AS cartId, b.* FROM books AS b INNER JOIN cart AS c ON b.id = c.bookId WHERE c.userId = ?",
-        [userId]
-    );
+export const getCartBooks = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    if (books.length === 0) {
-        return [];
-    }
+    const [books] = await pool.query(
+        "SELECT c.id AS cartId, b.* FROM books AS b INNER JOIN cart AS c ON b.id = c.bookId WHERE c.userId = ? LIMIT ? OFFSET ?",
+        [userId, lim, off]
+    );
 
     return books;
 };
 
-// ลบหนังสือออกจากตะกร้า
-export const removeFromCart = async (cartIds) => {
-    if (!cartIds || cartIds.length === 0) {
-        throw new Error("กรุณาเลือกสินค้าหนึ่งอย่างขึ้นไป");
+// ลบหนังสือออกจากตะกร้า (พร้อม ownership check)
+export const removeFromCart = async (cartIdsInput, userId) => {
+    const ids = Array.isArray(cartIdsInput) ? cartIdsInput : [cartIdsInput];
+    const filteredIds = ids.filter(Boolean);
+
+    if (!filteredIds || filteredIds.length === 0) {
+        const error = new Error("กรุณาเลือกสินค้าหนึ่งอย่างขึ้นไป");
+        error.statusCode = 400;
+        throw error;
     }
 
-    const placeholders = cartIds.map(() => '?').join(',');
+    const placeholders = filteredIds.map(() => '?').join(',');
+    const queryParams = userId ? [...filteredIds, userId] : filteredIds;
+    const userClause = userId ? " AND userId = ?" : "";
+
     const [result] = await pool.execute(
-        `DELETE FROM cart WHERE id IN (${placeholders})`,
-        cartIds
+        `DELETE FROM cart WHERE id IN (${placeholders})${userClause}`,
+        queryParams
     );
 
     if (result.affectedRows === 0) {
-        throw new Error("ไม่พบรายการในตะกร้า");
+        const error = new Error("ไม่พบรายการในตะกร้า");
+        error.statusCode = 404;
+        throw error;
     }
 
     return { message: "ลบหนังสือในตะกร้าเรียบร้อยแล้ว" };

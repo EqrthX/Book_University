@@ -11,10 +11,12 @@ import { verifyToken } from "../middleware/auth.middleware.js";
 export const registerRoutes = (app) => {
     app.use("/api/auth", userRouter);
     app.use("/api/admin", verifyToken, adminRouter);
-    app.use("/api", verifyToken, homepageRouter);
+    app.use("/api/books", verifyToken, productRouter);
     app.use("/api/product", verifyToken, productRouter);
     app.use("/api/cart", verifyToken, cartRouter);
+    app.use("/api/payments", verifyToken, paymentRouter);
     app.use("/api/payment", verifyToken, paymentRouter);
     app.use("/api/messages", verifyToken, messagesRouter);
     app.use("/api/notifications", verifyToken, notificationRouter);
+    app.use("/api", verifyToken, homepageRouter);
 };

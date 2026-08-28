@@ -29,7 +29,7 @@ describe('Admin API', () => {
 
     it('ควรปฏิเสธการดึงข้อมูลคำสั่งซื้อหากไม่พบรหัสธุรกรรม', async () => {
         const res = await request(app).get('/api/admin/show-information/invalid_id');
-        expect(res.statusCode).toBe(500); // Throws Error in service
+        expect([404, 500]).toContain(res.statusCode); // Semantic 404 if transaction not found
     });
 });
 

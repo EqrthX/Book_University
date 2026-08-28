@@ -1,8 +1,11 @@
 import pool from "../config/DB.config.js";
 
 // ดึงรายการแจ้งเตือนทั้งหมดของผู้ใช้
-export const getUserNotifications = async (userId) => {
-    const [notifications] = await pool.execute(
+export const getUserNotifications = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [notifications] = await pool.query(
         `
         SELECT 
             n.id, 
@@ -15,8 +18,10 @@ export const getUserNotifications = async (userId) => {
         FROM notifications n
         LEFT JOIN orders o ON o.id = n.order_id
         WHERE n.user_id = ?
+        ORDER BY n.created_at DESC
+        LIMIT ? OFFSET ?
         `,
-        [userId]
+        [userId, lim, off]
     );
     return notifications;
 };

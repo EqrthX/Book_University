@@ -1,26 +1,37 @@
 import pool from "../config/DB.config.js";
 
 // แสดงรายชื่อวิชาทั้งหมด
-export const getAllSubjects = async () => {
-    const [fetchSubjectsAll] = await pool.execute(
-        "SELECT * FROM subjects"
+export const getAllSubjects = async (limit = 100, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 100);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [fetchSubjectsAll] = await pool.query(
+        "SELECT * FROM subjects LIMIT ? OFFSET ?",
+        [lim, off]
     );
     return fetchSubjectsAll;
 };
 
 // แสดงหนังสือที่ได้รับการยืนยันแล้วและไม่ใช่ของตัวเอง
-export const getAvailableBooksExcludingUser = async (userId) => {
-    const [books] = await pool.execute(
-        "SELECT * FROM books WHERE status = 'available' AND checkStatusBooks = 'available' AND userId != ?",
-        [userId]
+export const getAvailableBooksExcludingUser = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [books] = await pool.query(
+        "SELECT * FROM books WHERE status = 'available' AND checkStatusBooks = 'available' AND userId != ? LIMIT ? OFFSET ?",
+        [userId, lim, off]
     );
     return books;
 };
 
 // แสดงหนังสือที่ยังไม่ได้รับการยืนยันสำหรับ Admin
-export const getUnavailableBooks = async () => {
-    const [books] = await pool.execute(
-        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable'"
+export const getUnavailableBooks = async (limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [books] = await pool.query(
+        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable' LIMIT ? OFFSET ?",
+        [lim, off]
     );
     return books;
 };
@@ -31,14 +42,17 @@ export const getBookDetails = async (bookId) => {
         "SELECT b.*, s.subjectCode FROM books AS b INNER JOIN subjects AS s ON b.subjectId = s.id WHERE b.id = ?",
         [bookId]
     );
-    return result[0];
+    return result[0] || null;
 };
 
 // แสดงสินค้าสำหรับ User คนนั้นๆด้วย userId ที่ลงขาย
-export const getUserBooks = async (userId) => {
-    const [books] = await pool.execute(
-        "SELECT * FROM books WHERE userId = ?",
-        [userId]
+export const getUserBooks = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [books] = await pool.query(
+        "SELECT * FROM books WHERE userId = ? LIMIT ? OFFSET ?",
+        [userId, lim, off]
     );
     return books;
 };
@@ -49,12 +63,15 @@ export const getBookById = async (bookId) => {
         "SELECT * FROM books WHERE id = ?",
         [bookId]
     );
-    return books[0];
+    return books[0] || null;
 };
 
 // แสดงประวัติคำสั่งซื้อ
-export const getCompletedOrderHistory = async (userId) => {
-    const [history] = await pool.execute(
+export const getCompletedOrderHistory = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [history] = await pool.query(
         `
         SELECT
             users.id AS id,
@@ -78,15 +95,19 @@ export const getCompletedOrderHistory = async (userId) => {
         INNER JOIN order_items ON order_items.order_id = orders.id
         INNER JOIN books ON books.id = order_items.book_id
         WHERE orders.status = 'completed' AND orders.user_id = ?
+        LIMIT ? OFFSET ?
         `,
-        [userId]
+        [userId, lim, off]
     );
     return history;
 };
 
 // แสดงประวัติคำสั่งซื้อแบบละเอียด (address, pickup, payment, books)
-export const getCompletedOrderDetails = async (userId) => {
-    const [result] = await pool.execute(
+export const getCompletedOrderDetails = async (userId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [result] = await pool.query(
         `
         SELECT  
             users.id AS id,
@@ -130,24 +151,31 @@ export const getCompletedOrderDetails = async (userId) => {
         INNER JOIN order_items ON order_items.order_id = orders.id
         INNER JOIN books ON books.id = order_items.book_id
         WHERE orders.status = 'completed' AND users.id = ?
+        LIMIT ? OFFSET ?
         `,
-        [userId]
+        [userId, lim, off]
     );
     return result;
 };
 
 // ค้นหาหนังสือจาก Keyword
-export const searchBooksByKeyword = async (bookKeyword) => {
-    const [search] = await pool.execute(
-        "SELECT * FROM books WHERE status = 'available' AND titleBook LIKE ?",
-        [`%${bookKeyword}%`]
+export const searchBooksByKeyword = async (bookKeyword, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [search] = await pool.query(
+        "SELECT * FROM books WHERE status = 'available' AND titleBook LIKE ? LIMIT ? OFFSET ?",
+        [`%${bookKeyword}%`, lim, off]
     );
     return search;
 };
 
 // แสดงประวัติการซื้อของหนังสือเฉพาะเล่ม
-export const getBookPurchaseHistory = async (bookId) => {
-    const [history] = await pool.execute(
+export const getBookPurchaseHistory = async (bookId, limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [history] = await pool.query(
         `
             SELECT 
                 sold_books.book_id AS book_id,
@@ -162,8 +190,9 @@ export const getBookPurchaseHistory = async (bookId) => {
             FROM sold_books 
             INNER JOIN orders ON sold_books.buyerId = orders.user_id
             WHERE sold_books.book_id = ?
+            LIMIT ? OFFSET ?
         `,
-        [bookId]
+        [bookId, lim, off]
     );
     return history;
 };

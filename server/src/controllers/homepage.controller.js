@@ -10,15 +10,20 @@ export const homepage = async(req, res) => {
 // แสดงรายชื่อวิชาทั้งหมด
 export const getSubjects = async(req, res) => {
     try {
-        const fetchSubjectsAll = await homepageService.getAllSubjects();
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 100;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const fetchSubjectsAll = await homepageService.getAllSubjects(limit, offset);
 
         res.status(200).json({
             message: "Show All subjects",
-            subjectCode: fetchSubjectsAll
+            subjectCode: fetchSubjectsAll || []
         });
     } catch (error) {
         if (!res.headersSent) {
-            return res.status(500).json({
+            const statusCode = error.statusCode || 500;
+            return res.status(statusCode).json({
                 error: error.message || error
             });
         }
@@ -29,18 +34,19 @@ export const getSubjects = async(req, res) => {
 export const showBooks = async(req, res) => {
     try {
         const userId = req.user?.id;
-        const books = await homepageService.getAvailableBooksExcludingUser(userId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
-        if(books.length === 0) {
-            return res.status(404).json({ message: "Books not found" });
-        }
+        const books = await homepageService.getAvailableBooksExcludingUser(userId, limit, offset);
 
         res.status(200).json({
             message: "Show All Books",
-            books: books
+            books: books || []
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetching books"
         });
     }
@@ -49,14 +55,19 @@ export const showBooks = async(req, res) => {
 // แสดงหนังสือที่ยังไม่ได้รับการยืนยันสำหรับ Admin
 export const showBooksUnavailable = async(req, res) => {
     try {
-        const books = await homepageService.getUnavailableBooks();
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const books = await homepageService.getUnavailableBooks(limit, offset);
 
         res.status(200).json({
             message: "Show All Books are unavailable",
-            books: books
+            books: books || []
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetching books"
         });
     }
@@ -69,12 +80,17 @@ export const showDetailBook = async(req, res) => {
     try {
         const result = await homepageService.getBookDetails(bookId);  
 
+        if (!result) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
         res.status(200).json({
             message: "Selected one book!",
             book: result
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetch one book"
         });
     }
@@ -84,18 +100,19 @@ export const showDetailBook = async(req, res) => {
 export const showUserBooks = async(req, res) => {
     try {
         const userId = req.user?.id;
-        const books = await homepageService.getUserBooks(userId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
-        if(books.length === 0) {
-            return res.status(404).json({ message: "Books not found" });
-        }
+        const books = await homepageService.getUserBooks(userId, limit, offset);
 
         res.status(200).json({
             message: "Show All Books",
-            books: books
+            books: books || []
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetching books"
         });
     }
@@ -116,7 +133,8 @@ export const showBookWithId = async(req, res) => {
             books: book
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetching books"
         });
     }
@@ -126,14 +144,19 @@ export const showBookWithId = async(req, res) => {
 export const showHistory = async(req, res) => {
     try {
         const userId = req.user?.id;
-        const history = await homepageService.getCompletedOrderHistory(userId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const history = await homepageService.getCompletedOrderHistory(userId, limit, offset);
 
         return res.status(200).json({
             message: "Fetech History",
-            books: history
+            books: history || []
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
             message: error.message
         });
     }
@@ -143,16 +166,19 @@ export const showHistory = async(req, res) => {
 export const showHistoryOrders = async(req, res) => {
     try {
         const userId = req.user?.id;
-        const result = await homepageService.getCompletedOrderDetails(userId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
-        if(result) {
-            return res.status(200).json({
-                message: "Show History Orders",
-                historyOrder: result
-            });
-        }
+        const result = await homepageService.getCompletedOrderDetails(userId, limit, offset);
+
+        return res.status(200).json({
+            message: "Show History Orders",
+            historyOrder: result || []
+        });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
             message: error.message
         });
     }
@@ -161,15 +187,20 @@ export const showHistoryOrders = async(req, res) => {
 // ค้นหาคำสำคัญ
 export const searchKeyword = async(req, res) => {
     try {
-        const {book} = req.query || "";
-        const search = await homepageService.searchBooksByKeyword(book);
+        const { book } = req.query || {};
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const search = await homepageService.searchBooksByKeyword(book || "", limit, offset);
 
         return res.status(200).json({
-            message: `Search keyword ${book}`,
-            books: search
+            message: `Search keyword ${book || ""}`,
+            books: search || []
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
             message: error.message
         });
     }
@@ -179,20 +210,19 @@ export const searchKeyword = async(req, res) => {
 export const showHistoryBook_WithId = async(req, res) => {
     try {
         const bookId = req.params.id;
-        const history = await homepageService.getBookPurchaseHistory(bookId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
-        if(history.length === 0) {
-            return res.status(404).json({
-                message: "ไม่พบข้อมูลการซื้อหนังสือ"
-            });
-        }
+        const history = await homepageService.getBookPurchaseHistory(bookId, limit, offset);
 
         return res.status(200).json({
             message: "แสดงประวัติการซื้อหนังสือ: " + bookId,
-            history: history[0]
+            history: history[0] || null
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
             message: error.message
         });
     }

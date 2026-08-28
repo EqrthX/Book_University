@@ -3,18 +3,19 @@ import * as messagesService from "../services/messages.service.js";
 export const showAllUsersToChat = async (req, res) => {
     try {
         const userId = req.user?.id;
-        const rows = await messagesService.getAllUsersToChat(userId);
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
-        if(rows.length === 0) {
-            return res.status(404).json({ message: "ไม่เจอผู้ใช้งาน" });
-        }
+        const rows = await messagesService.getAllUsersToChat(userId, limit, offset);
 
         return res.status(200).json({
             message: "แสดงผู้ใช้งานทั้งหมด",
-            users: rows
+            users: rows || []
         });
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({ message: error.message || "Internal server error" });
     }
 };
 
@@ -41,25 +42,30 @@ export const sendMessage = async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({ message: error.message || "Internal server error" });
     }
 };
 
 export const getMessages = async (req, res) => {
     try {
         const { sender_id, receiver_id } = req.params;
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 100;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
 
         if (!sender_id || !receiver_id) {
             return res.status(400).json({ message: "ไม่พบข้อมูล" });
         }
 
-        const rows = await messagesService.fetchMessagesBetweenUsers(sender_id, receiver_id);
+        const rows = await messagesService.fetchMessagesBetweenUsers(sender_id, receiver_id, limit, offset);
 
         return res.status(200).json({
             message: "แสดงข้อความทั้งหมด",
-            messages: rows,
+            messages: rows || [],
         });
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({ message: error.message || "Internal server error" });
     }
 };

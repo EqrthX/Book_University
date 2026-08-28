@@ -1,21 +1,30 @@
 import pool from "../config/DB.config.js";
 
 // ดึงหนังสือที่ไม่พร้อมจำหน่าย
-export const getUnavailableBooks = async () => {
-    const [books] = await pool.execute(
-        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable'"
+export const getUnavailableBooks = async (limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [books] = await pool.query(
+        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable' LIMIT ? OFFSET ?",
+        [lim, off]
     );
     return books;
 };
 
 // ดึงสถานะการชำระเงิน
-export const getPaymentStatus = async () => {
-    const [statusPayment] = await pool.execute(
+export const getPaymentStatus = async (limit = 50, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 50);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    const [statusPayment] = await pool.query(
         `
         SELECT o.id, o.status, p.* FROM payments AS p 
         INNER JOIN orders as o ON p.order_id = o.id
         ORDER BY p.payment_datetime_new DESC, p.transaction_id ASC
-        `
+        LIMIT ? OFFSET ?
+        `,
+        [lim, off]
     );
     return statusPayment;
 };

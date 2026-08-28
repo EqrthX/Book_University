@@ -2,14 +2,19 @@ import * as adminService from "../services/admin.service.js";
 
 export const showBooksUnavailable = async(req, res) => {
     try {
-        const books = await adminService.getUnavailableBooks();
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const books = await adminService.getUnavailableBooks(limit, offset);
 
         res.status(200).json({
             message: "Show All Books are unavailable",
-            books: books
+            books: books || []
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || "Error fetching books"
         });
     }
@@ -17,14 +22,19 @@ export const showBooksUnavailable = async(req, res) => {
 
 export const showStatusPayment = async(req, res) => {
     try {
-        const statusPayment = await adminService.getPaymentStatus();
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const statusPayment = await adminService.getPaymentStatus(limit, offset);
 
         return res.status(200).json({
             message: "Fetch statusPayment Successfully",
-            statusPayment: statusPayment
+            statusPayment: statusPayment || []
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
             message: error.message
         });
     }
@@ -42,7 +52,8 @@ export const fetchInfomation = async(req, res) => {
             showBooks: result.books,
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || (error.message?.includes("ไม่พบ") ? 404 : 500);
+        return res.status(statusCode).json({
             error: error.message || "เกิดข้อผิดพลาดในการดึงข้อมูล"
         });
     }
@@ -73,7 +84,8 @@ export const updateOrdersStatus = async(req, res) => {
             updatedStatus: updatedStatus || "unknown",
         });
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || (error.message?.includes("ไม่พบ") ? 404 : 500);
+        return res.status(statusCode).json({
             message: error.message
         });
     }
@@ -89,7 +101,8 @@ export const updateStatusBook = async(req, res) => {
             book: result
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || (error.message?.includes("not found") ? 404 : 500);
+        res.status(statusCode).json({
             error: error.message || "Error Updating Status book"
         });
     }

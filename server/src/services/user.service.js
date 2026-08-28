@@ -1,4 +1,5 @@
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import pool from '../config/DB.config.js';
 
 // ลงทะเบียนผู้ใช้ใหม่
@@ -10,7 +11,9 @@ export const registerUser = async (studentId, fullName, email, password) => {
     );
 
     if (existingUser.length > 0) {
-        throw new Error("Student Id or Email already exists!");
+        const error = new Error("Student Id or Email already exists!");
+        error.statusCode = 409;
+        throw error;
     }
 
     // เข้ารหัส Password
@@ -43,14 +46,18 @@ export const authenticateUser = async (email, studentId, password) => {
     const user = rows[0];
 
     if (!user) {
-        throw new Error("Invalid Student ID or Email");
+        const error = new Error("Invalid Student ID or Email");
+        error.statusCode = 401;
+        throw error;
     }
 
     // ตรวจสอบ Password
     const isPasswordValid = await bcryptjs.compare(password, user.password);
 
     if (!isPasswordValid) {
-        throw new Error("Password not match");
+        const error = new Error("Password not match");
+        error.statusCode = 401;
+        throw error;
     }
 
     return {
@@ -63,7 +70,7 @@ export const authenticateUser = async (email, studentId, password) => {
 
 // ดึงข้อมูลผู้ใช้จาก Token
 export const verifyToken = async (token, jwtSecret) => {
-    const jwt = require('jsonwebtoken');
     const decoded = jwt.verify(token, jwtSecret);
     return decoded;
 };
+

@@ -23,7 +23,7 @@ describe('Payments API', () => {
         const res = await request(app)
             .post('/api/payment/show-total-cost')
             .send({ orderId: 1 });
-        expect([200, 500]).toContain(res.statusCode); // 200 if order exists, 500 (order not found error) if not
+        expect([200, 404, 500]).toContain(res.statusCode); // 200 if order exists, 404 (semantic order not found error) if not
     });
 
     it('ควรปฏิเสธการดึงราคารวมสินค้าหากไม่ส่ง orderId', async () => {

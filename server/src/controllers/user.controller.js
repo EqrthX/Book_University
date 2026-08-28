@@ -16,7 +16,8 @@ export const signup = async (req, res) => {
             newStudent: newUser
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || error
         });
     }
@@ -61,7 +62,8 @@ export const login = async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             error: error.message || error
         });
     }

@@ -53,7 +53,7 @@ const AdminCheckBooks = () => {
     
     setIsLoading(true);
     try {
-      const res = await axios.delete(`/product/delete-book`, { data: { bookId }, withCredentials: true });
+      const res = await axios.delete(`/books/${bookId}`, { withCredentials: true });
       if (res.status === 200) {
         toast.success("ลบสินค้าเรียบร้อย");
         setDetailBook(prevState => ({

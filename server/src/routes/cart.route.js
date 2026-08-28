@@ -3,11 +3,16 @@ import { addToCart, deleteItemCart, showBookWithCart } from "../controllers/cart
 
 const router = express.Router();
 
-router.get("/show-cart", showBookWithCart)
+// RESTful Resource-based routes
+router.get("/", showBookWithCart);
+router.post("/:id", addToCart);
+router.delete("/:id", deleteItemCart);
+router.delete("/", deleteItemCart);
 
-router.post("/add-to-cart/:id", addToCart)
+// Legacy action-based route aliases
+router.get("/show-cart", showBookWithCart);
+router.post("/add-to-cart/:id", addToCart);
+router.delete("/delete-item-cart/:id", deleteItemCart);
+router.delete("/delete-item-cart", deleteItemCart);
 
-router.delete("/delete-item-cart", deleteItemCart)
-
-
-export default router
+export default router;

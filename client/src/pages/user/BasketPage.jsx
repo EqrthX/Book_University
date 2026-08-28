@@ -39,8 +39,7 @@ const BasketPage = () => {
 
   const deleteItem = async (cartId) => {
     try {
-      await axios.delete('/cart/delete-item-cart', {
-        data: { cartIds: [cartId] },
+      await axios.delete(`/cart/${cartId}`, {
         withCredentials: true
       });
       setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));

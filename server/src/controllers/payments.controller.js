@@ -41,7 +41,7 @@ export const addInfomationAndOrder = async(req, res) => {
             location,
             paymentMethod, 
             price, 
-            userId, 
+            userId: userId || req.user?.id, 
             date_and_time,
             total_price,
             orderData,
@@ -54,7 +54,8 @@ export const addInfomationAndOrder = async(req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
             message: error.message || error
         });
     }
@@ -73,7 +74,8 @@ export const updatePayment = async(req, res) => {
         });
 
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || (error.message?.includes("not found") ? 404 : 500);
+        return res.status(statusCode).json({
             message: error.message || error
         });
     }
@@ -81,7 +83,7 @@ export const updatePayment = async(req, res) => {
 
 export const showTotalCost = async(req, res) => {
     try {
-        const {orderId} = req.body;
+        const orderId = req.params.id || req.body.orderId;
         
         if (!orderId) {
             return res.status(400).json({ message: "Order ID is required" });
@@ -95,7 +97,8 @@ export const showTotalCost = async(req, res) => {
         });
         
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || (error.message === "Order not found" ? 404 : 500);
+        return res.status(statusCode).json({
             message: error.message || error
         });
     }
@@ -115,7 +118,8 @@ export const editPayment = async(req, res) => {
         });
 
     } catch (error) {
-        return res.status(500).json({
+        const statusCode = error.statusCode || (error.message?.includes("not found") ? 404 : 500);
+        return res.status(statusCode).json({
             message: error.message
         });
     }

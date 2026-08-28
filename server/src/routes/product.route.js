@@ -1,16 +1,20 @@
 import express from "express";
-import { addBook, deleteBook, updateBook } from "../controllers/product.controller.js";
+import { addBook, deleteBook, updateBook, showBooks } from "../controllers/product.controller.js";
 import upload from "../middleware/upload.middleware.js";
-import { showBooks } from "../controllers/homepage.controller.js";
 
 const router = express.Router();
 
-router.get("/show-books", showBooks)
+// Legacy action-based route aliases
+router.get("/show-books", showBooks);
+router.post("/add-book", upload, addBook);
+router.put("/update-book/:id", updateBook);
+router.delete("/delete-book", deleteBook);
+router.delete("/delete-book/:id", deleteBook);
 
-router.post("/add-book", upload, addBook)
+// RESTful Resource-based routes
+router.get("/", showBooks);
+router.post("/", upload, addBook);
+router.put("/:id", updateBook);
+router.delete("/:id", deleteBook);
 
-router.put("/update-book/:id", updateBook)
-
-router.delete("/delete-book", deleteBook)
-
-export default router
+export default router;
