@@ -1,12 +1,16 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 
 import { corsOptions } from "./config/app.config.js";
 import { registerRoutes } from "./routes/index.js";
 
 export const createApp = () => {
     const app = express();
+
+    // Use morgan to log incoming HTTP requests to stdout
+    app.use(morgan("dev"));
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));

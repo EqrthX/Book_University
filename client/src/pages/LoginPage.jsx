@@ -47,11 +47,12 @@ const LoginPage = () => {
       
       toast.success("เข้าสู่ระบบสำเร็จ");
     } catch (error) {
-      if(error.response && error.response.status === 400) {
-        toast.error(error.response.data.message);
+      const serverError = error.response?.data?.message || error.response?.data?.error;
+      if (error.response && error.response.status === 400) {
+        toast.error(serverError || "ข้อมูลไม่ถูกต้อง");
       } else {
-        console.error("Login Page error: ", error);
-        setErrorMessage(error.response?.data?.message || "เกิดข้อผิดพลาด กรุณาลองใหม่");
+        console.error("Login Page error: ", error.message);
+        setErrorMessage(serverError || "เกิดข้อผิดพลาด กรุณาลองใหม่");
       }
     } finally {
       setIsLoading(false);
