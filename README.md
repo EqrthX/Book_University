@@ -17,14 +17,15 @@
 
 ## 📌 สารบัญ (Table of Contents)
 1. [🔗 ลิงก์ทดลองใช้งาน & บัญชีทดสอบ (Live Demo & Test Accounts)](#-ลิงก์ทดลองใช้งาน--บัญชีทดสอบ-live-demo--test-accounts)
-2. [🖼️ ภาพรวมและ Demo (Overview & Demo)](#️-ภาพรวมและ-demo-overview--demo)
-3. [✨ ฟีเจอร์หลัก (Key Features)](#-ฟีเจอร์หลัก-key-features)
-4. [🛠️ เทคโนโลยีที่ใช้ (Tech Stack)](#️-เทคโนโลยีที่ใช้-tech-stack)
-5. [📂 โครงสร้างโปรเจกต์ (Folder Structure)](#-โครงสร้างโปรเจกต์-folder-structure)
-6. [⚙️ วิธีการติดตั้งและใช้งาน (Installation & Setup)](#️-วิธีการติดตั้งและใช้งาน-installation--setup)
-7. [🧪 การรันชุดทดสอบ (Automated Testing)](#-การรันชุดทดสอบ-automated-testing)
-8. [🛣️ โครงสร้าง API Endpoints (API Reference)](#️-โครงสร้าง-api-endpoints-api-reference)
-9. [💬 ระบบแชทและการทำงานแบบ Real-time](#-ระบบแชทและการทำงานแบบ-real-time)
+2. [📅 บันทึกการพัฒนา & Timeline การปรับปรุงระบบ (Development Timeline)](#-บันทึกการพัฒนา--timeline-การปรับปรุงระบบ-development-timeline)
+3. [🖼️ ภาพรวมและ Demo (Overview & Demo)](#️-ภาพรวมและ-demo-overview--demo)
+4. [✨ ฟีเจอร์หลัก (Key Features)](#-ฟีเจอร์หลัก-key-features)
+5. [🛠️ เทคโนโลยีที่ใช้ (Tech Stack)](#️-เทคโนโลยีที่ใช้-tech-stack)
+6. [📂 โครงสร้างโปรเจกต์ (Folder Structure)](#-โครงสร้างโปรเจกต์-folder-structure)
+7. [⚙️ วิธีการติดตั้งและใช้งาน (Installation & Setup)](#️-วิธีการติดตั้งและใช้งาน-installation--setup)
+8. [🧪 การรันชุดทดสอบ (Automated Testing)](#-การรันชุดทดสอบ-automated-testing)
+9. [🛣️ โครงสร้าง API Endpoints (API Reference)](#️-โครงสร้าง-api-endpoints-api-reference)
+10. [💬 ระบบแชทและการทำงานแบบ Real-time](#-ระบบแชทและการทำงานแบบ-real-time)
 
 ---
 
@@ -48,6 +49,55 @@
 > * **ห้าม** นำรหัสผ่านจริงของบัญชีส่วนตัว หรือคีย์ความปลอดภัยที่เป็นความลับในไฟล์ `.env` จริง (เช่น รหัสผ่านฐานข้อมูล MySQL, คีย์ JWT Secret จริง) มาแปะในคลังโค้ดนี้เด็ดขาด
 > * ข้อมูลบัญชีที่ระบุในตารางด้านบนควรเป็น **บัญชี Demo** ที่เตรียมไว้ในฐานข้อมูล Production เพื่อการสาธิตเท่านั้น
 
+## 📅 บันทึกการพัฒนา & Timeline การปรับปรุงระบบ (Development Timeline)
+
+เพื่อติดตามความก้าวหน้าในการพัฒนาแพลตฟอร์มในการทำงานร่วมกัน นี่คือประวัติการอัปเดตและพัฒนาชุดฟีเจอร์หลัก (Feature & Refactoring Timeline):
+
+| เฟสการทำงาน (Sprint) | รายละเอียดการปรับปรุงระบบ (Key Features & Refactoring) | สถานะ (Status) | ไฟล์สำคัญที่เกี่ยวข้อง (Key Files) |
+| :---: | :--- | :---: | :--- |
+| **Sprint 1**<br>*(Sequelize ORM Migration)* | **ย้ายระบบการติดต่อฐานข้อมูลจาก SQL Raw Query เป็น Sequelize ORM:**<br>• ยกระดับโครงสร้างความปลอดภัยและการจัดการฐานข้อมูลโดยสร้างโมเดลความสัมพันธ์ (Associations Index)<br>• พัฒนาโมเดล `User`, `Book`, `Cart`, `Subject`, `Order`, `OrderItem`, `Payment`, `Message`, `Notification` ให้ทำงานผ่าน Sequelize ORM เต็มรูปแบบแทน Raw SQL | `Completed` | [models/index.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/models/index.js)<br>[services/user.service.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/services/user.service.js) |
+| **Sprint 2**<br>*(Cart State Refactoring)* | **ย้ายระบบจัดการตะกร้าสินค้าไปเป็น Global State:**<br>• ออกแบบและสร้าง `CartContext` เพื่อรวบรวมฟังก์ชันการเพิ่ม/ลบสิ่งของ และเชื่อมต่อกับ Database ในจุดเดียว<br>• ส่งผลให้จำนวนเลขตะกร้าบนแถบ Navbar อัปเดตแบบเรียลไทม์ทันทีและลื่นไหลโดยไม่ต้องรีเฟรชหน้าจอหรือเรียกซ้ำซ้อน | `Completed` | [CartContext.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/context/CartContext.jsx)<br>[Navbar.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/components/layouts/Navbar.jsx) |
+| **Sprint 3**<br>*(UI/UX Polishing)* | **ยกระดับ UI/UX และธีมสีให้ดูทันสมัยและน่าใช้งาน:**<br>• เพิ่มระบบสลับโหมดสว่าง-มืด (Light/Dark Mode Switcher) ด้วย DaisyUI<br>• เปลี่ยนไอคอนดาวน์โหลดธรรมดาในหน้าหลักเป็น **Skeleton Loader** เล่นเอฟเฟกต์แสงวิ่งสั่นไหว (Pulsating Effect) ขณะรอเชื่อมต่อ API ดึงข้อมูลหนังสือ<br>• ทำปุ่มกดแสดงสถานะกำลังโหลด (Loading State) ป้องกันการสแปมปุ่มสั่งซื้อ/ลงหนังสือซ้ำซ้อน | `Completed` | [HomePage.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/user/HomePage.jsx)<br>[AddBook.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/user/AddBook.jsx) |
+| **Sprint 4**<br>*(Cloud Storage Integration)* | **ระบบคลาวด์จัดเก็บไฟล์ถาวร (Cloudinary Integration):**<br>• พัฒนาระบบจัดเก็บไฟล์รูปภาพตำราเรียน สลิปโอนเงิน และรูปแนบแชทจากเครื่อง Local Server ขึ้นสู่ระบบ Cloud Storage (Cloudinary)<br>• เปลี่ยน Multer จากการบันทึกชั่วคราวลงฮาร์ดดิสก์เซิร์ฟเวอร์ย้ายไปเก็บที่ Buffer ในแรมชั่วคราวแล้ว Stream ขึ้นคลาวด์ทันที ป้องกันภาพสูญหายเมื่อเครื่องรีสตาร์ท<br>• ทำโมดูล `getImageUrl` ซัพพอร์ตภาพทั้งระบบลิงก์สากลและรูปเดิมบน Disk | `Completed` | [cloudinary.config.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/config/cloudinary.config.js)<br>[image.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/util/image.js) |
+| **Sprint 5**<br>*(Admin Dashboard & Activity Tracking)* | **ระบบควบคุมผู้ใช้งาน สถิติความเคลื่อนไหว และการจัดการสถานะสินค้า:**<br>• เพิ่มบันทึกการล็อกอิน (`loginCount`) และบันทึกเวลาความเคลื่อนไหวล่าสุด (`lastActiveAt`) อัปเดตเรียลไทม์ผ่าน Middleware<br>• พัฒนาหน้าจอ **[AdminUsers.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminUsers.jsx)** แสดงสถานะล็อกอิน, อัปเดตเปลี่ยนสิทธิ์ Admin/Student, และปุ่มลบแอดเคาท์ที่ปลอดภัย<br>• พัฒนาหน้าจอ **[AdminBooks.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminBooks.jsx)** สำหรับตรวจอนุมัติวางจำหน่ายหนังสือและสลับเปลี่ยนสถานะสินค้าว่ากำลังลงขายอยู่ หรือขายแล้ว (Sold Out) | `Completed` | [AdminUsers.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminUsers.jsx)<br>[AdminBooks.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminBooks.jsx) |
+| **Google OAuth 2.0 Scaffold**<br>*(Practice Frame)* | **ชุดโครงสร้างเข้าสู่ระบบผ่าน Google (OAuth 2.0 Scaffold):**<br>• วางปุ่ม "เข้าสู่ระบบด้วย Google" บนหน้าล็อกอินหลัก<br>• จัดวางชุดเราท์เตอร์และ Handler ฝั่งเซิร์ฟเวอร์หลังบ้าน พร้อมคำแนะนำการเชื่อมต่อ Client ID/Secret ในคอมเมนต์ `TODO` ให้คุณไปศึกษาและฝึกเขียนโค้ดด้วยตนเอง | `Ready` | [LoginPage.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/LoginPage.jsx)<br>[oauth.route.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/routes/oauth.route.js) |
+## 🚀 บันทึกประวัติการอัปเดตระบบ (Daily Update Logs - Portfolio Highlights)
+
+ส่วนนี้สรุปรายละเอียดการพัฒนาระบบและการแก้ปัญหาเชิงเทคนิคในแต่ละรอบการอัปเดต เพื่อใช้สำหรับอ้างอิงความก้าวหน้าและการนำไปประกอบเป็นผลงานใน **Portfolio**:
+
+### 📅 อัปเดตล่าสุด: 28 สิงหาคม 2569 (2026-08-28)
+
+ในรอบการพัฒนานี้ เน้นการยกระดับความน่าเชื่อถือ ความปลอดภัยในการบันทึกข้อมูลแบบถาวรบนระบบคลาวด์ การติดตามความเคลื่อนไหวของผู้ใช้งานสำหรับผู้ดูแลระบบ และการวางโครงสร้างระบบความปลอดภัยทางเลือก (OAuth 2.0) โดยมีหัวข้อผลงานทางเทคนิคที่ทำสำเร็จดังนี้:
+
+#### 1. Cloud Persistent Storage Integration (ระบบจัดเก็บข้อมูลถาวรบนคลาวด์)
+*   **ความท้าทาย:** การบันทึกไฟล์อิมเมจในเครื่องเซิร์ฟเวอร์แบบเดิม (Local Disk Storage) ทำให้ภาพสูญหายทุกครั้งเมื่อนำไปโฮสต์บนแพลตฟอร์มที่เป็น Cloud Hosting (เนื่องจากมีลักษณะเป็น Ephemeral File System ที่จะรีเซ็ตตัวเองทุกครั้งที่มีการอัปเดตโค้ดหรือรีสตาร์ทเซิร์ฟเวอร์)
+*   **การแก้ไข (Tech Achievement):**
+    *   ปรับปรุงมิดเดิลแวร์การรับไฟล์ของ [multer](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/middleware/upload.middleware.js) จากการพักไฟล์ในเครื่องให้ทำงานในรูปแบบ **Memory Buffer Storage** แทน
+    *   พัฒนาระบบ Stream Upload ผ่านชุดเครื่องมือ [cloudinary.config.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/config/cloudinary.config.js) โดยดึงข้อมูลรูปภาพจากหน่วยความจำ (Buffer) และยิงขึ้นระบบ **Cloudinary API** แบบ Secure HTTPS โดยตรง
+    *   เชื่อมต่อการอัปโหลดไฟล์รูปภาพใหม่บนคลาวด์ 3 ส่วนหลัก: รูปภาพปกหนังสือเรียน, รูปภาพสลิปใบโอนเงินสำหรับแจ้งชำระเงิน, และไฟล์รูปแนบแชทเรียลไทม์
+    *   เขียนฟังก์ชันความช่วยเหลือ [image.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/util/image.js) ฝั่งผู้ใช้งานเพื่อเช็คฟิลด์รูปภาพในฐานข้อมูลแบบยืดหยุ่น โดยสามารถแสดงผลได้ทั้งรูปภาพที่เป็นลิงก์ CDN ของ Cloudinary และรูปภาพในโหมด Legacy (ภาพในอดีตที่เก็บในโฟลเดอร์ฝั่งเซิร์ฟเวอร์เดิม)
+
+#### 2. User Activity Tracking & Administration (ระบบติดตามความเคลื่อนไหวและจัดการผู้ใช้)
+*   **รายละเอียดฟีเจอร์:**
+    *   ดำเนินการคำสั่งปรับปรุงฐานข้อมูลเพิ่มฟิลด์ `loginCount` (จำนวนครั้งการเข้าระบบ), `lastActiveAt` (เวลาความเคลื่อนไหวล่าสุด), และ `googleId` ลงในตารางผู้ใช้งาน รวมถึงปรับแต่งโครงสร้าง `studentId` และ `password` ให้เป็น Nullable สำหรับเตรียมรองรับ Social Login
+    *   ผูกการบันทึกจำนวนการล็อกอินสะสมในระบบตรวจสอบความถูกต้อง และสร้าง Middleware อัปเดตเวลา `lastActiveAt` ทุกครั้งที่ผู้ใช้ส่งคำขอเรียกใช้งาน API
+    *   ออกแบบหน้าตารางการจัดการสมาชิกของแอดมิน [AdminUsers.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminUsers.jsx) ที่มีตัวระบุสเตตัส Active (ตอนนี้ / วันนี้ / ไม่ได้เคลือนไหว) ด้วยรูปแบบ CSS Animation Pulsating Dot สวยงาม พร้อมปุ่มเปลี่ยนบทบาทสิทธิ์สมาชิก และกล่องโมดอลแจ้งลบบัญชีผู้ใช้ออกอย่างปลอดภัย
+
+#### 3. Book Status Catalog Manager (ระบบบริหารจัดการและติดตามสถานะหนังสือของ Admin)
+*   **รายละเอียดฟีเจอร์:**
+    *   พัฒนาหน้าจอตรวจสอบรายการหนังสือทั้งหมดของแพลตฟอร์ม [AdminBooks.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminBooks.jsx)
+    *   แสดงผลรูปภาพและข้อมูลผู้ลงทะเบียนขายแบบครบถ้วน พร้อมปุ่มเปลี่ยนสถานะอย่างรวดเร็ว (Toggle Switch Badges):
+        *   **สถานะการตรวจสอบ:** สลับค่าระหว่าง อนุมัติวางขาย (`available`) / รอการอนุมัติ (`unavailable`) เพื่อคัดกรองข้อมูลสแปม
+        *   **สถานะคลังสินค้า:** สลับค่าระหว่าง กำลังลงขาย (`available`) / ขายแล้ว (`sold`)
+    *   ปุ่มสั่งลบหนังสือออกจากฐานข้อมูลในกรณีที่ข้อมูลไม่ถูกต้อง โดยมีระบบ Confirm ก่อนลบเพื่อป้องกันความเสียหาย
+    *   แก้ไขหน้าจอสำหรับเพิ่มรายชื่อนักศึกษา [AdminRegister.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/admin/AdminRegister.jsx) ให้มีความกว้างการ์ดเพิ่มขึ้นเป็น 950px เพื่อความสบายตาในการกรอกข้อมูล และแก้ปัญหาการแจ้งเตือนกล่อง Toast โชว์ซ้ำซ้อนในโหมด Strict Mode
+
+#### 4. Google OAuth 2.0 Authentication Scaffold (โครงร่างระบบล็อกอินผ่าน Google)
+*   **รายละเอียดฟีเจอร์:**
+    *   ติดตั้งปุ่มกดล็อกอิน **"เข้าสู่ระบบด้วย Google"** ที่มีสีสันและไอคอน Google เวกเตอร์ชัดเจนลงใน [LoginPage.jsx](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/client/src/pages/LoginPage.jsx)
+    *   สร้างไฟล์จุดรับข้อมูล [oauth.route.js](file:///c:/Users/Nontprawitch/Desktop/Vs%20code/Javascript/Book_University/server/src/routes/oauth.route.js) สำหรับฝั่ง Backend เพื่อเตรียมพร้อมสำหรับการดึงรหัสแลกเปลี่ยน (Auth Code), ส่งหา API ยืนยัน Token Identity, และเขียนคอมเมนต์แนะนำวิธีต่อ API ในข้อกำหนดแบบทีละขั้นตอนสำหรับการทดลองทำด้วยตัวเอง
+
+---
 
 ## 🖼️ ภาพรวมและ Demo (Overview & Demo)
 
