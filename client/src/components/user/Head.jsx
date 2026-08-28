@@ -1,43 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, UserRound, LogOut, ShoppingBag, BookOpen } from "lucide-react";
+import { ShoppingCart, UserRound, LogOut, ShoppingBag, BookOpen, Sun, Moon } from "lucide-react";
 import UTCC from "/src/assets/UTCC.png";
 import { useAuth } from '../../context/AuthContext.jsx';
 import axios from '../../util/axios.js';
+import { useCart } from '../../context/CartContext.jsx';
 
 function Head() {
   const { user, logout } = useAuth();
+  const { cartCount } = useCart();
   const studentId = user?.studentId;
   const navigate = useNavigate();
-  const [cartCount, setCartCount] = useState(0);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-  const fetchCartCount = async () => {
-    if (!user) {
-      setCartCount(0);
-      return;
-    }
-    try {
-      const res = await axios.get('/cart/show-cart', { withCredentials: true });
-      setCartCount(res.data.books?.length || 0);
-    } catch (err) {
-      console.error("Error fetching cart count:", err);
-    }
-  };
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
-    fetchCartCount();
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
-    // Listen to custom event for real-time updates
-    const handleCartUpdate = () => {
-      fetchCartCount();
-    };
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
-    window.addEventListener('cart-updated', handleCartUpdate);
-    return () => {
-      window.removeEventListener('cart-updated', handleCartUpdate);
-    };
-  }, [user]);
 
   const handleLogout = () => {
     setShowLogoutConfirm(true);
@@ -70,6 +55,19 @@ function Head() {
       </Link>
 
       <div className="ml-auto flex items-center space-x-5">
+
+        {/* Toggle Theme */}
+        <button 
+          onClick={toggleTheme}
+          className="text-slate-700 p-2.5 rounded-xl bg-slate-50 hover:bg-[#2F5792]/10 hover:text-[#2F5792] transition-all duration-300 shadow-sm hover:shadow-md border border-slate-100 flex items-center justify-center cursor-pointer"
+          title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+        >
+          {theme === "light" ? (
+            <Moon className="w-5 h-5 text-slate-750" />
+          ) : (
+            <Sun className="w-5 h-5 text-amber-500" />
+          )}
+        </button>
 
         {/* ตะกร้า */}
         <Link to="/user/BasketPage" className="relative group">

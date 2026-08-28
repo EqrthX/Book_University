@@ -4,12 +4,14 @@ import axios from '../../util/axios.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import Promote from "../../assets/Promote.png";
 import BookCard from "../../features/books/components/BookCard.jsx";
+import SkeletonBook from "../../features/books/components/SkeletonBook.jsx";
 
 const HomePage = () => {
   const { user } = useAuth();
   const [books, setBooks] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all"); // "all" | "meet" | "ship"
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getAllBooks = async () => {
@@ -18,6 +20,8 @@ const HomePage = () => {
         setBooks(res.data.books || []);
       } catch (error) {
         console.error("Error fetching books", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -254,7 +258,13 @@ const HomePage = () => {
         )}
 
         {/* Books Grid display */}
-        {filteredBooks.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 gap-y-10">
+            {Array.from({ length: 12 }).map((_, idx) => (
+              <SkeletonBook key={idx} />
+            ))}
+          </div>
+        ) : filteredBooks.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 gap-y-10">
             {filteredBooks.map((book) => (
               <BookCard key={book.id} book={book} />

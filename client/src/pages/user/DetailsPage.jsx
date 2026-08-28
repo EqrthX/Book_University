@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios, { SERVER_URL } from '../../util/axios.js';
 import { Book, MessageSquareText } from "lucide-react";
-import toast from 'react-hot-toast';
+import { useCart } from '../../context/CartContext.jsx';
 
 const DetailsPage = () => {
   const navigate = useNavigate();
   const [studentId, setStudentId] = useState("");
   const { id } = useParams();
   const [book, setBook] = useState({});
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,25 +39,13 @@ const DetailsPage = () => {
     fetchOnceBook();
   }, [id]);
 
-  const addToCart = async (id) => {
-    try {
-      const res = await axios.post(`/cart/add-to-cart/${id}`, { withCredentials: true });
-
-      if (res.status === 201) {
-        toast.success(res.data.message);
-        window.dispatchEvent(new Event('cart-updated'));
-        navigate("/user/HomePage");
-      }
-
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        toast.error(error.response.data.message);
-      } else {
-        console.error("Error adding to cart", error);
-        toast.error("เกิดข้อผิดพลาดในการเพิ่มหนังสือไปยังตะกร้า");
-      }
+  const handleAddToCart = async (id) => {
+    const success = await addToCart(id);
+    if (success) {
+      navigate("/user/HomePage");
     }
   };
+
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen pb-16 font-sans text-slate-800">
@@ -153,7 +142,7 @@ const DetailsPage = () => {
                     </button>
                     
                     <button 
-                      onClick={() => addToCart(book.id)}
+                      onClick={() => handleAddToCart(book.id)}
                       className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-98 transition-all duration-300 cursor-pointer"
                     >
                       <span>เพิ่มใส่ตะกร้า</span>

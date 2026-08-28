@@ -1,27 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios, { SERVER_URL } from '../../util/axios.js';
+import { SERVER_URL } from '../../util/axios.js';
 import { ShoppingCart, Trash2, ShieldAlert, CreditCard, ChevronRight } from "lucide-react";
-import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { useCart } from '../../context/CartContext.jsx';
 
 const BasketPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchCart = async () => {
-    try {
-      const cartRes = await axios.get('/cart/show-cart', { withCredentials: true });
-      setCartItems(cartRes.data.books || []);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { cartItems, loading, deleteItem, deleteSelected, fetchCart } = useCart();
 
   useEffect(() => {
     fetchCart();
@@ -37,38 +25,21 @@ const BasketPage = () => {
     });
   };
 
-  const deleteItem = async (cartId) => {
-    try {
-      await axios.delete(`/cart/${cartId}`, {
-        withCredentials: true
-      });
-      setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
+  const handleDeleteItem = async (cartId) => {
+    const success = await deleteItem(cartId);
+    if (success) {
       setSelectedItems((prev) => prev.filter((id) => id !== cartId));
-      window.dispatchEvent(new Event('cart-updated'));
-      toast.success("ลบสินค้าเรียบร้อย");
-    } catch (error) {
-      console.error("Error deleting item:", error);
-      toast.error("ลบสินค้าไม่สำเร็จ");
     }
   };
 
-  const deleteSelected = async () => {
+  const handleDeleteSelected = async () => {
     if (selectedItems.length === 0) return;
     const confirmDelete = window.confirm("ต้องการลบรายการที่เลือกทั้งหมดใช่ไหม");
     if (!confirmDelete) return;
 
-    try {
-      await axios.delete('/cart/delete-item-cart', {
-        data: { cartIds: selectedItems },
-        withCredentials: true
-      });
-      setCartItems((prev) => prev.filter((item) => !selectedItems.includes(item.cartId)));
+    const success = await deleteSelected(selectedItems);
+    if (success) {
       setSelectedItems([]);
-      window.dispatchEvent(new Event('cart-updated'));
-      toast.success("ลบรายการที่เลือกเรียบร้อย");
-    } catch (error) {
-      console.error("Error deleting items:", error);
-      toast.error("ลบรายการล้มเหลว");
     }
   };
 
@@ -115,7 +86,7 @@ const BasketPage = () => {
           </div>
           {selectedItems.length > 0 && (
             <button 
-              onClick={deleteSelected}
+              onClick={handleDeleteSelected}
               className="flex items-center space-x-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 px-3 py-1.5 rounded-xl transition-all"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -172,7 +143,7 @@ const BasketPage = () => {
 
                     {/* Delete Item button */}
                     <button 
-                      onClick={() => deleteItem(item.cartId)}
+                      onClick={() => handleDeleteItem(item.cartId)}
                       className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
                     >
                       <Trash2 className="w-5 h-5" />
