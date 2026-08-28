@@ -1,4 +1,5 @@
 import userRouter from "./user.route.js";
+import oauthRouter from "./oauth.route.js";
 import homepageRouter from "./homepage.route.js";
 import productRouter from "./product.route.js";
 import adminRouter from "./admin.route.js";
@@ -10,6 +11,7 @@ import { verifyToken } from "../middleware/auth.middleware.js";
 
 export const registerRoutes = (app) => {
     app.use("/api/auth", userRouter);
+    app.use("/api/auth", oauthRouter);
     app.use("/api/admin", verifyToken, adminRouter);
     app.use("/api/books", verifyToken, productRouter);
     app.use("/api/product", verifyToken, productRouter);

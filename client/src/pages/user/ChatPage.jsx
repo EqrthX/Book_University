@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import socket from "../../util/socket.socket.js";
-import axios, { SERVER_URL } from '../../util/axios.js';
+import axios from '../../util/axios.js';
 import { UserRound, Menu, Handshake, Paperclip, X, Send, MessageSquare } from 'lucide-react';
 import { formatTime } from '../../util/helper.js';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { getImageUrl } from '../../util/image.js';
 
 const ChatPage = () => {
   const { user, loading } = useAuth();
@@ -249,10 +250,10 @@ const ChatPage = () => {
                           {msg.text}
                           {msg.picture && (
                             <img
-                              src={`${SERVER_URL}/${msg.picture.replace(/\\/g, "/")}`}
+                              src={getImageUrl(msg.picture)}
                               alt="Attached evidence"
                               className="mt-2 rounded-lg max-h-48 w-full object-contain cursor-zoom-in"
-                              onClick={() => window.open(`${SERVER_URL}/${msg.picture.replace(/\\/g, "/")}`, "_blank")}
+                              onClick={() => window.open(getImageUrl(msg.picture), "_blank")}
                             />
                           )}
                         </div>

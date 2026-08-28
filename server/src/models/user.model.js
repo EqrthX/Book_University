@@ -9,7 +9,7 @@ const User = sequelize.define("User", {
     },
     studentId: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
         unique: true
     },
     fullName: {
@@ -23,7 +23,21 @@ const User = sequelize.define("User", {
     },
     password: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
+    },
+    googleId: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        unique: true
+    },
+    lastActiveAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    loginCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     },
     user_role: {
         type: DataTypes.ENUM("student", "admin"),

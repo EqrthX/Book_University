@@ -9,6 +9,7 @@ const AddBook = () => {
     const [subjects, setSubjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showBookPic, setShowBookPic] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [user, setUser] = useState({
         userId: "",
@@ -95,6 +96,8 @@ const AddBook = () => {
             return;
         }
 
+        setIsSubmitting(true);
+
         try {
             const res = await axios.post("/product/add-book", formData, {
                 withCredentials: true,
@@ -111,6 +114,8 @@ const AddBook = () => {
         } catch (error) {
             console.error("Error add book:", error);
             toast.error("เกิดข้อผิดพลาดในการเพิ่มหนังสือ");
+        } finally {
+            setIsSubmitting(false);
         }
     }
     
@@ -450,9 +455,17 @@ const AddBook = () => {
                                     </button>
                                     <button 
                                         type="submit"
-                                        className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-[#2F5792] to-[#2B6CB0] border-0 text-white font-bold hover:shadow-lg rounded-xl text-xs transition-all shadow-md cursor-pointer text-center"
+                                        disabled={isSubmitting}
+                                        className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-[#2F5792] to-[#2B6CB0] border-0 text-white font-bold hover:shadow-lg rounded-xl text-xs transition-all shadow-md cursor-pointer text-center flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        ลงขายหนังสือ
+                                        {isSubmitting ? (
+                                            <>
+                                                <span className="loading loading-spinner loading-xs"></span>
+                                                <span>กำลังบันทึกข้อมูล...</span>
+                                            </>
+                                        ) : (
+                                            <span>ลงขายหนังสือ</span>
+                                        )}
                                     </button>
                                 </div>
 

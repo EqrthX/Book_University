@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SERVER_URL } from '../../util/axios.js';
 import { ShoppingCart, Trash2, ShieldAlert, CreditCard, ChevronRight } from "lucide-react";
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
+import { getImageUrl } from '../../util/image.js';
 
 const BasketPage = () => {
   const { user } = useAuth();
@@ -102,9 +102,7 @@ const BasketPage = () => {
             <div className="lg:col-span-8 space-y-4">
               {cartItems.map((item) => {
                 const isChecked = selectedItems.includes(item.cartId);
-                const cover = item.bookPic 
-                  ? `${SERVER_URL}/${item.bookPic.replace(/\\/g, "/")}` 
-                  : "https://via.placeholder.com/150";
+                const cover = getImageUrl(item.bookPic);
 
                 return (
                   <div 

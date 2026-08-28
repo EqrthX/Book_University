@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import { SERVER_URL } from '../../../util/axios.js';
+import { getImageUrl } from '../../../util/image.js';
 
 function BookCard({ book }) {
-  const imageUrl = book.bookPic
-    ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}`
-    : "https://via.placeholder.com/150";
+  const imageUrl = getImageUrl(book.bookPic);
 
   return (
     <Link to={`/user/DetailsPage/${book.id}`} className="block h-full group">

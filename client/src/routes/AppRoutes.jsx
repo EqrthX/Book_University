@@ -8,6 +8,8 @@ import AdminRegister from '../pages/admin/AdminRegister';
 import AdminCheckBooks from '../pages/admin/AdminCheckBooks';
 import AdminCheckPayment from '../pages/admin/AdminCheckPayment';
 import AdminDetailsPayment from '../pages/admin/AdminDetailsPayment';
+import AdminUsers from '../pages/admin/AdminUsers';
+import AdminBooks from '../pages/admin/AdminBooks';
 
 import HomePage from '../pages/user/HomePage';
 import AddBook from '../pages/user/AddBook';
@@ -46,6 +48,8 @@ function AppRoutes() {
           <Route path='check-books' element={<AdminCheckBooks />} />
           <Route path='check-payment' element={<AdminCheckPayment />} />
           <Route path='check-payment/details-payment/:id' element={<AdminDetailsPayment />} />
+          <Route path='users' element={<AdminUsers />} />
+          <Route path='books' element={<AdminBooks />} />
         </Route>
       </Route>
 

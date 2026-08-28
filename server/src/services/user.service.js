@@ -75,6 +75,11 @@ export const authenticateUser = async (email, studentId, password) => {
         throw error;
     }
 
+    // Increment loginCount and update lastActiveAt
+    user.loginCount = (user.loginCount || 0) + 1;
+    user.lastActiveAt = new Date();
+    await user.save();
+
     return {
         id: user.id,
         studentId: user.studentId,

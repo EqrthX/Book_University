@@ -76,10 +76,13 @@ const AdminRegister = () => {
       </div>
 
       {/* Form Card Container */}
-      <div className='flex justify-start items-center w-full max-w-2xl bg-slate-50/50 border border-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm'>
-        <form onSubmit={handleSubmit} className='w-full flex flex-col gap-5'>
+      <div 
+        style={{ maxWidth: '950px' }}
+        className='flex justify-start items-center w-full bg-slate-50/70 border border-slate-200/60 p-8 sm:p-10 rounded-3xl shadow-sm'
+      >
+        <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Student ID */}
             <div className='flex flex-col gap-1.5'>
               <label className='font-bold text-xs uppercase tracking-wider text-slate-500'>รหัสนักศึกษา</label>

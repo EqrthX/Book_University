@@ -108,3 +108,117 @@ export const updateStatusBook = async(req, res) => {
     }
 };
 
+export const showUsersList = async(req, res) => {
+    try {
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 100;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const users = await adminService.getAllUsers(limit, offset);
+
+        res.status(200).json({
+            message: "Fetch Users List Successfully",
+            users: users || []
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error fetching users list"
+        });
+    }
+};
+
+export const updateUserRole = async(req, res) => {
+    try {
+        const userId = req.params.id;
+        const { role } = req.body;
+
+        if (!role || !["student", "admin"].includes(role)) {
+            return res.status(400).json({ error: "Invalid role value" });
+        }
+
+        const result = await adminService.updateUserRole(userId, role);
+
+        res.status(200).json({
+            message: "Update User Role Successfully!",
+            user: result
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error updating user role"
+        });
+    }
+};
+
+export const deleteUser = async(req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // ป้องกัน Admin ลบตัวเอง
+        if (parseInt(userId, 10) === req.user?.id) {
+            return res.status(400).json({ error: "You cannot delete your own admin account!" });
+        }
+
+        await adminService.deleteUser(userId);
+
+        res.status(200).json({
+            message: "Delete User Account Successfully!"
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error deleting user account"
+        });
+    }
+};
+
+export const showAllBooks = async(req, res) => {
+    try {
+        const limit = req.query.limit ? parseInt(req.query.limit, 10) : 100;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+        const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+
+        const books = await adminService.getAllBooksAdmin(limit, offset);
+
+        res.status(200).json({
+            message: "Fetch All Books Successfully",
+            books: books || []
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error fetching books list"
+        });
+    }
+};
+
+export const adminUpdateBook = async(req, res) => {
+    try {
+        const bookId = req.params.id;
+        const { checkStatusBooks, status } = req.body;
+
+        const result = await adminService.updateBookStatusAdmin(bookId, { checkStatusBooks, status });
+
+        res.status(200).json({
+            message: "Update Book Status Successfully!",
+            book: result
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error updating book status"
+        });
+    }
+};
+
+export const adminDeleteBook = async(req, res) => {
+    try {
+        const bookId = req.params.id;
+        await adminService.deleteBookAdmin(bookId);
+
+        res.status(200).json({
+            message: "Delete Book Successfully by Admin"
+        });
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Error deleting book"
+        });
+    }
+};
+

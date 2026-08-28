@@ -1,7 +1,7 @@
 import axios from '../../util/axios.js'
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { UserRoundPlus, Wallet, BookPlus, LogOut, Shield } from 'lucide-react';
+import { UserRoundPlus, Wallet, BookPlus, LogOut, Shield, Users, BookOpen } from 'lucide-react';
 import HeadAdmin from '../../components/admin/HeadAdmin.jsx'
 
 const AdminHomePage = () => {
@@ -45,6 +45,8 @@ const AdminHomePage = () => {
     { to: 'register', label: 'ลงทะเบียนนักศึกษา', icon: UserRoundPlus },
     { to: 'check-books', label: 'ตรวจสอบหนังสือ', icon: BookPlus },
     { to: 'check-payment', label: 'ตรวจสอบชำระเงิน', icon: Wallet },
+    { to: 'users', label: 'จัดการผู้ใช้งาน', icon: Users },
+    { to: 'books', label: 'จัดการหนังสือ', icon: BookOpen },
   ];
 
   return (

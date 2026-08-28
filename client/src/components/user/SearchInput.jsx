@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, BookOpen } from "lucide-react";
 import axios, { SERVER_URL } from "../../util/axios.js";
+import { getImageUrl } from "../../util/image.js";
 
 function SearchInput() {
   const [query, setQuery] = useState("");
@@ -108,7 +109,7 @@ function SearchInput() {
                 >
                   <div className="w-10 h-12 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
-                      src={book.bookPic ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` : "https://via.placeholder.com/40x50"} 
+                      src={book.bookPic ? getImageUrl(book.bookPic) : "https://via.placeholder.com/40x50"} 
                       className="h-full object-contain"
                       alt={book.titleBook} 
                     />

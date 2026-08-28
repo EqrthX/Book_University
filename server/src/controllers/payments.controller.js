@@ -1,4 +1,5 @@
 import * as paymentsService from "../services/payments.service.js";
+import { uploadToCloudinary } from "../config/cloudinary.config.js";
 
 export const addInfomationAndOrder = async(req, res) => {
     try {
@@ -65,7 +66,10 @@ export const updatePayment = async(req, res) => {
     try {
         const {orderId, payment_date, payment_time} = req.body;
         const slip_image = req.files?.paymentSlip?.[0];
-        const filePath = slip_image ? slip_image.path : null;
+        let filePath = null;
+        if (slip_image) {
+            filePath = await uploadToCloudinary(slip_image.buffer, "slips");
+        }
 
         await paymentsService.updatePaymentSlip(orderId, payment_date, payment_time, filePath);
 
@@ -74,6 +78,7 @@ export const updatePayment = async(req, res) => {
         });
 
     } catch (error) {
+        console.error("Error in updatePayment controller:", error);
         const statusCode = error.statusCode || (error.message?.includes("not found") ? 404 : 500);
         return res.status(statusCode).json({
             message: error.message || error
@@ -109,7 +114,10 @@ export const editPayment = async(req, res) => {
         const {id} = req.params;
         const {payment_date, payment_time} = req.body;
         const slip_image = req.files?.paymentSlip?.[0];
-        const filePath = slip_image ? slip_image.path : null;
+        let filePath = null;
+        if (slip_image) {
+            filePath = await uploadToCloudinary(slip_image.buffer, "slips");
+        }
 
         const result = await paymentsService.editPaymentDetails(id, payment_date, payment_time, filePath);
 
@@ -118,6 +126,7 @@ export const editPayment = async(req, res) => {
         });
 
     } catch (error) {
+        console.error("Error in editPayment controller:", error);
         const statusCode = error.statusCode || (error.message?.includes("not found") ? 404 : 500);
         return res.status(statusCode).json({
             message: error.message

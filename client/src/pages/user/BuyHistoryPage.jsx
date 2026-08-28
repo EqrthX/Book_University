@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios, { SERVER_URL } from '../../util/axios.js';
+import axios from '../../util/axios.js';
 import { getMessagesStatus } from '../../util/helper.js';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, Calendar } from "lucide-react";
 import { useAuth } from '../../context/AuthContext.jsx';
+import { getImageUrl } from '../../util/image.js';
 
 const statusColor = [
   { name: "pending", label: "รอดำเนินการ", bg: "bg-red-50 text-red-700 border-red-100" },
@@ -65,9 +66,7 @@ const BuyHistoryPage = () => {
               </div>
             ) : (
               books.map((book) => {
-                const bookPic = book.bookPic 
-                  ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
-                  : "https://via.placeholder.com/150";
+                const bookPic = getImageUrl(book.bookPic);
 
                 const currentStatus = statusColor.find(status => status.name === book.delivery_status) || {
                   label: book.delivery_status || "สำเร็จ",

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios, { SERVER_URL } from '../../util/axios.js';
 import toast from 'react-hot-toast';
 import { Book, Check, Trash2, ShieldAlert, BookOpen } from "lucide-react";
+import { getImageUrl } from '../../util/image.js';
 
 const AdminCheckBooks = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -94,9 +95,7 @@ const AdminCheckBooks = () => {
       ) : detailBook.books && detailBook.books.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {detailBook.books.map((book) => {
-            const coverImage = book.bookPic 
-              ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
-              : "https://via.placeholder.com/150";
+            const coverImage = getImageUrl(book.bookPic);
 
             return (
               <div 

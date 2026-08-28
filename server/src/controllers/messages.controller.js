@@ -1,4 +1,5 @@
 import * as messagesService from "../services/messages.service.js";
+import { uploadToCloudinary } from "../config/cloudinary.config.js";
 
 export const showAllUsersToChat = async (req, res) => {
     try {
@@ -22,7 +23,12 @@ export const showAllUsersToChat = async (req, res) => {
 export const sendMessage = async (req, res) => {
     try {
         const { sender, receiver, text: message } = req.body;
-        const picture = req.files?.picture_message?.[0]?.path.replace(/\\/g, "/") || null;
+        
+        const file = req.files?.picture_message?.[0];
+        let picture = null;
+        if (file) {
+            picture = await uploadToCloudinary(file.buffer, "chat");
+        }
 
         if (!sender || !receiver || (!message && !picture)) {
             return res.status(400).json({ message: "ไม่พบข้อมูล" });
@@ -42,6 +48,7 @@ export const sendMessage = async (req, res) => {
             },
         });
     } catch (error) {
+        console.error("Error in sendMessage controller:", error);
         const statusCode = error.statusCode || 500;
         res.status(statusCode).json({ message: error.message || "Internal server error" });
     }

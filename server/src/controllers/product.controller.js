@@ -1,4 +1,5 @@
 import * as productService from "../services/product.service.js";
+import { uploadToCloudinary } from "../config/cloudinary.config.js";
 
 export const showBooks = async(req, res) => {
     try {
@@ -34,7 +35,11 @@ export const addBook = async(req, res) => {
             });
         }
 
-        const bookPic = req.files?.bookPic?.[0]?.path.replace(/\\/g, "/") || null;
+        const file = req.files?.bookPic?.[0];
+        let bookPic = null;
+        if (file) {
+            bookPic = await uploadToCloudinary(file.buffer, "books");
+        }
 
         const bookData = {
             titleBook,
@@ -54,6 +59,7 @@ export const addBook = async(req, res) => {
             book: result
         });
     } catch (error) {
+        console.error("Error in addBook controller:", error);
         if (!res.headersSent) {
             const statusCode = error.statusCode || 500;
             return res.status(statusCode).json({

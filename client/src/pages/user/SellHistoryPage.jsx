@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios, { SERVER_URL } from '../../util/axios.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Trash2, Edit2, ShoppingBag, Plus } from "lucide-react";
+import { getImageUrl } from '../../util/image.js';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext.jsx';
 
@@ -83,9 +84,7 @@ const SellHistoryPage = () => {
               </div>
             ) : (
               books.map((book) => {
-                const bookPic = book.bookPic 
-                  ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` 
-                  : "https://via.placeholder.com/150";
+                const bookPic = getImageUrl(book.bookPic);
 
                 return (
                   <div key={book.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:shadow-sm transition-all duration-200">

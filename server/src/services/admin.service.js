@@ -245,3 +245,101 @@ export const updateBookStatus = async (bookId) => {
     return { bookId };
 };
 
+// ดึงรายชื่อผู้ใช้งานทั้งหมด
+export const getAllUsers = async (limit = 100, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 100);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    return await User.findAll({
+        attributes: ["id", "studentId", "fullName", "email", "googleId", "lastActiveAt", "loginCount", "user_role", "createdAt"],
+        limit: lim,
+        offset: off,
+        order: [["createdAt", "DESC"]],
+        raw: true
+    });
+};
+
+// อัปเดตสิทธิ์การใช้งาน
+export const updateUserRole = async (userId, role) => {
+    const user = await User.findByPk(userId);
+    if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    user.user_role = role;
+    await user.save();
+    return user.get({ plain: true });
+};
+
+// ลบผู้ใช้งานออกจากระบบ
+export const deleteUser = async (userId) => {
+    const user = await User.findByPk(userId);
+    if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    await user.destroy();
+    return true;
+};
+
+// ดึงข้อมูลหนังสือทั้งหมดสำหรับ Admin
+export const getAllBooksAdmin = async (limit = 100, offset = 0) => {
+    const lim = Math.max(1, parseInt(limit, 10) || 100);
+    const off = Math.max(0, parseInt(offset, 10) || 0);
+
+    return await Book.findAll({
+        include: [
+            {
+                model: User,
+                as: "user",
+                attributes: ["id", "fullName", "email", "studentId"]
+            },
+            {
+                model: Subject,
+                as: "subject",
+                attributes: ["id", "subjectCode"]
+            }
+        ],
+        limit: lim,
+        offset: off,
+        order: [["createdAt", "DESC"]]
+    });
+};
+
+// ลบหนังสือออกจากระบบโดย Admin
+export const deleteBookAdmin = async (bookId) => {
+    const book = await Book.findByPk(bookId);
+    if (!book) {
+        const error = new Error("Book not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    await book.destroy();
+    return true;
+};
+
+// อัปเดตสถานะหนังสือโดยละเอียดสำหรับ Admin
+export const updateBookStatusAdmin = async (bookId, fields) => {
+    const book = await Book.findByPk(bookId);
+    if (!book) {
+        const error = new Error("Book not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    if (fields.checkStatusBooks !== undefined) {
+        book.checkStatusBooks = fields.checkStatusBooks;
+    }
+    if (fields.status !== undefined) {
+        book.status = fields.status;
+    }
+
+    await book.save();
+    return book.get({ plain: true });
+};
+

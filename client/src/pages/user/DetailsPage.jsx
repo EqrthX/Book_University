@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import axios, { SERVER_URL } from '../../util/axios.js';
+import axios from '../../util/axios.js';
 import { Book, MessageSquareText } from "lucide-react";
 import { useCart } from '../../context/CartContext.jsx';
+import { getImageUrl } from '../../util/image.js';
 
 const DetailsPage = () => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const DetailsPage = () => {
               <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[3/4] bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-6 group">
                 <img 
                   className="h-full object-contain transition-transform duration-500 ease-out group-hover:scale-105 filter drop-shadow-md" 
-                  src={book.bookPic ? `${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}` : "https://via.placeholder.com/300x400"} 
+                  src={book.bookPic ? getImageUrl(book.bookPic) : "https://via.placeholder.com/300x400"} 
                   alt={book.titleBook || "ชื่อหนังสือ"} 
                 />
               </div>

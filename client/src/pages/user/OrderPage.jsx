@@ -1,6 +1,6 @@
-import { SERVER_URL } from '../../util/axios.js';
 import { useEffect, useState } from "react";
 import axios from "../../util/axios.js";
+import { getImageUrl } from "../../util/image.js";
 import { getMessagePayment } from "../../util/helper.js";
 import { formatDate, formatTime } from "../../util/helper.js";
 import { ShoppingCart, Mail, User, MapPin, Calendar, Clock, CreditCard, ChevronRight } from "lucide-react";
@@ -106,7 +106,7 @@ const OrderPage = () => {
                         <div className="relative w-32 h-40 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                           <img
                             className="w-full h-full object-contain"
-                            src={`${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}`}
+                            src={getImageUrl(book.bookPic)}
                             alt={book.titleBook}
                           />
                         </div>
@@ -207,7 +207,7 @@ const OrderPage = () => {
                         <div className="relative w-32 h-40 flex-shrink-0 bg-slate-50 border border-slate-100 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                           <img
                             className="w-full h-full object-contain"
-                            src={`${SERVER_URL}/${book.bookPic.replace(/\\/g, "/")}`}
+                            src={getImageUrl(book.bookPic)}
                             alt={book.titleBook}
                           />
                         </div>
