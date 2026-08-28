@@ -1,23 +1,20 @@
-import pool from "../config/DB.config.js";
+import { Cart, Book } from "../models/index.js";
+import { Op } from "sequelize";
 
 // เพิ่มหนังสือในตะกร้า
 export const addBookToCart = async (userId, bookId) => {
     // ตรวจสอบว่าหนังสือมีในตะกร้าแล้ว
-    const [existingCart] = await pool.execute(
-        "SELECT * FROM cart WHERE userId = ? AND bookId = ?",
-        [userId, bookId]
-    );
+    const existingCart = await Cart.findOne({
+        where: { userId, bookId }
+    });
 
-    if (existingCart.length > 0) {
+    if (existingCart) {
         const error = new Error("มีหนังสือเล่มนี้อยู่ในตะกร้าอยู่แล้ว");
         error.statusCode = 409;
         throw error;
     }
 
-    await pool.execute(
-        "INSERT INTO cart (userId, bookId) VALUES (?, ?)",
-        [userId, bookId]
-    );
+    await Cart.create({ userId, bookId });
 
     return { message: "เพิ่มหนังสือในตะกร้าเรียบร้อยแล้ว" };
 };
@@ -27,12 +24,24 @@ export const getCartBooks = async (userId, limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [books] = await pool.query(
-        "SELECT c.id AS cartId, b.* FROM books AS b INNER JOIN cart AS c ON b.id = c.bookId WHERE c.userId = ? LIMIT ? OFFSET ?",
-        [userId, lim, off]
-    );
+    const cartItems = await Cart.findAll({
+        where: { userId },
+        include: [{
+            model: Book,
+            as: "book"
+        }],
+        limit: lim,
+        offset: off
+    });
 
-    return books;
+    // Map to flat object structure: c.id AS cartId, b.*
+    return cartItems.map(item => {
+        const bookData = item.book ? item.book.get({ plain: true }) : {};
+        return {
+            cartId: item.id,
+            ...bookData
+        };
+    });
 };
 
 // ลบหนังสือออกจากตะกร้า (พร้อม ownership check)
@@ -46,16 +55,20 @@ export const removeFromCart = async (cartIdsInput, userId) => {
         throw error;
     }
 
-    const placeholders = filteredIds.map(() => '?').join(',');
-    const queryParams = userId ? [...filteredIds, userId] : filteredIds;
-    const userClause = userId ? " AND userId = ?" : "";
+    const whereClause = {
+        id: {
+            [Op.in]: filteredIds
+        }
+    };
+    if (userId) {
+        whereClause.userId = userId;
+    }
 
-    const [result] = await pool.execute(
-        `DELETE FROM cart WHERE id IN (${placeholders})${userClause}`,
-        queryParams
-    );
+    const affectedRows = await Cart.destroy({
+        where: whereClause
+    });
 
-    if (result.affectedRows === 0) {
+    if (affectedRows === 0) {
         const error = new Error("ไม่พบรายการในตะกร้า");
         error.statusCode = 404;
         throw error;
@@ -66,23 +79,31 @@ export const removeFromCart = async (cartIdsInput, userId) => {
 
 // ดึงข้อมูลตะกร้าพร้อมราคา
 export const getCartTotal = async (userId) => {
-    const [result] = await pool.execute(
-        `SELECT SUM(b.price) as total, COUNT(*) as count 
-         FROM cart c 
-         JOIN books b ON c.bookId = b.id 
-         WHERE c.userId = ?`,
-        [userId]
-    );
+    const cartItems = await Cart.findAll({
+        where: { userId },
+        include: [{
+            model: Book,
+            as: "book",
+            attributes: ["price"]
+        }]
+    });
 
-    return result[0];
+    let total = 0;
+    const count = cartItems.length;
+
+    for (const item of cartItems) {
+        if (item.book) {
+            total += item.book.price;
+        }
+    }
+
+    return { total, count };
 };
 
 // ล้างตะกร้า
 export const clearCart = async (userId) => {
-    const [result] = await pool.execute(
-        "DELETE FROM cart WHERE userId = ?",
-        [userId]
-    );
-
-    return result.affectedRows;
+    return await Cart.destroy({
+        where: { userId }
+    });
 };
+

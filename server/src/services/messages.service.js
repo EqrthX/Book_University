@@ -1,24 +1,31 @@
-import pool from '../config/DB.config.js';
+import { User, Message } from "../models/index.js";
+import { Op } from "sequelize";
 
 // ดึงผู้ใช้งานทั้งหมดที่เป็นนักเรียน ยกเว้นตัวเอง
 export const getAllUsersToChat = async (userId, limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [rows] = await pool.query(
-        `SELECT * FROM users WHERE user_role = 'student' AND id != ? LIMIT ? OFFSET ?`,
-        [userId, lim, off]
-    );
-    return rows;
+    return await User.findAll({
+        where: {
+            user_role: "student",
+            id: { [Op.ne]: userId }
+        },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // บันทึกข้อความการสนทนาใหม่
 export const saveMessage = async (sender, receiver, message, picture) => {
-    const [result] = await pool.execute(
-        `INSERT INTO messages (sender_id, receiver_id, message, img) VALUES (?, ?, ?, ?)`,
-        [sender, receiver, message || "", picture]
-    );
-    return result.insertId;
+    const msg = await Message.create({
+        sender_id: sender,
+        receiver_id: receiver,
+        message: message || "",
+        img: picture
+    });
+    return msg.id;
 };
 
 // ดึงข้อความสนทนาระหว่างคู่สนทนา
@@ -26,16 +33,26 @@ export const fetchMessagesBetweenUsers = async (senderId, receiverId, limit = 10
     const lim = Math.max(1, parseInt(limit, 10) || 100);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [rows] = await pool.query(
-        `
-        SELECT id, sender_id AS sender, receiver_id AS receiver, img AS picture, message AS text, created_at
-        FROM messages
-        WHERE (sender_id = ? AND receiver_id = ?)
-        OR (sender_id = ? AND receiver_id = ?)
-        ORDER BY created_at ASC
-        LIMIT ? OFFSET ?
-        `,
-        [senderId, receiverId, receiverId, senderId, lim, off]
-    );
-    return rows;
+    const messages = await Message.findAll({
+        where: {
+            [Op.or]: [
+                { sender_id: senderId, receiver_id: receiverId },
+                { sender_id: receiverId, receiver_id: senderId }
+            ]
+        },
+        order: [["created_at", "ASC"]],
+        limit: lim,
+        offset: off,
+        raw: true
+    });
+
+    return messages.map(msg => ({
+        id: msg.id,
+        sender: msg.sender_id,
+        receiver: msg.receiver_id,
+        picture: msg.img,
+        text: msg.message,
+        created_at: msg.created_at
+    }));
 };
+

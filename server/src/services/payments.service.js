@@ -1,4 +1,4 @@
-import pool from "../config/DB.config.js";
+import { sequelize, Order, Address, Pickup, OrderItem, Payment, Notification } from "../models/index.js";
 
 // สร้าง Order และบันทึกข้อมูลการจัดส่ง/การชำระเงินใน Transaction เดียวกัน
 export const createOrderTransaction = async (paymentDetails) => {
@@ -40,62 +40,71 @@ export const createOrderTransaction = async (paymentDetails) => {
         update_price = price + shipping_cost;
     }
 
-    const connection = await pool.getConnection();
-    await connection.beginTransaction();       
+    const t = await sequelize.transaction();
 
     try {
-        const [order] = await connection.query(
-            "INSERT INTO orders(user_id, total_price, type, orther) VALUES(?, ?, ?, ?)",
-            [userId, update_price || total_cost, type, other]
-        );
+        const order = await Order.create({
+            user_id: userId,
+            total_price: update_price || total_cost,
+            type,
+            orther: other
+        }, { transaction: t });
 
-        const orderId = order.insertId;
+        const orderId = order.id;
 
         if (!orderId) {
             throw new Error("Error adding order");
         }
 
         if (type === "delivery") {
-            await connection.query(
-                "INSERT INTO addresses (order_id, full_name, phone, house_no, street, zone, subdistrict, district, province, zip_code, email) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [orderId, fullName, phone, house_no, street, zone, subdistrict, district, province, zip_code, email]
-            );
+            await Address.create({
+                order_id: orderId,
+                full_name: fullName,
+                phone,
+                house_no,
+                street,
+                zone,
+                subdistrict,
+                district,
+                province,
+                zip_code,
+                email
+            }, { transaction: t });
         } else if (type === "pickup") {
-            await connection.query(
-                "INSERT INTO pickups (order_id, full_name, pickup_datetime, location, email) VALUES(?, ?, ?, ?, ?)",
-                [orderId, fullName, date_and_time, location, email]
-            );
+            await Pickup.create({
+                order_id: orderId,
+                full_name: fullName,
+                pickup_datetime: date_and_time,
+                location,
+                email
+            }, { transaction: t });
         }
 
         if (!Array.isArray(orderData) || orderData.length === 0) {
             throw new Error("Invalid order data");
         }
 
-        const orderItems = orderData.map(item => [
-            orderId,
-            item.bookId,
-            item.quantity || 1,
-            item.price
-        ]);
+        const orderItems = orderData.map(item => ({
+            order_id: orderId,
+            book_id: item.bookId,
+            quantity: item.quantity || 1,
+            price: item.price
+        }));
         
-        await connection.query(
-            "INSERT INTO order_items(order_id, book_id, quantity, price) VALUES ?",
-            [orderItems]
-        );
+        await OrderItem.bulkCreate(orderItems, { transaction: t });
 
         const paymentDateTime_New = new Date();
-        await connection.query(
-            "INSERT INTO payments(order_id, payment_method, payment_datetime_new) VALUES(?, ?, ?)",
-            [orderId, paymentMethod, paymentDateTime_New]
-        );
+        await Payment.create({
+            order_id: orderId,
+            payment_method: paymentMethod,
+            payment_datetime_new: paymentDateTime_New
+        }, { transaction: t });
 
-        await connection.commit();
+        await t.commit();
         return { orderId };
     } catch (error) {
-        await connection.rollback();
+        await t.rollback();
         throw error;
-    } finally {
-        connection.release();
     }
 };
 
@@ -104,12 +113,15 @@ export const updatePaymentSlip = async (orderId, paymentDate, paymentTime, fileP
     const randomTransactioNumber = Math.floor(Math.random() * 9000000) + 1000000;
     const paymentDateTime = paymentDate + " " + paymentTime;
 
-    const [payment] = await pool.execute(
-        `UPDATE payments SET transaction_id = ?, payment_datetime = ?, slip_image = ?  WHERE order_id = ?`,
-        [randomTransactioNumber, paymentDateTime, filePath, orderId]
-    );
+    const [affectedRows] = await Payment.update({
+        transaction_id: randomTransactioNumber,
+        payment_datetime: paymentDateTime,
+        slip_image: filePath
+    }, {
+        where: { order_id: orderId }
+    });
 
-    if (payment.affectedRows === 0) {
+    if (affectedRows === 0) {
         throw new Error("Payment record not found for this order");
     }
 
@@ -122,47 +134,43 @@ export const getTotalCost = async (orderId) => {
         throw new Error("Order ID is required");
     }
     
-    const [totalCost] = await pool.execute(
-        `SELECT total_price FROM orders WHERE id = ?`,
-        [orderId]
-    );
+    const order = await Order.findByPk(orderId, {
+        attributes: ["total_price"],
+        raw: true
+    });
 
-    if (totalCost.length === 0) {
+    if (!order) {
         throw new Error("Order not found");
     }
 
-    return totalCost[0].total_price;
+    return order.total_price;
 };
 
 // แก้ไขข้อมูลการชำระเงินและลบการแจ้งเตือน
 export const editPaymentDetails = async (notificationId, paymentDate, paymentTime, filePath) => {
-    const [getStatusPayment_orders] = await pool.execute(
-        `SELECT order_id FROM notifications WHERE id = ?`,
-        [notificationId]
-    );
+    const notification = await Notification.findByPk(notificationId, {
+        attributes: ["order_id"],
+        raw: true
+    });
 
-    const orderId = getStatusPayment_orders[0]?.order_id;
+    const orderId = notification?.order_id;
     if (!orderId) {
         throw new Error("Notification or Order not found");
     }
 
     const paymentDateTime = paymentDate + " " + paymentTime;
 
-    const [result] = await pool.execute(
-        `
-        UPDATE payments
-        SET 
-            payment_datetime = ?,
-            slip_image = ?
-        WHERE order_id = ?
-        `,
-        [paymentDateTime, filePath, orderId]
-    );
+    const [affectedRows] = await Payment.update({ 
+        payment_datetime: paymentDateTime,
+        slip_image: filePath
+    }, {
+        where: { order_id: orderId }
+    });
 
-    await pool.execute(
-        `DELETE FROM notifications WHERE order_id = ?`, 
-        [orderId]
-    );
+    await Notification.destroy({
+        where: { order_id: orderId }
+    });
 
-    return result;
+    return affectedRows;
 };
+

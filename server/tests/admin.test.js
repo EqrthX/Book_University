@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import adminRouter from '../src/routes/admin.route.js';
 import pool from '../src/config/DB.config.js';
+import sequelize from '../src/config/sequelize.config.js';
 
 const app = express();
 app.use(express.json());
@@ -35,4 +36,6 @@ describe('Admin API', () => {
 
 afterAll(async () => {
     await pool.end();
+    await sequelize.close();
 });
+

@@ -1,15 +1,16 @@
-import pool from "../config/DB.config.js";
+import { Subject, Book, Order, OrderItem, Address, Pickup, Payment, SoldBook, User } from "../models/index.js";
+import { Op } from "sequelize";
 
 // แสดงรายชื่อวิชาทั้งหมด
 export const getAllSubjects = async (limit = 100, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 100);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [fetchSubjectsAll] = await pool.query(
-        "SELECT * FROM subjects LIMIT ? OFFSET ?",
-        [lim, off]
-    );
-    return fetchSubjectsAll;
+    return await Subject.findAll({
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // แสดงหนังสือที่ได้รับการยืนยันแล้วและไม่ใช่ของตัวเอง
@@ -17,11 +18,16 @@ export const getAvailableBooksExcludingUser = async (userId, limit = 50, offset 
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [books] = await pool.query(
-        "SELECT * FROM books WHERE status = 'available' AND checkStatusBooks = 'available' AND userId != ? LIMIT ? OFFSET ?",
-        [userId, lim, off]
-    );
-    return books;
+    return await Book.findAll({
+        where: {
+            status: "available",
+            checkStatusBooks: "available",
+            userId: { [Op.ne]: userId }
+        },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // แสดงหนังสือที่ยังไม่ได้รับการยืนยันสำหรับ Admin
@@ -29,20 +35,34 @@ export const getUnavailableBooks = async (limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [books] = await pool.query(
-        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable' LIMIT ? OFFSET ?",
-        [lim, off]
-    );
-    return books;
+    return await Book.findAll({
+        where: {
+            checkStatusBooks: "unavailable"
+        },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // แสดงรายละเอียดหนังสือของแต่ละเล่มโดยมีการเชื่อมโยงกับตาราง subjects
 export const getBookDetails = async (bookId) => {
-    const [result] = await pool.execute(
-        "SELECT b.*, s.subjectCode FROM books AS b INNER JOIN subjects AS s ON b.subjectId = s.id WHERE b.id = ?",
-        [bookId]
-    );
-    return result[0] || null;
+    const book = await Book.findOne({
+        where: { id: bookId },
+        include: [{
+            model: Subject,
+            as: "subject",
+            attributes: ["subjectCode"]
+        }]
+    });
+
+    if (!book) return null;
+
+    const plainBook = book.get({ plain: true });
+    return {
+        ...plainBook,
+        subjectCode: plainBook.subject?.subjectCode || null
+    };
 };
 
 // แสดงสินค้าสำหรับ User คนนั้นๆด้วย userId ที่ลงขาย
@@ -50,20 +70,18 @@ export const getUserBooks = async (userId, limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [books] = await pool.query(
-        "SELECT * FROM books WHERE userId = ? LIMIT ? OFFSET ?",
-        [userId, lim, off]
-    );
-    return books;
+    return await Book.findAll({
+        where: { userId },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // แสดงหนังสือที่เลือกและของ user คนนั้นๆ โดยใช้ userId และ bookId
 export const getBookById = async (bookId) => {
-    const [books] = await pool.execute(
-        "SELECT * FROM books WHERE id = ?",
-        [bookId]
-    );
-    return books[0] || null;
+    const book = await Book.findByPk(bookId);
+    return book ? book.get({ plain: true }) : null;
 };
 
 // แสดงประวัติคำสั่งซื้อ
@@ -71,34 +89,45 @@ export const getCompletedOrderHistory = async (userId, limit = 50, offset = 0) =
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [history] = await pool.query(
-        `
-        SELECT
-            users.id AS id,
+    const orders = await Order.findAll({
+        where: {
+            status: "completed",
+            user_id: userId
+        },
+        include: [{
+            model: OrderItem,
+            as: "items",
+            include: [{
+                model: Book,
+                as: "book"
+            }]
+        }],
+        limit: lim,
+        offset: off
+    });
 
-            orders.id AS order_id,
-            orders.user_id AS user_id,
-            orders.type AS type,
-            orders.status AS status,
-            orders.delivery_status AS delivery_status,
+    const history = [];
+    for (const order of orders) {
+        for (const item of order.items) {
+            if (item.book) {
+                history.push({
+                    id: userId,
+                    order_id: order.id,
+                    user_id: order.user_id,
+                    type: order.type,
+                    status: order.status,
+                    delivery_status: order.delivery_status,
+                    bookId: item.book.id,
+                    titleBook: item.book.titleBook,
+                    description: item.book.description,
+                    price: item.book.price,
+                    bookPic: item.book.bookPic,
+                    book_id: item.book_id
+                });
+            }
+        }
+    }
 
-            books.id AS bookId,
-            books.titleBook AS titleBook,
-            books.description AS description,
-            books.price AS price,
-            books.bookPic AS bookPic,
-
-            order_items.book_id AS book_id
-
-        FROM users
-        INNER JOIN orders ON orders.user_id = users.id
-        INNER JOIN order_items ON order_items.order_id = orders.id
-        INNER JOIN books ON books.id = order_items.book_id
-        WHERE orders.status = 'completed' AND orders.user_id = ?
-        LIMIT ? OFFSET ?
-        `,
-        [userId, lim, off]
-    );
     return history;
 };
 
@@ -107,55 +136,71 @@ export const getCompletedOrderDetails = async (userId, limit = 50, offset = 0) =
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [result] = await pool.query(
-        `
-        SELECT  
-            users.id AS id,
-            
-            orders.id AS order_id,
-            orders.user_id AS user_id,
-            orders.type AS type,
-            orders.status AS status,
-            
-            addresses.order_id AS Address_order_id,
-            addresses.full_name AS Address_full_name,
-            addresses.house_no AS house_no,
-            addresses.street AS street,
-            addresses.zone AS zone,
-            addresses.subdistrict AS subdistrict,
-            addresses.district AS district,
-            addresses.province AS province,
-            addresses.zip_code AS zip_code,
-            addresses.email AS Address_email,
+    const orders = await Order.findAll({
+        where: {
+            status: "completed",
+            user_id: userId
+        },
+        include: [
+            { model: Address, as: "address" },
+            { model: Pickup, as: "pickup" },
+            { model: Payment, as: "payment" },
+            {
+                model: OrderItem,
+                as: "items",
+                include: [{ model: Book, as: "book" }]
+            }
+        ],
+        limit: lim,
+        offset: off
+    });
 
-            pickups.order_id AS pickup_order_id,
-            pickups.full_name AS fullName,
-            pickups.pickup_datetime AS pickup_datetime,
-            pickups.location AS location,
-            pickups.email AS email,
+    const results = [];
+    for (const order of orders) {
+        const addr = order.address ? order.address.get({ plain: true }) : {};
+        const pick = order.pickup ? order.pickup.get({ plain: true }) : {};
+        const pay = order.payment ? order.payment.get({ plain: true }) : {};
 
-            payments.order_id AS p_order_id,    
-            payments.payment_method AS payment_method,
-            payments.payment_datetime AS payment_datetime,
+        for (const item of order.items) {
+            if (item.book) {
+                results.push({
+                    id: userId,
+                    order_id: order.id,
+                    user_id: order.user_id,
+                    type: order.type,
+                    status: order.status,
 
-            order_items.book_id AS book_id,
-            books.id AS bookId,
-            books.bookPic AS bookPic,
-            books.titleBook AS titleBook
+                    Address_order_id: addr.order_id || null,
+                    Address_full_name: addr.full_name || null,
+                    house_no: addr.house_no || null,
+                    street: addr.street || null,
+                    zone: addr.zone || null,
+                    subdistrict: addr.subdistrict || null,
+                    district: addr.district || null,
+                    province: addr.province || null,
+                    zip_code: addr.zip_code || null,
+                    Address_email: addr.email || null,
 
-        FROM users
-        INNER JOIN orders ON orders.user_id = users.id
-        LEFT JOIN addresses ON addresses.order_id = orders.id
-        LEFT JOIN pickups ON pickups.order_id = orders.id
-        INNER JOIN payments ON payments.order_id = orders.id
-        INNER JOIN order_items ON order_items.order_id = orders.id
-        INNER JOIN books ON books.id = order_items.book_id
-        WHERE orders.status = 'completed' AND users.id = ?
-        LIMIT ? OFFSET ?
-        `,
-        [userId, lim, off]
-    );
-    return result;
+                    pickup_order_id: pick.order_id || null,
+                    fullName: pick.full_name || null,
+                    pickup_datetime: pick.pickup_datetime || null,
+                    location: pick.location || null,
+                    email: pick.email || null,
+
+                    p_order_id: pay.order_id || null,
+                    payment_method: pay.payment_method || null,
+                    payment_datetime: pay.payment_datetime || null,
+
+                    book_id: item.book_id,
+                    bookId: item.book.id,
+                    bookPic: item.book.bookPic,
+                    titleBook: item.book.titleBook
+                });
+            }
+        }
+    }
+
+    return results;
 };
 
 // ค้นหาหนังสือจาก Keyword
@@ -163,11 +208,15 @@ export const searchBooksByKeyword = async (bookKeyword, limit = 50, offset = 0) 
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [search] = await pool.query(
-        "SELECT * FROM books WHERE status = 'available' AND titleBook LIKE ? LIMIT ? OFFSET ?",
-        [`%${bookKeyword}%`, lim, off]
-    );
-    return search;
+    return await Book.findAll({
+        where: {
+            status: "available",
+            titleBook: { [Op.like]: `%${bookKeyword}%` }
+        },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // แสดงประวัติการซื้อของหนังสือเฉพาะเล่ม
@@ -175,24 +224,31 @@ export const getBookPurchaseHistory = async (bookId, limit = 50, offset = 0) => 
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [history] = await pool.query(
-        `
-            SELECT 
-                sold_books.book_id AS book_id,
-                sold_books.titleBook AS titleBook,
-                sold_books.price AS price,
-                sold_books.bookPic AS bookPic,
-                sold_books.buyerId AS buyerId,
+    const soldBooks = await SoldBook.findAll({
+        where: { book_id: bookId },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 
-                orders.user_id AS user_id,
-                orders.delivery_status AS delivery_status
+    const results = [];
+    for (const sb of soldBooks) {
+        const order = await Order.findOne({
+            where: { user_id: sb.buyerId },
+            raw: true
+        });
 
-            FROM sold_books 
-            INNER JOIN orders ON sold_books.buyerId = orders.user_id
-            WHERE sold_books.book_id = ?
-            LIMIT ? OFFSET ?
-        `,
-        [bookId, lim, off]
-    );
-    return history;
+        results.push({
+            book_id: sb.book_id,
+            titleBook: sb.titleBook,
+            price: sb.price,
+            bookPic: sb.bookPic,
+            buyerId: sb.buyerId,
+            user_id: order ? order.user_id : null,
+            delivery_status: order ? order.delivery_status : null
+        });
+    }
+
+    return [results]; // Returning [results] to match original structure where history[0] was expected
 };
+

@@ -3,6 +3,7 @@ import express from 'express';
 import userRouter from '../src/routes/user.route.js';
 import cookieParser from 'cookie-parser';
 import pool from '../src/config/DB.config.js';
+import sequelize from '../src/config/sequelize.config.js';
 
 const app = express();
 app.use(express.json());
@@ -23,4 +24,6 @@ describe('Authentication API', () => {
 afterAll(async () => {
     // Close the database pool to ensure Jest can exit gracefully
     await pool.end();
+    await sequelize.close();
 });
+

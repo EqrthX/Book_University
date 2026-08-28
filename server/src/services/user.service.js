@@ -1,16 +1,21 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import pool from '../config/DB.config.js';
+import { Op } from 'sequelize';
+import { User } from '../models/index.js';
 
 // ลงทะเบียนผู้ใช้ใหม่
 export const registerUser = async (studentId, fullName, email, password) => {
     // ตรวจสอบว่าผู้ใช้มีอยู่แล้ว
-    const [existingUser] = await pool.execute(
-        "SELECT * FROM users WHERE studentId = ? or email = ?",
-        [studentId, email]
-    );
+    const existingUser = await User.findOne({
+        where: {
+            [Op.or]: [
+                { studentId },
+                { email }
+            ]
+        }
+    });
 
-    if (existingUser.length > 0) {
+    if (existingUser) {
         const error = new Error("Student Id or Email already exists!");
         error.statusCode = 409;
         throw error;
@@ -21,29 +26,39 @@ export const registerUser = async (studentId, fullName, email, password) => {
     const hashedPassword = await bcryptjs.hash(password, salt);
 
     // บันทึกผู้ใช้ใหม่
-    const [result] = await pool.execute(
-        "INSERT INTO users (studentId, fullName, email, password) VALUES(?, ?, ?, ?)",
-        [studentId, fullName, email, hashedPassword]
-    );
+    const newUser = await User.create({
+        studentId,
+        fullName,
+        email,
+        password: hashedPassword
+    });
 
-    // ดึงข้อมูลผู้ใช้ใหม่ที่สร้างขึ้น
-    const [newUser] = await pool.execute(
-        "SELECT id, studentId, fullName, email FROM users WHERE id = ?",
-        [result.insertId]
-    );
-
-    return newUser[0];
+    return {
+        id: newUser.id,
+        studentId: newUser.studentId,
+        fullName: newUser.fullName,
+        email: newUser.email
+    };
 };
 
 // เข้าสู่ระบบ
 export const authenticateUser = async (email, studentId, password) => {
     // ค้นหาผู้ใช้
-    const [rows] = await pool.execute(
-        "SELECT * FROM users WHERE studentId = ? or email = ?",
-        [studentId || null, email || null]
-    );
+    const conditions = [];
+    if (studentId) conditions.push({ studentId });
+    if (email) conditions.push({ email });
 
-    const user = rows[0];
+    if (conditions.length === 0) {
+        const error = new Error("Invalid Student ID or Email");
+        error.statusCode = 401;
+        throw error;
+    }
+
+    const user = await User.findOne({
+        where: {
+            [Op.or]: conditions
+        }
+    });
 
     if (!user) {
         const error = new Error("Invalid Student ID or Email");
@@ -73,4 +88,5 @@ export const verifyToken = async (token, jwtSecret) => {
     const decoded = jwt.verify(token, jwtSecret);
     return decoded;
 };
+
 

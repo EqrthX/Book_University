@@ -1,15 +1,17 @@
-import pool from "../config/DB.config.js";
+import { Book, Payment, Order, OrderItem, User, SoldBook, Cart, Notification } from "../models/index.js";
+import { Op } from "sequelize";
 
 // ดึงหนังสือที่ไม่พร้อมจำหน่าย
 export const getUnavailableBooks = async (limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [books] = await pool.query(
-        "SELECT * FROM books WHERE checkStatusBooks = 'unavailable' LIMIT ? OFFSET ?",
-        [lim, off]
-    );
-    return books;
+    return await Book.findAll({
+        where: { checkStatusBooks: "unavailable" },
+        limit: lim,
+        offset: off,
+        raw: true
+    });
 };
 
 // ดึงสถานะการชำระเงิน
@@ -17,16 +19,30 @@ export const getPaymentStatus = async (limit = 50, offset = 0) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    const [statusPayment] = await pool.query(
-        `
-        SELECT o.id, o.status, p.* FROM payments AS p 
-        INNER JOIN orders as o ON p.order_id = o.id
-        ORDER BY p.payment_datetime_new DESC, p.transaction_id ASC
-        LIMIT ? OFFSET ?
-        `,
-        [lim, off]
-    );
-    return statusPayment;
+    const payments = await Payment.findAll({
+        include: [{
+            model: Order,
+            as: "order",
+            attributes: ["id", "status"]
+        }],
+        order: [
+            ["payment_datetime_new", "DESC"],
+            ["transaction_id", "ASC"]
+        ],
+        limit: lim,
+        offset: off
+    });
+
+    return payments.map(p => {
+        const plain = p.get({ plain: true });
+        const orderData = plain.order || {};
+        delete plain.order;
+        return {
+            id: orderData.id || null,
+            status: orderData.status || null,
+            ...plain
+        };
+    });
 };
 
 // ดึงข้อมูลรายละเอียดของคำสั่งซื้อ
@@ -35,57 +51,69 @@ export const getOrderInformation = async (transactionId) => {
         throw new Error("ไม่พบรหัสธุรกรรม");
     }
 
-    const [orderResult] = await pool.execute(
-        `
-        SELECT 
-            users.id AS user_id, 
-            users.fullName AS user_fullName, 
-            users.email AS user_email,
-            orders.id AS order_id,
-            orders.user_id AS order_user_id,
-            orders.status AS order_status,
-            orders.total_price AS order_totalPrice, 
-            order_items.order_id AS order_items_order_id,
-            order_items.book_id AS order_items_book_id,
-            books.id AS book_id,
-            books.titleBook AS book_titleBook,
-            books.price AS book_price,
-            books.bookPic AS book_bookPic,
-            payments.* 
-        FROM users
-        INNER JOIN orders ON users.id = orders.user_id
-        INNER JOIN order_items ON order_items.order_id = orders.id
-        INNER JOIN books ON books.id = order_items.book_id
-        INNER JOIN payments ON payments.order_id = orders.id
-        WHERE payments.transaction_id = ?
-        `,
-        [transactionId]
-    );
+    const payment = await Payment.findOne({
+        where: { transaction_id: transactionId },
+        include: [{
+            model: Order,
+            as: "order",
+            include: [
+                { model: User, as: "user" },
+                {
+                    model: OrderItem,
+                    as: "items",
+                    include: [{ model: Book, as: "book" }]
+                }
+            ]
+        }]
+    });
 
-    if (orderResult.length === 0) {
+    if (!payment || !payment.order) {
         throw new Error("ไม่พบข้อมูลสำหรับรหัสธุรกรรมที่ระบุ");
     }
 
-    const [sellerResults] = await pool.execute(
-        `
-        SELECT
-            users.id AS seller_id,
-            users.fullName AS seller_fullName,
-            users.email AS seller_email,
-            books.id AS book_id
-        FROM users
-        INNER JOIN books ON users.id = books.userId
-        INNER JOIN order_items ON books.id = order_items.book_id
-        WHERE order_items.order_id = ?
-        `,
-        [orderResult[0].order_id]
-    );
+    const order = payment.order;
+    const buyer = order.user;
 
-    const enrichedBooks = orderResult.map((book) => {
-        const seller = sellerResults.find((seller) => seller.book_id === book.book_id);
+    const bookIds = order.items.map(item => item.book_id);
+    
+    // ดึงข้อมูลผู้ขายของหนังสือแต่ละเล่มในออเดอร์นี้
+    const booksWithSellers = await Book.findAll({
+        where: { id: { [Op.in]: bookIds } },
+        include: [{
+            model: User,
+            as: "user"
+        }]
+    });
+
+    const enrichedBooks = order.items.map(item => {
+        const book = item.book ? item.book.get({ plain: true }) : {};
+        const bookWithSeller = booksWithSellers.find(b => b.id === item.book_id);
+        const seller = bookWithSeller?.user ? bookWithSeller.user.get({ plain: true }) : null;
+
+        const plainPayment = payment.get({ plain: true });
+        delete plainPayment.order;
+
         return {
-            ...book,
-            seller: seller || null,
+            user_id: buyer?.id || null,
+            user_fullName: buyer?.fullName || null,
+            user_email: buyer?.email || null,
+            order_id: order.id,
+            order_user_id: order.user_id,
+            order_status: order.status,
+            order_totalPrice: order.total_price,
+            order_items_order_id: order.id,
+            order_items_book_id: item.book_id,
+            book_id: book.id,
+            book_titleBook: book.titleBook,
+            book_price: book.price,
+            book_bookPic: book.bookPic,
+            ...plainPayment,
+            seller: seller ? {
+                seller_id: seller.id,
+                seller_fullName: seller.fullName,
+                seller_email: seller.email,
+                book_id: book.id
+            } : null
         };
     });
 
@@ -102,35 +130,30 @@ export const getOrderInformation = async (transactionId) => {
 
 // อัพเดทสถานะคำสั่งซื้อ
 export const updateOrderStatus = async (transactionId, status, titleMessage = null, message = null) => {
-    const [resultOrderStatus] = await pool.execute(
-        `
-        UPDATE orders o
-        JOIN payments p ON p.order_id = o.id
-        SET o.status = ?
-        WHERE p.transaction_id = ?
-        `,
-        [status, transactionId]
-    );
+    const payment = await Payment.findOne({
+        where: { transaction_id: transactionId },
+        include: [{
+            model: Order,
+            as: "order"
+        }]
+    });
 
-    if (resultOrderStatus.affectedRows === 0) {
+    if (!payment || !payment.order) {
         throw new Error("ไม่พบคำสั่งซื้อหรือสถานะไม่ได้รับการอัพเดต");
     }
 
-    const [updatedOrder] = await pool.execute(
-        "SELECT o.status, o.id FROM orders o JOIN payments p ON p.order_id = o.id WHERE p.transaction_id = ?",
-        [transactionId]
-    );
+    await payment.order.update({ status });
 
     // ถ้าสถานะเป็น completed
     if (status === "completed") {
-        await completeOrder(transactionId, updatedOrder[0].id, titleMessage, message);
+        await completeOrder(transactionId, payment.order_id, titleMessage, message);
     }
     // ถ้าสถานะเป็น Not_Approved
     else if (status === "Not_Approved") {
-        await rejectOrder(transactionId, updatedOrder[0].id, titleMessage, message);
+        await rejectOrder(transactionId, payment.order_id, titleMessage, message);
     }
 
-    return updatedOrder[0]?.status || "unknown";
+    return payment.order.status;
 };
 
 // สมบูรณ์คำสั่งซื้อ
@@ -138,63 +161,55 @@ const completeOrder = async (transactionId, orderId, titleMessage = null, messag
     const finalTitle = titleMessage || "การสั่งซื้อของคุณเสร็จสมบูรณ์";
     const finalMessage = message || "ขอบคุณสำหรับการสั่งซื้อของคุณ!";
 
-    const [orderItems] = await pool.execute(
-        `
-        SELECT b.*, o.user_id AS buyerId
-        FROM order_items oi
-        INNER JOIN books b ON b.id = oi.book_id
-        INNER JOIN orders o ON o.id = oi.order_id
-        WHERE o.id = ?
-        `,
-        [orderId]
-    );
+    const orderItems = await OrderItem.findAll({
+        where: { order_id: orderId },
+        include: [
+            { model: Book, as: "book" },
+            { model: Order, as: "order" }
+        ]
+    });
 
-    for (const book of orderItems) {
-        await pool.execute(
-            `
-            INSERT INTO sold_books (book_id, titleBook, price, description, bookPic, userId, buyerId)
-            VALUES(?, ?, ?, ?, ?, ?, ?)
-            `,
-            [
-                book.id,
-                book.titleBook,
-                book.price + 40,
-                book.description,
-                book.bookPic,
-                book.userId,
-                book.buyerId,
-            ]
-        );
+    for (const item of orderItems) {
+        const book = item.book;
+        const order = item.order;
 
-        await pool.execute(
-            "UPDATE books SET status = 'sold', quantity = 0 WHERE id = ?",
-            [book.id]
-        );
+        if (book && order) {
+            await SoldBook.create({
+                book_id: book.id,
+                titleBook: book.titleBook,
+                price: book.price + 40,
+                description: book.description,
+                bookPic: book.bookPic,
+                userId: book.userId,
+                buyerId: order.user_id
+            });
 
-        await pool.execute(
-            "DELETE FROM cart WHERE bookId = ? AND userId = ?",
-            [book.id, book.buyerId]
-        );
+            await Book.update(
+                { status: "sold", quantity: 0 },
+                { where: { id: book.id } }
+            );
+
+            await Cart.destroy({
+                where: {
+                    bookId: book.id,
+                    userId: order.user_id
+                }
+            });
+        }
     }
 
-    const [orderInfo] = await pool.execute(
-        "SELECT * FROM orders WHERE id = ?",
-        [orderId]
-    );
-
-    if (orderInfo.length === 0) {
+    const order = await Order.findByPk(orderId);
+    if (!order) {
         throw new Error("ไม่พบข้อมูลการสั่งซื้อ");
     }
 
-    const buyerId = orderInfo[0].user_id;
-
-    await pool.execute(
-        `
-        INSERT INTO notifications (user_id, Title_message, message, status, order_id) 
-        VALUES(?, ?, ?, ?, ?)
-        `,
-        [buyerId, finalTitle, finalMessage, "unread", orderId]
-    );
+    await Notification.create({
+        user_id: order.user_id,
+        Title_message: finalTitle,
+        message: finalMessage,
+        status: "unread",
+        order_id: orderId
+    });
 };
 
 // ปฏิเสธคำสั่งซื้อ
@@ -202,36 +217,31 @@ const rejectOrder = async (transactionId, orderId, titleMessage = null, message 
     const finalTitle = titleMessage || "การสั่งซื้อของคุณไม่ได้รับการอนุมัติ";
     const finalMessage = message || "กรุณาติดต่อฝ่ายสนับสนุนสำหรับข้อมูลเพิ่มเติม";
 
-    const [orderInfo] = await pool.execute(
-        "SELECT * FROM orders WHERE id = ?",
-        [orderId]
-    );
-
-    if (orderInfo.length === 0) {
+    const order = await Order.findByPk(orderId);
+    if (!order) {
         throw new Error("ไม่พบข้อมูลการสั่งซื้อ");
     }
 
-    const buyerId = orderInfo[0].user_id;
-
-    await pool.execute(
-        `
-        INSERT INTO notifications (user_id, Title_message, message, status, order_id) 
-        VALUES(?, ?, ?, ?, ?)
-        `,
-        [buyerId, finalTitle, finalMessage, "unread", orderId]
-    );
+    await Notification.create({
+        user_id: order.user_id,
+        Title_message: finalTitle,
+        message: finalMessage,
+        status: "unread",
+        order_id: orderId
+    });
 };
 
 // อัพเดทสถานะหนังสือ
 export const updateBookStatus = async (bookId) => {
-    const [result] = await pool.execute(
-        "UPDATE books SET checkStatusBooks = 'available' WHERE id = ?",
-        [bookId]
+    const [affectedRows] = await Book.update(
+        { checkStatusBooks: "available" },
+        { where: { id: bookId } }
     );
 
-    if (result.affectedRows === 0) {
+    if (affectedRows === 0) {
         throw new Error("Book not found or already updated");
     }
 
     return { bookId };
 };
+

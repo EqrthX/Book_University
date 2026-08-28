@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import messagesRouter from '../src/routes/messages.route.js';
 import pool from '../src/config/DB.config.js';
+import sequelize from '../src/config/sequelize.config.js';
 
 const app = express();
 app.use(express.json());
@@ -36,4 +37,6 @@ describe('Messages API', () => {
 
 afterAll(async () => {
     await pool.end();
+    await sequelize.close();
 });
+
