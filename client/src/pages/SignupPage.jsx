@@ -93,13 +93,13 @@ const SignupPage = () => {
             
             {/* Student ID */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="studentId" className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label htmlFor="studentId" className="text-sm font-bold uppercase tracking-wider text-slate-300">
                 รหัสนักศึกษา
               </label>
               <div className="relative flex items-center">
                 <User className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
                 <input 
-                  className="bg-white/5 w-full pl-12 pr-4 py-2.5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
+                  className="bg-white/5 w-full pl-12 pr-4 py-3 border border-white/10 rounded-xl text-slate-100 text-base placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
                   id="studentId"
                   name="studentId"
                   type="text"
@@ -113,13 +113,13 @@ const SignupPage = () => {
 
             {/* Full Name */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fullName" className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label htmlFor="fullName" className="text-sm font-bold uppercase tracking-wider text-slate-300">
                 ชื่อจริง - นามสกุล
               </label>
               <div className="relative flex items-center">
                 <Users className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
                 <input 
-                  className="bg-white/5 w-full pl-12 pr-4 py-2.5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
+                  className="bg-white/5 w-full pl-12 pr-4 py-3 border border-white/10 rounded-xl text-slate-100 text-base placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
                   id="fullName"
                   name="fullName"
                   type="text"
@@ -133,13 +133,13 @@ const SignupPage = () => {
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label htmlFor="email" className="text-sm font-bold uppercase tracking-wider text-slate-300">
                 อีเมล
               </label>
               <div className="relative flex items-center">
                 <Mail className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
                 <input 
-                  className="bg-white/5 w-full pl-12 pr-4 py-2.5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
+                  className="bg-white/5 w-full pl-12 pr-4 py-3 border border-white/10 rounded-xl text-slate-100 text-base placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
                   id="email"
                   name="email"
                   type="email"
@@ -153,7 +153,7 @@ const SignupPage = () => {
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label htmlFor="password" className="text-sm font-bold uppercase tracking-wider text-slate-300">
                 รหัสผ่าน
               </label>
               <div className="relative flex items-center">

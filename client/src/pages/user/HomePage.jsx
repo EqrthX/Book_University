@@ -60,7 +60,7 @@ const HomePage = () => {
         {/* Hero Content */}
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 w-full">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-[#E28743] text-white mb-4 uppercase tracking-wider shadow-sm animate-pulse">
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#E28743] text-white mb-4 uppercase tracking-wider shadow-sm animate-pulse">
               🔥 แหล่งส่งต่อหนังสือเรียน UTCC
             </span>
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
@@ -69,15 +69,15 @@ const HomePage = () => {
                 เพื่อน้องพี่ชาว UTCC
               </span>
             </h1>
-            <p className="text-slate-300 text-xs md:text-sm mb-6 leading-relaxed max-w-lg">
+            <p className="text-slate-200 text-sm md:text-base mb-6 leading-relaxed max-w-lg">
               ส่งต่อความรู้ แลกเปลี่ยนหนังสือเรียน และชีทสรุปราคาประหยัดสำหรับนักศึกษาทุกคน 
               สะดวก รวดเร็ว ทั้งบริการจัดส่งพัสดุและทางเลือกนัดรับใต้ตึกเรียน
             </p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-              <a href="#marketplace" className="btn btn-primary bg-[#2F5792] border-0 text-white hover:bg-[#1A365D] rounded-xl px-6 font-bold text-xs h-auto min-h-0 py-3 shadow-md">
+              <a href="#marketplace" className="btn btn-primary bg-[#2F5792] border-0 text-white hover:bg-[#1A365D] rounded-xl px-6 font-bold text-sm h-auto min-h-0 py-3.5 shadow-md">
                 เริ่มสำรวจหนังสือ
               </a>
-              <Link to="/user/AddBook" className="btn btn-outline border-white text-white hover:bg-white hover:text-slate-900 rounded-xl px-6 font-bold text-xs h-auto min-h-0 py-3">
+              <Link to="/user/AddBook" className="btn btn-outline border-white text-white hover:bg-white hover:text-slate-900 rounded-xl px-6 font-bold text-sm h-auto min-h-0 py-3.5">
                 ลงขายหนังสือ
               </Link>
             </div>
@@ -125,7 +125,7 @@ const HomePage = () => {
             </div>
             <div>
               <p className="text-xl font-black text-slate-800">{books.length}</p>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">เล่มในคลังทั้งหมด</p>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">เล่มในคลังทั้งหมด</p>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ const HomePage = () => {
               <p className="text-xl font-black text-slate-800">
                 {books.filter(b => b.canMeet === "yes").length}
               </p>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">รายการนัดรับกับผู้ขาย</p>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">รายการนัดรับกับผู้ขาย</p>
             </div>
           </div>
 
@@ -153,7 +153,7 @@ const HomePage = () => {
             </div>
             <div>
               <p className="text-xl font-black text-slate-800">100%</p>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">เฉพาะสมาชิก UTCC เท่านั้น</p>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">เฉพาะสมาชิก UTCC เท่านั้น</p>
             </div>
           </div>
 
@@ -166,11 +166,11 @@ const HomePage = () => {
         {/* Marketplace Section Title */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
           <div>
-            <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
+            <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
               <span className="w-2.5 h-6 bg-[#2F5792] rounded-full inline-block"></span>
               หนังสือเรียนทั้งหมด
             </h2>
-            <p className="text-xs text-slate-400 mt-1 font-semibold">
+            <p className="text-sm text-slate-500 mt-1 font-semibold">
               ค้นหาตามความต้องการ เลือกนัดรับได้ทันที หรือจัดส่งสะดวกสบาย
             </p>
           </div>
@@ -179,7 +179,7 @@ const HomePage = () => {
           {(selectedCategory !== "all" || selectedSubject) && (
             <button 
               onClick={() => { setSelectedCategory("all"); setSelectedSubject(""); }}
-              className="text-xs font-bold text-[#D93619] hover:underline mt-2 md:mt-0 flex items-center gap-1 cursor-pointer"
+              className="text-sm font-bold text-[#D93619] hover:underline mt-2 md:mt-0 flex items-center gap-1 cursor-pointer"
             >
               <span>✕ ล้างตัวกรองทั้งหมด</span>
             </button>
@@ -187,33 +187,33 @@ const HomePage = () => {
         </div>
 
         {/* Interactive Filter Category Tabs */}
-        <div className="flex flex-wrap justify-start items-center gap-2 mb-8 bg-slate-200/60 p-1 rounded-2xl w-fit">
+        <div className="flex flex-wrap justify-start items-center gap-2 mb-8 bg-slate-200/60 p-1.5 rounded-2xl w-fit">
           <button 
             onClick={() => { setSelectedCategory("all"); }}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all duration-300 cursor-pointer ${
+            className={`px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
               selectedCategory === "all"
                 ? "bg-[#2F5792] text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-200"
+                : "text-slate-700 hover:bg-slate-200"
             }`}
           >
             📚 ทั้งหมด
           </button>
           <button 
             onClick={() => { setSelectedCategory("meet"); }}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all duration-300 cursor-pointer ${
+            className={`px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
               selectedCategory === "meet"
                 ? "bg-[#2F5792] text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-200"
+                : "text-slate-700 hover:bg-slate-200"
             }`}
           >
             🤝 นัดรับสินค้าได้
           </button>
           <button 
             onClick={() => { setSelectedCategory("ship"); }}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all duration-300 cursor-pointer ${
+            className={`px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
               selectedCategory === "ship"
                 ? "bg-[#2F5792] text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-200"
+                : "text-slate-700 hover:bg-slate-200"
             }`}
           >
             📦 จัดส่งพัสดุ
@@ -223,16 +223,16 @@ const HomePage = () => {
         {/* Dynamic Subject Recommendation Chips */}
         {books.length > 0 && (
           <div className="mb-10 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3.5">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-3.5">
               🔍 ค้นหาด่วนตามวิชายอดนิยม:
             </p>
             <div className="flex flex-wrap gap-2">
               <button 
                 onClick={() => setSelectedSubject("")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border cursor-pointer ${
                   !selectedSubject 
                     ? "bg-[#2F5792]/10 text-[#2F5792] border-[#2F5792]" 
-                    : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+                    : "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300"
                 }`}
               >
                 ทั้งหมด
@@ -243,10 +243,10 @@ const HomePage = () => {
                   <button 
                     key={subj}
                     onClick={() => setSelectedSubject(subj)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border cursor-pointer ${
                       selectedSubject === subj 
                         ? "bg-[#2F5792]/10 text-[#2F5792] border-[#2F5792] shadow-sm" 
-                        : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
+                        : "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300"
                     }`}
                   >
                     {subj}
@@ -277,13 +277,13 @@ const HomePage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <h3 className="text-base font-bold text-slate-700">ไม่พบหนังสือเรียนที่ระบุ</h3>
-            <p className="text-slate-400 text-xs mt-1 max-w-xs mx-auto font-medium">
+            <h3 className="text-lg font-bold text-slate-700">ไม่พบหนังสือเรียนที่ระบุ</h3>
+            <p className="text-slate-500 text-sm mt-1 max-w-xs mx-auto font-medium">
               ลองเปลี่ยนหมวดหมู่ตัวเลือก ตัวกรองวิชา หรือกดล้างตัวกรองทั้งหมดเพื่อเริ่มต้นเลือกซื้อใหม่อีกครั้ง
             </p>
             <button 
               onClick={() => { setSelectedCategory("all"); setSelectedSubject(""); }}
-              className="mt-5 btn btn-primary btn-sm bg-[#2F5792] text-white border-0 hover:bg-[#1A365D] rounded-xl font-bold px-6 py-2.5 h-auto cursor-pointer"
+              className="mt-5 btn btn-primary bg-[#2F5792] text-white border-0 hover:bg-[#1A365D] rounded-xl font-bold px-6 py-3 text-sm h-auto cursor-pointer"
             >
               ล้างตัวกรองทั้งหมด
             </button>

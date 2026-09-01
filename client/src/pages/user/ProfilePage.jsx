@@ -50,13 +50,13 @@ const ProfilePage = () => {
             {initials}
           </div>
           <div className="flex-1 text-center sm:text-left space-y-1">
-            <h1 className="text-xl font-black text-slate-800">{user?.fullName || "ข้อมูลนักศึกษา"}</h1>
-            <p className="text-sm text-slate-500 font-medium flex items-center justify-center sm:justify-start">
-              <User className="w-4 h-4 mr-1.5 text-slate-400" />
+            <h1 className="text-2xl font-black text-slate-800">{user?.fullName || "ข้อมูลนักศึกษา"}</h1>
+            <p className="text-base text-slate-600 font-medium flex items-center justify-center sm:justify-start">
+              <User className="w-4.5 h-4.5 mr-2 text-slate-400" />
               รหัสนักศึกษา: {user?.studentId}
             </p>
-            <p className="text-sm text-slate-500 font-medium flex items-center justify-center sm:justify-start">
-              <Mail className="w-4 h-4 mr-1.5 text-slate-400" />
+            <p className="text-base text-slate-600 font-medium flex items-center justify-center sm:justify-start">
+              <Mail className="w-4.5 h-4.5 mr-2 text-slate-400" />
               อีเมล: {user?.email}
             </p>
           </div>
@@ -64,34 +64,34 @@ const ProfilePage = () => {
 
         {/* Quick Actions / Navigation items */}
         <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm mb-6 space-y-4">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-50 pb-2 mb-3">
+          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2 mb-3">
             รายการของฉัน
           </h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <button 
               onClick={() => navigate('/user/BuyHistoryPage')}
-              className="flex items-center space-x-3 p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-xl transition-all text-left"
+              className="flex items-center space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-xl transition-all text-left"
             >
-              <div className="p-2.5 bg-blue-500/10 text-blue-600 rounded-lg">
-                <ShoppingBag className="w-5 h-5" />
+              <div className="p-3 bg-blue-500/10 text-blue-600 rounded-xl">
+                <ShoppingBag className="w-6 h-6" />
               </div>
               <div>
-                <span className="font-extrabold text-sm text-slate-800 block">ประวัติการซื้อ</span>
-                <span className="text-[10px] text-slate-400">ตรวจสอบหนังสือที่เคยซื้อ</span>
+                <span className="font-extrabold text-base text-slate-800 block">ประวัติการซื้อ</span>
+                <span className="text-xs text-slate-500 font-medium">ตรวจสอบหนังสือที่เคยซื้อ</span>
               </div>
             </button>
 
             <button 
               onClick={() => navigate('/user/SellHistoryPage')}
-              className="flex items-center space-x-3 p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-xl transition-all text-left"
+              className="flex items-center space-x-3.5 p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-xl transition-all text-left"
             >
-              <div className="p-2.5 bg-emerald-500/10 text-emerald-600 rounded-lg">
-                <BookOpen className="w-5 h-5" />
+              <div className="p-3 bg-emerald-500/10 text-emerald-600 rounded-xl">
+                <BookOpen className="w-6 h-6" />
               </div>
               <div>
-                <span className="font-extrabold text-sm text-slate-800 block">ประวัติการขาย</span>
-                <span className="text-[10px] text-slate-400">จัดการโพสต์และหนังสือที่ลงขาย</span>
+                <span className="font-extrabold text-base text-slate-800 block">ประวัติการขาย</span>
+                <span className="text-xs text-slate-500 font-medium">จัดการโพสต์และหนังสือที่ลงขาย</span>
               </div>
             </button>
           </div>
@@ -100,9 +100,9 @@ const ProfilePage = () => {
         {/* Logout button */}
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center justify-center space-x-2 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-all rounded-xl font-bold text-sm border border-red-500/20 active:scale-98"
+          className="w-full flex items-center justify-center space-x-2 py-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-600 transition-all rounded-xl font-bold text-base border border-red-500/20 active:scale-98 cursor-pointer"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="w-5 h-5" />
           <span>ออกจากระบบ</span>
         </button>
 
@@ -118,22 +118,22 @@ const ProfilePage = () => {
             </div>
             <div>
               <h3 className="font-extrabold text-lg text-slate-850">ออกจากระบบ</h3>
-              <p className="text-xs text-slate-400 font-semibold mt-0.5">ยืนยันต้องการออกจากระบบหรือไม่?</p>
+              <p className="text-sm text-slate-400 font-semibold mt-0.5">ยืนยันต้องการออกจากระบบหรือไม่?</p>
             </div>
           </div>
-          <p className="text-slate-500 font-semibold text-xs leading-relaxed mb-6">
+          <p className="text-slate-500 font-semibold text-sm leading-relaxed mb-6">
             เซสชันของคุณจะถูกทำลายและต้องเข้าสู่ระบบอีกครั้งเพื่อใช้งานบัญชีนี้ต่อ
           </p>
           <div className="flex gap-3">
             <button
               onClick={() => setShowLogoutConfirm(false)}
-              className="flex-1 py-3 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold text-xs transition-all duration-200 cursor-pointer text-center text-slate-600"
+              className="flex-1 py-3 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold text-sm transition-all duration-200 cursor-pointer text-center text-slate-600"
             >
               ยกเลิก
             </button>
             <button
               onClick={confirmLogout}
-              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs shadow-md shadow-red-500/10 hover:shadow-red-500/20 hover:scale-[1.01] transition-all duration-200 cursor-pointer text-center"
+              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-sm shadow-md shadow-red-500/10 hover:shadow-red-500/20 hover:scale-[1.01] transition-all duration-200 cursor-pointer text-center"
             >
               ออกจากระบบ
             </button>

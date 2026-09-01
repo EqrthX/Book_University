@@ -43,98 +43,89 @@ function BuyNowPage() {
     }, [navigate, user.userId])
 
   return (
-    <div className='bg-[#F5F5F5] min-h-screen pb-10 '>
+    <div className='bg-[#F5F5F5] min-h-screen pb-16 font-sans text-slate-800'>
                 
-        <div className='pt-35 px-6 md:px-30 '>
-            {/* icon กับ ข้อความ */}
+        <div className='container mx-auto px-4 md:px-8 pt-8 max-w-6xl'>
+            {/* Header */}
             <div className="flex items-center mb-6">
-                <ShoppingCart className="w-10 h-10 text-[#2d3695]" />
-                <h1 className="font-bold text-2xl ml-3">รายการสินค้า</h1>
+                <ShoppingCart className="w-8 h-8 text-[#2d3695]" />
+                <h1 className="font-extrabold text-2xl ml-3 text-slate-800">สรุปการสั่งซื้อสินค้า</h1>
             </div>
 
-            {/* กรอบสีขาว */}
-            <div className="bg-white p-10 rounded-l-3xl shadow w-full ">
-                <div className="grid grid-cols-10 gap-6">
+            {/* Content Box */}
+            <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                    {/* ส่วนรายละเอียดหนังสือ */}
-                    <div className="col-span-4">
-                        <div className="flex items-start space-x-4">
+                    {/* Book Detail section */}
+                    <div className="lg:col-span-8">
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
 
-                            {/* รูปหนังสือ */}
-                            <img className="w-70 h-100 object-cover rounded-2xl " 
+                            {/* Book cover image */}
+                            <img className="w-44 h-60 object-cover rounded-2xl border border-slate-100 shadow-sm flex-shrink-0" 
                                 src={book.bookPic ? getImageUrl(book.bookPic) : "https://via.placeholder.com/300x400"} 
-                                alt="หนังสือ" />
+                                alt={book.titleBook || "หนังสือ"} />
 
-                            {/* กล่องรายละเอียดหนังสือ */}
-                            <div className="flex-1 space-y-2 ml-5">
-                                <p className="font-bold text-lg mt-20">{book.titleBook} </p>
+                            {/* Book details */}
+                            <div className="flex-1 space-y-3">
+                                {book.canMeet === "yes" ? (
+                                    <span className="inline-flex px-3.5 py-1.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-xl border border-amber-200">
+                                        🤝 สะดวกนัดรับได้
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex px-3.5 py-1.5 bg-rose-100 text-rose-800 text-xs font-bold rounded-xl border border-rose-200">
+                                        📦 จัดส่งพัสดุเท่านั้น
+                                    </span>
+                                )}
+                                
+                                <h3 className="font-extrabold text-xl md:text-2xl text-slate-800">{book.titleBook}</h3>
 
-                                <div className="flex items-start mt-5">
-                                    <span className="font-bold">รายละเอียด : {book.description}</span>
-                                    <p className="text-sm text-gray-700 ml-2 break-words max-w-xs"></p>
-                                </div>
-
-                                <div className="flex items-center mt-5">
-                                    <span className="font-bold">ราคา :</span>
-                                    <p className="text-sm text-gray-700 ml-2">{book.price} บาท</p>
+                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2">
+                                    <p className="text-sm font-semibold text-slate-700 leading-relaxed">
+                                        <span className="font-extrabold text-slate-900">รายละเอียด:</span> {book.description || "ไม่มีรายละเอียดสภาพเพิ่มเติม"}
+                                    </p>
+                                    <p className="text-base font-black text-[#2F5792] pt-1">
+                                        ราคาต่อเล่ม: {book.price} ฿
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* ปุ่มชำระเงินอยู่ตรงกลาง */}
-                    <div className="col-span-2 flex items-center justify-center">
-                        {book.canMeet === "yes" ? (
-                            <div className="bg-[#F8E94C] text-white px-6 py-2 mb-85 text-center ">
-                                นัดรับได้
-                            </div>
-                        ) : (
-                            <div className="bg-[#D93619] text-white px-6 py-2 mb-85 text-center ">
-                                นัดรับไม่ได้
-                            </div>
-                        )}
-                    </div>
-
-                    {/* สรุปรายการสั่งซื้อ อยู่ด้านขวา */}
-                    <div className="col-span-4 bg-gray-100 p-4 border flex flex-col h-full">
-                        <h2 className="text-lg font-bold mb-4 text-center">สรุปรายการสั่งซื้อ</h2>
-                        <p className="w-full h-[1px] bg-black" />
-                        <div className="text-gray-700 space-y-2 mt-5">
-                            <div className="grid grid-cols-3 gap-4">
-                                <p className="text-right pr-10">จำนวน</p>
-                                <p className="text-right font-bold rtl">{book.quantity}</p>
-                                <p className="text-left pl-12">ชิ้น</p>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4">
-                                <p className="text-right pr-7">ราคารวม</p>
-                                <p className="text-right font-bold rtl">{book.price * book.quantity}</p>
-                                <p className="text-left pl-12">บาท</p>
-                            </div>
-                        </div>
-                        <div className="text-gray-700 space-y-2 mt-auto">
-                            <p className="w-full h-[1px] border-t border-dashed border-black" />
-                            <div className="grid grid-cols-3 gap-4">
-                                <p className="text-lg font-bold text-center">ราคารวมสุทธิ</p>
-                                <p className="text-right font-bold rtl">{book.price * book.quantity}</p>
-                                <p className="text-left pl-12">บาท</p>
-                            </div>
-                        </div>
-                        <div className="mt-5">
-                          
-                        <Link 
-                            to = '/user/DeliveryPage'
-                            state= {{ 
-                                price: book.price,
-                                bookId: book.id,
-                                quantity: book.quantity
-                            }}
-                        >
-                            <button className="w-full bg-[#3D6299] text-white py-2 font-bold hover:bg-[#1e256f]">
-                                ดำเนินการชำระเงิน
-                            </button>
+                    {/* Invoice Summary section */}
+                    <div className="lg:col-span-4 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 flex flex-col justify-between h-full">
+                        <div>
+                            <h2 className="text-lg font-black mb-4 text-slate-800 border-b border-slate-200 pb-3">สรุปรายการสั่งซื้อ</h2>
                             
-                        </Link>
+                            <div className="space-y-3 text-slate-600 font-semibold text-base py-2">
+                                <div className="flex justify-between">
+                                    <span>จำนวนสินค้า</span>
+                                    <span className="font-extrabold text-slate-900">{book.quantity || 1} ชิ้น</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>ราคารวม</span>
+                                    <span className="font-extrabold text-slate-900">{book.price * (book.quantity || 1)} ฿</span>
+                                </div>
+                            </div>
 
+                            <div className="border-t border-dashed border-slate-300 pt-4 mt-4 flex justify-between items-center">
+                                <span className="text-base font-extrabold text-slate-900">ราคารวมสุทธิ</span>
+                                <span className="text-2xl font-black text-[#2F5792]">{book.price * (book.quantity || 1)} ฿</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-8">
+                            <Link 
+                                to='/user/DeliveryPage'
+                                state={{ 
+                                    price: book.price,
+                                    bookId: book.id,
+                                    quantity: book.quantity || 1
+                                }}
+                            >
+                                <button className="w-full bg-[#2F5792] hover:bg-[#1A365D] text-white py-3.5 px-4 font-extrabold text-base rounded-xl shadow-md shadow-blue-500/10 transition-all cursor-pointer">
+                                    ดำเนินการชำระเงิน
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

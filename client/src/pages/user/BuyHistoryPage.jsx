@@ -83,24 +83,24 @@ const BuyHistoryPage = () => {
                     <div className="flex items-center space-x-4">
                       <img className="w-16 h-20 object-cover rounded-lg border border-slate-100" src={bookPic} alt="หนังสือ" />
                       <div>
-                        <h4 className="font-extrabold text-slate-800 text-sm leading-snug">{book.titleBook}</h4>
-                        <p className="text-xs text-slate-400 mt-1 line-clamp-1">รายละเอียด: {book.description || "ไม่มีรายละเอียด"}</p>
-                        <p className="text-sm font-black text-blue-600 mt-1.5">{book.price} ฿</p>
+                        <h4 className="font-extrabold text-slate-800 text-base leading-snug">{book.titleBook}</h4>
+                        <p className="text-sm text-slate-500 mt-1 line-clamp-1">รายละเอียด: {book.description || "ไม่มีรายละเอียด"}</p>
+                        <p className="text-base font-black text-blue-600 mt-1.5">{book.price} ฿</p>
                       </div>
                     </div>
 
                     {/* Status badges */}
                     <div className="flex items-center justify-between w-full md:w-auto space-x-6">
                       <div className="flex items-center space-x-1.5 text-xs font-semibold">
-                        <span className="text-slate-400">สถานะ: </span>
-                        <span className={`px-2.5 py-0.5 rounded-full border ${currentStatus.bg}`}>
+                        <span className="text-slate-500">สถานะ: </span>
+                        <span className={`px-3 py-1 rounded-full border text-xs font-bold ${currentStatus.bg}`}>
                           {getMessagesStatus(book.delivery_status) || currentStatus.label}
                         </span>
                       </div>
 
-                      <button className="flex items-center space-x-0.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-white border border-slate-100 px-3 py-1.5 rounded-xl transition-all shadow-sm">
+                      <button className="flex items-center space-x-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-white border border-slate-200 px-3.5 py-2 rounded-xl transition-all shadow-sm">
                         <span>ดูรายละเอียด</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
 

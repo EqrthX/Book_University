@@ -63,7 +63,7 @@ const SellHistoryPage = () => {
           </div>
           <button 
             onClick={() => navigate('/user/AddBook')}
-            className="flex items-center space-x-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl transition-all shadow-md shadow-blue-500/10 active:scale-95"
+            className="flex items-center space-x-1.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 px-4.5 py-2.5 rounded-xl transition-all shadow-md shadow-blue-500/10 active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>ลงขายหนังสือเรียน</span>
@@ -72,7 +72,7 @@ const SellHistoryPage = () => {
 
         {/* Sales inventory container */}
         <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
-          <h2 className='text-sm font-extrabold text-slate-500 uppercase tracking-wider mb-6'>
+          <h2 className='text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-6'>
             รายการหนังสือที่ลงขายทั้งหมด
           </h2>
           
@@ -80,7 +80,7 @@ const SellHistoryPage = () => {
             {books.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 border border-dashed border-slate-100 rounded-xl bg-slate-50/50">
                 <ShoppingBag className="w-10 h-10 text-slate-300 mb-2" />
-                <p className="text-slate-400 text-sm font-medium">ยังไม่มีหนังสือที่ลงขายในขณะนี้</p>
+                <p className="text-slate-500 text-sm font-medium">ยังไม่มีหนังสือที่ลงขายในขณะนี้</p>
               </div>
             ) : (
               books.map((book) => {
@@ -91,22 +91,22 @@ const SellHistoryPage = () => {
                     <div className="flex items-center">
                       <img className="w-16 h-20 object-cover rounded-lg border border-slate-100" src={bookPic} alt="หนังสือ" />
                       <div className="ml-4 pr-4">
-                        <h4 className="font-extrabold text-slate-800 text-sm leading-snug">{book.titleBook}</h4>
-                        <p className="text-xs text-slate-400 mt-1 line-clamp-1">รายละเอียด: {book.description || "ไม่มีรายละเอียด"}</p>
-                        <p className="text-sm font-black text-blue-600 mt-1.5">{book.price} ฿</p>
+                        <h4 className="font-extrabold text-slate-800 text-base leading-snug">{book.titleBook}</h4>
+                        <p className="text-sm text-slate-500 mt-1 line-clamp-1">รายละเอียด: {book.description || "ไม่มีรายละเอียด"}</p>
+                        <p className="text-base font-black text-blue-600 mt-1.5">{book.price} ฿</p>
                       </div>
                     </div>
 
                     {/* Status and Edit/Delete controls */}
                     <div className="flex items-center justify-between w-full md:w-auto space-x-6">
                       <div className="flex items-center space-x-1.5 text-xs font-semibold">
-                        <span className="text-slate-400">นัดรับ: </span>
+                        <span className="text-slate-500">นัดรับ: </span>
                         {book.canMeet === "yes" ? (
-                          <span className="bg-yellow-50 text-yellow-700 border border-yellow-100 px-2 py-0.5 rounded-full">
+                          <span className="bg-yellow-100 text-yellow-800 border border-yellow-200 px-3 py-1 rounded-full font-bold">
                             ได้
                           </span>
                         ) : (
-                          <span className="bg-slate-100 text-slate-500 border border-slate-200 px-2 py-0.5 rounded-full">
+                          <span className="bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1 rounded-full font-bold">
                             ไม่ได้
                           </span>
                         )}
@@ -115,7 +115,7 @@ const SellHistoryPage = () => {
                       <div className="flex items-center space-x-2">
                         <Link 
                           to={`/user/UpdateABook/${book.id}`} 
-                          className="flex items-center space-x-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-white border border-slate-100 px-3 py-1.5 rounded-xl transition-all shadow-sm"
+                          className="flex items-center space-x-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-white border border-slate-200 px-3.5 py-2 rounded-xl transition-all shadow-sm"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                           <span>แก้ไข</span>
@@ -123,7 +123,7 @@ const SellHistoryPage = () => {
                         
                         <button 
                           onClick={() => deleteBook(book.id)} 
-                          className="flex items-center space-x-1 text-xs font-bold text-red-600 hover:text-red-700 bg-red-50/50 hover:bg-red-50 border border-red-100 px-3 py-1.5 rounded-xl transition-all"
+                          className="flex items-center space-x-1 text-xs font-bold text-red-600 hover:text-red-700 bg-red-50/50 hover:bg-red-50 border border-red-100 px-3.5 py-2 rounded-xl transition-all cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                           <span>ลบ</span>

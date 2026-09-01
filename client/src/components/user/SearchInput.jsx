@@ -98,7 +98,7 @@ function SearchInput() {
         <div className="absolute top-full left-0 w-full mt-2 bg-white text-slate-800 shadow-2xl rounded-2xl border border-slate-100 z-[150] overflow-hidden max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
           {results.length > 0 ? (
             <div className="p-2 flex flex-col gap-1">
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider px-3.5 py-1.5 border-b border-slate-50">
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-wider px-3.5 py-1.5 border-b border-slate-50">
                 📚 หนังสือเรียนที่ค้นพบ ({results.length})
               </p>
               {results.map((book) => (
@@ -115,8 +115,8 @@ function SearchInput() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-slate-800 truncate">{book.titleBook}</p>
-                    <p className="text-[10px] text-slate-400 font-semibold truncate mt-0.5">
+                    <p className="text-sm font-bold text-slate-800 truncate">{book.titleBook}</p>
+                    <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
                       วิชา: {book.subjectCode || "ไม่มีรหัสวิชา"} • {book.price} ฿
                     </p>
                   </div>
@@ -126,7 +126,7 @@ function SearchInput() {
           ) : (
             <div className="p-6 text-center text-slate-400">
               <BookOpen className="w-8 h-8 mx-auto text-slate-300 mb-2 animate-bounce-subtle" />
-              <p className="text-xs font-bold">ไม่พบหนังสือเรียนที่ค้นหา</p>
+              <p className="text-sm font-bold">ไม่พบหนังสือเรียนที่ค้นหา</p>
             </div>
           )}
         </div>

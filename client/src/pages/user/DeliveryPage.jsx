@@ -156,7 +156,7 @@ function DeliveryPage() {
           </div>
           <div>
             <h1 className="font-extrabold text-2xl text-slate-800">วิธีการจัดส่งสินค้า</h1>
-            <p className="text-xs text-slate-400 font-semibold mt-1">เลือกช่องทางการรับสินค้าและกรอกรายละเอียดข้อมูลติดต่อ</p>
+            <p className="text-sm text-slate-500 font-semibold mt-1">เลือกช่องทางการรับสินค้าและกรอกรายละเอียดข้อมูลติดต่อ</p>
           </div>
         </div>
       </div>
@@ -174,10 +174,10 @@ function DeliveryPage() {
             <div className="flex items-center gap-4">
               <img src={Ems} alt="EMS" className="w-20 md:w-28 h-auto object-contain" />
               <div>
-                <h3 className="font-extrabold text-sm text-slate-800">จัดส่งไปรษณีย์ไทย (EMS)</h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">กทม. และปริมณฑล: <b>1 - 3 วัน</b></p>
-                <p className="text-[11px] text-slate-500">ต่างจังหวัด: <b>3 - 5 วัน</b></p>
-                <p className="text-[11px] text-red-500 font-bold mt-1">*ค่าจัดส่งคิดตามจริง 40 บาท</p>
+                <h3 className="font-extrabold text-base text-slate-800">จัดส่งไปรษณีย์ไทย (EMS)</h3>
+                <p className="text-xs text-slate-600 mt-0.5">กทม. และปริมณฑล: <b>1 - 3 วัน</b></p>
+                <p className="text-xs text-slate-600">ต่างจังหวัด: <b>3 - 5 วัน</b></p>
+                <p className="text-xs text-red-500 font-bold mt-1">*ค่าจัดส่งคิดตามจริง 40 บาท</p>
               </div>
             </div>
             <input
@@ -206,10 +206,10 @@ function DeliveryPage() {
                 className="w-20 md:w-28 h-auto object-contain"
               />
               <div>
-                <h3 className="font-extrabold text-sm text-slate-800">เจอกันพร้อมจ่าย (นัดรับ)</h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">นัดหมายวันเวลาและสถานที่รับสินค้า</p>
-                <p className="text-[11px] text-slate-500">ภายในมหาวิทยาลัยหอการค้าไทย (UTCC)</p>
-                <p className="text-[11px] text-emerald-600 font-bold mt-1">*ไม่มีค่าบริการจัดส่งเพิ่มเติม</p>
+                <h3 className="font-extrabold text-base text-slate-800">เจอกันพร้อมจ่าย (นัดรับ)</h3>
+                <p className="text-xs text-slate-600 mt-0.5">นัดหมายวันเวลาและสถานที่รับสินค้า</p>
+                <p className="text-xs text-slate-600">ภายในมหาวิทยาลัยหอการค้าไทย (UTCC)</p>
+                <p className="text-xs text-emerald-600 font-bold mt-1">*ไม่มีค่าบริการจัดส่งเพิ่มเติม</p>
               </div>
             </div>
             <input

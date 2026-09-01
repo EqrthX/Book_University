@@ -61,13 +61,13 @@ const SearchPage = () => {
 
         {/* Hero Content */}
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-left w-full">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-[#E28743] text-white mb-3.5 uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#E28743] text-white mb-3.5 uppercase tracking-wider">
             🔍 ผลการค้นหาหนังสือเรียน
           </span>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
             คำค้นหา: <span className="bg-gradient-to-r from-amber-400 to-[#3986DD] bg-clip-text text-transparent">"{searchKeyword}"</span>
           </h1>
-          <p className="text-slate-300 text-xs md:text-sm mt-2 font-semibold">
+          <p className="text-slate-200 text-sm md:text-base mt-2 font-semibold">
             มีรายการที่ตรงหรือใกล้เคียงวิชาเรียนทั้งหมด {books.length} รายการ
           </p>
         </div>
@@ -80,7 +80,7 @@ const SearchPage = () => {
           <div>
             <div className="flex items-center gap-2 mb-8 pb-3 border-b border-slate-200">
               <span className="w-2.5 h-6 bg-[#2F5792] rounded-full inline-block"></span>
-              <h2 className="text-lg font-black text-slate-800">หนังสือที่ค้นพบ</h2>
+              <h2 className="text-xl font-black text-slate-800">หนังสือที่ค้นพบ</h2>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 gap-y-10">
@@ -96,13 +96,13 @@ const SearchPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <h3 className="text-base font-bold text-slate-700">ไม่พบหนังสือเรียนที่ค้นหา</h3>
-            <p className="text-slate-400 text-xs mt-1 max-w-xs mx-auto font-semibold leading-relaxed">
+            <h3 className="text-lg font-bold text-slate-700">ไม่พบหนังสือเรียนที่ค้นหา</h3>
+            <p className="text-slate-500 text-sm mt-1 max-w-xs mx-auto font-semibold leading-relaxed">
               ไม่พบข้อมูลหนังสือเรียนตามรหัสวิชาหรือชื่อหนังสือที่ระบุ ลองตรวจสอบตัวสะกดใหม่อีกครั้ง หรือกลับไปที่หน้าหลักเพื่อเริ่มต้นหาใหม่
             </p>
             <button
               onClick={() => navigate('/user/HomePage')}
-              className="mt-6 btn btn-primary btn-sm bg-[#2F5792] text-white border-0 hover:bg-[#1A365D] rounded-xl font-bold px-6 py-2.5 h-auto cursor-pointer"
+              className="mt-6 btn btn-primary bg-[#2F5792] text-white border-0 hover:bg-[#1A365D] rounded-xl font-bold px-6 py-3 text-sm h-auto cursor-pointer"
             >
               กลับหน้าหลัก
             </button>

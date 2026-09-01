@@ -123,7 +123,7 @@ function NotificationPage() {
             </div>
             <div>
               <h1 className="font-extrabold text-2xl text-slate-800">การแจ้งเตือนของฉัน</h1>
-              <p className="text-xs text-slate-400 font-semibold mt-1">
+              <p className="text-sm text-slate-500 font-semibold mt-1">
                 ติดตามอัปเดตสถานะและข้อมูลการทำธุรกรรมของคุณ
               </p>
             </div>
@@ -132,7 +132,7 @@ function NotificationPage() {
           {notification.some(n => n.status === "unread") && (
             <button
               onClick={markAllAsRead}
-              className="flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl bg-white border border-slate-200 text-[#2F5792] hover:bg-slate-50 font-bold text-xs shadow-sm hover:shadow transition-all duration-300 cursor-pointer w-full sm:w-auto hover:border-slate-300"
+              className="flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl bg-white border border-slate-200 text-[#2F5792] hover:bg-slate-50 font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer w-full sm:w-auto hover:border-slate-300"
             >
               <CheckCircle2 className="w-4.5 h-4.5" />
               <span>อ่านทั้งหมด</span>
@@ -146,8 +146,8 @@ function NotificationPage() {
         {notification.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200 max-w-md mx-auto shadow-sm px-6">
             <Bell className="w-16 h-16 mx-auto text-slate-300 mb-3 animate-pulse" />
-            <h3 className="text-base font-bold text-slate-700">ไม่มีการแจ้งเตือน</h3>
-            <p className="text-slate-400 text-xs mt-1 font-semibold leading-relaxed">
+            <h3 className="text-lg font-bold text-slate-700">ไม่มีการแจ้งเตือน</h3>
+            <p className="text-slate-500 text-sm mt-1 font-semibold leading-relaxed">
               คุณจะได้รับการแจ้งเตือนที่นี่เมื่อมีความคืบหน้าเกี่ยวกับคำสั่งซื้อและหนังสือเรียนของคุณ
             </p>
           </div>
@@ -175,16 +175,16 @@ function NotificationPage() {
 
                   {/* Content block */}
                   <div className="flex-1 min-w-0 pr-4">
-                    <p className={`text-slate-800 text-sm md:text-base ${isUnread ? 'font-extrabold' : 'font-bold'}`}>
+                    <p className={`text-slate-800 text-base ${isUnread ? 'font-extrabold' : 'font-bold'}`}>
                       {item.title_message || "ไม่มีหัวข้อ"}
                     </p>
-                    <p className="text-slate-500 font-semibold text-xs md:text-sm mt-1 leading-relaxed break-words">
+                    <p className="text-slate-600 font-medium text-sm md:text-base mt-1 leading-relaxed break-words">
                       {item.message || "ไม่มีข้อความ"}
                     </p>
                     
                     {/* Timestamp */}
                     {item.created_at && (
-                      <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] text-slate-400 font-semibold mt-2.5">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400 font-semibold mt-2.5">
                         <span>{formatDate(item.created_at)}</span>
                         <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
                         <span>{formatTime(item.created_at)} น.</span>

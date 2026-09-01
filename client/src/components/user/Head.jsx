@@ -83,7 +83,7 @@ function Head() {
 
         {/* ข้อมูลโปรไฟล์ & dropdown */}
         <div className="flex items-center space-x-3">
-          <span className="hidden md:inline-block text-slate-600 font-semibold text-xs bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200/60 tracking-wider">
+          <span className="hidden md:inline-block text-slate-700 font-bold text-sm bg-slate-100 px-4 py-2 rounded-full border border-slate-200/60 tracking-wider">
             {studentId || "Student"}
           </span>
 
@@ -102,24 +102,24 @@ function Head() {
               className="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow-2xl bg-white border border-slate-100 rounded-2xl w-60 text-slate-700 animate-in fade-in slide-in-from-top-2 duration-200"
             >
               <div className="px-4 py-3 border-b border-slate-100 mb-1">
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">บัญชีผู้ใช้</p>
-                <p className="font-bold text-slate-800 truncate text-sm mt-0.5">{studentId || "รหัสนักศึกษา"}</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">บัญชีผู้ใช้</p>
+                <p className="font-bold text-slate-800 truncate text-base mt-0.5">{studentId || "รหัสนักศึกษา"}</p>
               </div>
               
               <li>
-                <Link to="/user/ProfilePage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold">
+                <Link to="/user/ProfilePage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-sm">
                   <UserRound className="w-4.5 h-4.5 text-slate-400" />
                   <span>โปรไฟล์ของฉัน</span>
                 </Link>
               </li>
               <li>
-                <Link to="/user/BuyHistoryPage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold">
+                <Link to="/user/BuyHistoryPage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-sm">
                   <ShoppingBag className="w-4.5 h-4.5 text-slate-400" />
                   <span>ประวัติการซื้อ</span>
                 </Link>
               </li>
               <li>
-                <Link to="/user/SellHistoryPage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold">
+                <Link to="/user/SellHistoryPage" className="flex items-center gap-3 py-2.5 px-3 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-sm">
                   <BookOpen className="w-4.5 h-4.5 text-slate-400" />
                   <span>ประวัติการขาย</span>
                 </Link>
@@ -130,7 +130,7 @@ function Head() {
               <li>
                 <button 
                   onClick={handleLogout} 
-                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold w-full text-left"
+                  className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold w-full text-left text-sm"
                 >
                   <LogOut className="w-4.5 h-4.5" />
                   <span>ออกจากระบบ</span>
@@ -152,22 +152,22 @@ function Head() {
             </div>
             <div>
               <h3 className="font-extrabold text-lg text-slate-850">ออกจากระบบ</h3>
-              <p className="text-xs text-slate-400 font-semibold mt-0.5">ยืนยันต้องการออกจากระบบหรือไม่?</p>
+              <p className="text-sm text-slate-400 font-semibold mt-0.5">ยืนยันต้องการออกจากระบบหรือไม่?</p>
             </div>
           </div>
-          <p className="text-slate-500 font-semibold text-xs leading-relaxed mb-6">
+          <p className="text-slate-500 font-semibold text-sm leading-relaxed mb-6">
             เซสชันของคุณจะถูกทำลายและต้องเข้าสู่ระบบอีกครั้งเพื่อใช้งานบัญชีนี้ต่อ
           </p>
           <div className="flex gap-3">
             <button
               onClick={() => setShowLogoutConfirm(false)}
-              className="flex-1 py-3 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold text-xs transition-all duration-200 cursor-pointer text-center text-slate-600"
+              className="flex-1 py-3 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold text-sm transition-all duration-200 cursor-pointer text-center text-slate-600"
             >
               ยกเลิก
             </button>
             <button
               onClick={confirmLogout}
-              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs shadow-md shadow-red-500/10 hover:shadow-red-500/20 hover:scale-[1.01] transition-all duration-200 cursor-pointer text-center"
+              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-sm shadow-md shadow-red-500/10 hover:shadow-red-500/20 hover:scale-[1.01] transition-all duration-200 cursor-pointer text-center"
             >
               ออกจากระบบ
             </button>

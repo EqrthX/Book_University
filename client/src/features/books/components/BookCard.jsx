@@ -23,15 +23,15 @@ function BookCard({ book }) {
               {book.titleBook}
             </h3>
             {book.description && (
-              <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
+              <p className="mt-1 text-sm text-slate-600 line-clamp-2 leading-relaxed">
                 {book.description}
               </p>
             )}
           </div>
 
           <div className="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between">
-            <span className="text-lg font-black text-blue-600">{book.price} ฿</span>
-            <span className="text-[10px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+            <span className="text-xl font-black text-blue-600">{book.price} ฿</span>
+            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
               {book.status === 'available' ? 'พร้อมส่ง' : book.status}
             </span>
           </div>
