@@ -164,8 +164,8 @@ const AddBook = () => {
                             <Archive className="w-10 h-10 text-amber-400" />
                         </div>
                         <div>
-                            <h1 className="font-extrabold text-3xl">ลงขายหนังสือเรียน</h1>
-                            <p className="text-slate-200 text-xs md:text-sm mt-1 font-semibold">
+                            <h1 className="font-extrabold text-3xl md:text-4xl">ลงขายหนังสือเรียน</h1>
+                            <p className="text-slate-200 text-sm md:text-base mt-1.5 font-semibold">
                                 ส่งต่อหนังสือเรียนและชีทสรุปที่คุณไม่ได้ใช้แล้ว ให้กับรุ่นน้องและเพื่อนนักศึกษา UTCC
                             </p>
                         </div>
@@ -173,7 +173,7 @@ const AddBook = () => {
                     <div>
                         <button 
                             onClick={() => navigate('/user/Homepage')}
-                            className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs transition-colors backdrop-blur-sm border border-white/10 cursor-pointer"
+                            className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-sm transition-colors backdrop-blur-sm border border-white/10 cursor-pointer"
                         >
                             ← กลับสู่หน้าหลัก
                         </button>
@@ -190,7 +190,7 @@ const AddBook = () => {
                         
                         {/* Box 1: Selling Tips */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                            <h2 className="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+                            <h2 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
                                 <span className="p-1.5 bg-amber-50 rounded-lg text-amber-500">
                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -199,7 +199,7 @@ const AddBook = () => {
                                 เคล็ดลับการขายเร็ว
                             </h2>
                             
-                            <ul className="flex flex-col gap-4 text-xs font-semibold text-slate-600 leading-relaxed">
+                            <ul className="flex flex-col gap-4 text-sm font-medium text-slate-600 leading-relaxed">
                                 <li className="flex gap-2.5 items-start">
                                     <span className="text-[#2d3695] font-black">1.</span>
                                     <p>ถ่ายรูปปกหนังสือในพื้นที่ที่มีแสงสว่างชัดเจน ไม่เบลอ เพื่อสร้างความน่าเชื่อถือ</p>
@@ -217,7 +217,7 @@ const AddBook = () => {
 
                         {/* Box 2: Safety Guidelines */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                            <h2 className="font-bold text-slate-800 text-base mb-4 flex items-center gap-2">
+                            <h2 className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
                                 <span className="p-1.5 bg-emerald-50 rounded-lg text-emerald-500">
                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -226,7 +226,7 @@ const AddBook = () => {
                                 ข้อควรระวังความปลอดภัย
                             </h2>
                             
-                            <ul className="flex flex-col gap-4 text-xs font-semibold text-slate-600 leading-relaxed">
+                            <ul className="flex flex-col gap-4 text-sm font-medium text-slate-600 leading-relaxed">
                                 <li className="flex gap-2.5 items-start">
                                     <span className="text-red-500 font-bold">•</span>
                                     <p>แนะนำให้ใช้ช่องทางนัดรับสินค้าภายในขอบเขตรั้วมหาวิทยาลัยหอการค้าไทย (UTCC) ในช่วงเวลากลางวัน</p>
@@ -247,7 +247,7 @@ const AddBook = () => {
                                 
                                 {/* Photo Upload Row */}
                                 <div className="md:col-span-12 flex flex-col">
-                                    <h3 className="font-extrabold text-sm text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
+                                    <h3 className="font-extrabold text-base md:text-lg text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
                                         📸 รูปภาพหนังสือที่ต้องการขาย
                                     </h3>
                                     
@@ -259,10 +259,10 @@ const AddBook = () => {
                                                         <div className="p-3 bg-white rounded-xl shadow-sm mb-3 text-slate-400">
                                                             <FileDown className="w-6 h-6" />
                                                         </div>
-                                                        <p className="text-xs font-bold text-slate-500">คลิกเพื่ออัปโหลด</p>
-                                                        <p className="text-[9px] text-slate-400 font-semibold mt-1">ไฟล์ JPG, PNG</p>
+                                                        <p className="text-sm font-bold text-slate-600">คลิกเพื่ออัปโหลด</p>
+                                                        <p className="text-xs text-slate-400 font-semibold mt-1">ไฟล์ JPG, PNG</p>
                                                         
-                                                        <label className="mt-3 px-3 py-1.5 bg-[#2F5792] text-white hover:bg-[#1A365D] rounded-lg text-[10px] font-bold transition-all shadow-sm cursor-pointer">
+                                                        <label className="mt-3 px-4 py-2 bg-[#2F5792] text-white hover:bg-[#1A365D] rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer">
                                                             เลือกรูปภาพ
                                                             <input 
                                                                 className="hidden" 
@@ -277,7 +277,7 @@ const AddBook = () => {
                                                     <div className="relative w-full h-full min-h-[180px] flex items-center justify-center">
                                                         <img src={showBookPic} alt='Book Preview' className='w-full h-full object-contain rounded-xl max-h-[190px]'/>
                                                         
-                                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white cursor-pointer rounded-xl font-bold text-[10px] gap-1 backdrop-blur-xs">
+                                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white cursor-pointer rounded-xl font-bold text-xs gap-1 backdrop-blur-xs">
                                                             <FileDown className="w-5 h-5" />
                                                             <span>เปลี่ยนรูป</span>
                                                             <input 
@@ -305,27 +305,27 @@ const AddBook = () => {
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="md:col-span-7 text-xs text-slate-500 font-semibold flex flex-col gap-2">
-                                            <p className="text-slate-700 font-bold">เงื่อนไขการใส่รูปภาพปก:</p>
-                                            <p className="text-[11px]">• ต้องเห็นหน้าปกหนังสืออย่างเป็นทางการ หรือจุดที่ระบุรุ่นอย่างชัดเจน</p>
-                                            <p className="text-[11px]">• ขนาดภาพแนะนำ 600x800 พิกเซล (แนวตั้ง)</p>
-                                            <p className="text-[11px] text-red-500 font-bold">• กรุณาใส่ไฟล์รูปภาพนามสกุล JPEG หรือ PNG เท่านั้น</p>
+                                        <div className="md:col-span-7 text-xs md:text-sm text-slate-500 font-semibold flex flex-col gap-2">
+                                            <p className="text-slate-700 font-bold text-sm">เงื่อนไขการใส่รูปภาพปก:</p>
+                                            <p className="text-xs md:text-sm">• ต้องเห็นหน้าปกหนังสืออย่างเป็นทางการ หรือจุดที่ระบุรุ่นอย่างชัดเจน</p>
+                                            <p className="text-xs md:text-sm">• ขนาดภาพแนะนำ 600x800 พิกเซล (แนวตั้ง)</p>
+                                            <p className="text-xs md:text-sm text-red-500 font-bold">• กรุณาใส่ไฟล์รูปภาพนามสกุล JPEG หรือ PNG เท่านั้น</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Form Input details */}
                                 <div className="md:col-span-12 flex flex-col mt-4">
-                                    <h3 className="font-extrabold text-sm text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
+                                    <h3 className="font-extrabold text-base md:text-lg text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
                                         📝 รายละเอียดหนังสือ
                                     </h3>
                                     
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         {/* Book Title */}
                                         <div className="flex flex-col">
-                                            <label className="text-xs font-bold text-slate-700 mb-2">ชื่อหนังสือ <span className="text-red-500">*</span></label>
+                                            <label className="text-sm font-bold text-slate-700 mb-2">ชื่อหนังสือ <span className="text-red-500">*</span></label>
                                             <input 
-                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3 text-xs font-semibold transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
+                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3.5 text-sm font-medium transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
                                                 type="text"
                                                 name='titleBook'
                                                 placeholder="กรอกชื่อหนังสือเรียน เช่น หลักการตลาด..."
@@ -337,9 +337,9 @@ const AddBook = () => {
 
                                         {/* Book Price */}
                                         <div className="flex flex-col">
-                                            <label className="text-xs font-bold text-slate-700 mb-2">ราคาขาย (บาท) <span className="text-red-500">*</span></label>
+                                            <label className="text-sm font-bold text-slate-700 mb-2">ราคาขาย (บาท) <span className="text-red-500">*</span></label>
                                             <input 
-                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3 text-xs font-semibold transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
+                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3.5 text-sm font-medium transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
                                                 type="number"
                                                 name='price'
                                                 placeholder="เช่น 150..."
@@ -351,9 +351,9 @@ const AddBook = () => {
 
                                         {/* Subject Selection */}
                                         <div className="flex flex-col">
-                                            <label className="text-xs font-bold text-slate-700 mb-2">ตรงกับรายวิชา <span className="text-red-500">*</span></label>
+                                            <label className="text-sm font-bold text-slate-700 mb-2">ตรงกับรายวิชา <span className="text-red-500">*</span></label>
                                             <select 
-                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3 text-xs font-semibold transition-all text-slate-800 outline-none shadow-sm"
+                                                className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3.5 text-sm font-medium transition-all text-slate-800 outline-none shadow-sm"
                                                 required
                                                 name='subjectId'
                                                 value={valuesBook.subjectId}
@@ -374,13 +374,13 @@ const AddBook = () => {
 
                                         {/* Delivery/Pickup Selectors */}
                                         <div className="flex flex-col">
-                                            <label className="text-xs font-bold text-slate-700 mb-2">สะดวกนัดรับภายใน ม. หรือไม่ <span className="text-red-500">*</span></label>
+                                            <label className="text-sm font-bold text-slate-700 mb-2">สะดวกนัดรับภายใน ม. หรือไม่ <span className="text-red-500">*</span></label>
                                             
                                             <div className="grid grid-cols-2 gap-3">
-                                                <label className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl border-2 cursor-pointer transition-all ${
+                                                <label className={`flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border-2 cursor-pointer transition-all ${
                                                     canPickup === "yes" 
                                                         ? "border-[#2F5792] bg-[#2F5792]/5 text-[#2F5792] font-bold shadow-sm" 
-                                                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-500 text-xs font-semibold"
+                                                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-sm font-medium"
                                                 }`}>
                                                     <input 
                                                         type="radio" 
@@ -394,10 +394,10 @@ const AddBook = () => {
                                                     <span>🤝 นัดรับสินค้า</span>
                                                 </label>
 
-                                                <label className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl border-2 cursor-pointer transition-all ${
+                                                <label className={`flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl border-2 cursor-pointer transition-all ${
                                                     canPickup === "no" 
                                                         ? "border-[#2F5792] bg-[#2F5792]/5 text-[#2F5792] font-bold shadow-sm" 
-                                                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-500 text-xs font-semibold"
+                                                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-sm font-medium"
                                                 }`}>
                                                     <input 
                                                         type="radio" 
@@ -417,10 +417,10 @@ const AddBook = () => {
 
                                 {/* Description Box */}
                                 <div className="md:col-span-12 flex flex-col">
-                                    <label className="text-xs font-bold text-slate-700 mb-2">สภาพหนังสือ/รายละเอียดเพิ่มเติม</label>
+                                    <label className="text-sm font-bold text-slate-700 mb-2">สภาพหนังสือ/รายละเอียดเพิ่มเติม</label>
                                     <textarea 
                                         rows={4}
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3 text-xs font-semibold transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400 resize-none"
+                                        className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3.5 text-sm font-medium transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400 resize-none"
                                         name='description'
                                         placeholder="สภาพเหมือนใหม่ ไม่มีรอยขีดเขียน หรือมีรอยขีดเขียนจำนวนกี่หน้า..."
                                         value={valuesBook.description}
@@ -431,9 +431,9 @@ const AddBook = () => {
                                 {/* Conditional Email */}
                                 {canPickup === 'yes' && (
                                     <div className="md:col-span-12 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200">
-                                        <label className="text-xs font-bold text-slate-700 mb-2">อีเมลติดต่อกลับสำหรับนัดรับสินค้า <span className="text-red-500">*</span></label>
+                                        <label className="text-sm font-bold text-slate-700 mb-2">อีเมลติดต่อกลับสำหรับนัดรับสินค้า <span className="text-red-500">*</span></label>
                                         <input 
-                                            className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3 text-xs font-semibold transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
+                                            className="w-full bg-slate-50 border border-slate-200 focus:border-[#2F5792] focus:ring-2 focus:ring-[#2F5792]/10 rounded-xl px-4 py-3.5 text-sm font-medium transition-all text-slate-800 outline-none shadow-sm placeholder-slate-400"
                                             type="email"
                                             value={valuesBook.contactInfo}
                                             placeholder="เช่น student@utcc.ac.th"
@@ -449,14 +449,14 @@ const AddBook = () => {
                                     <button 
                                         type="button"
                                         onClick={() => navigate('/user/Homepage')}
-                                        className="w-full sm:w-auto px-6 py-2.5 border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 rounded-xl font-bold text-xs transition-colors cursor-pointer text-center"
+                                        className="w-full sm:w-auto px-6 py-3 border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-xl font-bold text-sm transition-colors cursor-pointer text-center"
                                     >
                                         ยกเลิก
                                     </button>
                                     <button 
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-[#2F5792] to-[#2B6CB0] border-0 text-white font-bold hover:shadow-lg rounded-xl text-xs transition-all shadow-md cursor-pointer text-center flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#2F5792] to-[#2B6CB0] border-0 text-white font-bold hover:shadow-lg rounded-xl text-sm transition-all shadow-md cursor-pointer text-center flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isSubmitting ? (
                                             <>

@@ -14,6 +14,7 @@ const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [showUsers, setShowUsers] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [nameUser, setNameUser] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,6 +65,21 @@ const ChatPage = () => {
       };
     }
   }, [user, searchParams, location.state]);
+
+  // Listen for online active users list from socket
+  useEffect(() => {
+    if (user?.id) {
+      const handleOnlineUsers = (users) => {
+        setOnlineUsers((users || []).map((id) => Number(id)));
+      };
+
+      socket.on("get_online_users", handleOnlineUsers);
+
+      return () => {
+        socket.off("get_online_users", handleOnlineUsers);
+      };
+    }
+  }, [user]);
 
   // Listener for incoming socket messages
   useEffect(() => {
@@ -165,6 +181,8 @@ const ChatPage = () => {
     );
   }
 
+  const isSelectedOnline = selectedUser && onlineUsers.includes(Number(selectedUser));
+
   return (
     <div className="container mx-auto px-4 md:px-8 max-w-6xl pb-10 font-sans text-slate-800">
       
@@ -195,6 +213,7 @@ const ChatPage = () => {
             ) : (
               showUsers.map((target) => {
                 const isSelected = selectedUser === target.id;
+                const isOnline = onlineUsers.includes(Number(target.id));
                 const initials = target.fullName.split(" ").map(n => n[0]).join("").toUpperCase();
 
                 return (
@@ -207,16 +226,26 @@ const ChatPage = () => {
                         : 'hover:bg-slate-100 text-slate-700'
                     }`}
                   >
-                    {/* Mock Avatar Circle */}
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                      isSelected ? 'bg-white/10 text-white' : 'bg-blue-50 text-blue-600'
-                    }`}>
-                      {initials}
+                    {/* Mock Avatar Circle with Online Badge */}
+                    <div className="relative flex-shrink-0">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                        isSelected ? 'bg-white/10 text-white' : 'bg-blue-50 text-blue-600'
+                      }`}>
+                        {initials}
+                      </div>
+                      <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 ${isSelected ? 'border-blue-600' : 'border-slate-50'} ${
+                        isOnline ? 'bg-emerald-500' : 'bg-slate-300'
+                      }`} />
                     </div>
+
                     <div className="overflow-hidden flex-1">
                       <p className="font-extrabold text-sm truncate">{target.fullName}</p>
-                      <span className={`text-[10px] block mt-0.5 ${isSelected ? 'text-blue-200' : 'text-slate-400'}`}>
-                        {target.user_role === 'student' ? 'นักศึกษา' : 'ผู้ใช้งาน'}
+                      <span className={`text-[10px] block mt-0.5 ${
+                        isSelected 
+                          ? 'text-blue-200' 
+                          : isOnline ? 'text-emerald-600 font-semibold' : 'text-slate-400'
+                      }`}>
+                        {isOnline ? '🟢 กำลังใช้งาน' : '⚪ ออฟไลน์'}
                       </span>
                     </div>
                   </div>
@@ -234,15 +263,27 @@ const ChatPage = () => {
               {/* Active User Header */}
               <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/20">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-black text-sm">
-                    {nameUser ? nameUser.split(" ").map(n => n[0]).join("").toUpperCase() : "US"}
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-black text-sm">
+                      {nameUser ? nameUser.split(" ").map(n => n[0]).join("").toUpperCase() : "US"}
+                    </div>
+                    <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                      isSelectedOnline ? 'bg-emerald-500' : 'bg-slate-300'
+                    }`} />
                   </div>
                   <div>
                     <h3 className="font-extrabold text-sm text-slate-800 leading-none">{nameUser}</h3>
-                    <span className="text-[10px] text-emerald-500 font-bold block mt-1.5 flex items-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-                      กำลังสนทนา
-                    </span>
+                    {isSelectedOnline ? (
+                      <span className="text-[10px] text-emerald-500 font-bold block mt-1.5 flex items-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
+                        กำลังใช้งานอยู่ (Online)
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-slate-400 font-bold block mt-1.5 flex items-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mr-1.5" />
+                        ออฟไลน์ (Offline)
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
