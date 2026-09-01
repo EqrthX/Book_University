@@ -135,7 +135,13 @@ const DetailsPage = () => {
                 <div className="flex flex-col gap-3">
                   <div className="grid grid-cols-2 gap-3">
                     <button 
-                      onClick={() => navigate('/user/Chat')}
+                      onClick={() => {
+                        if (book?.userId) {
+                          navigate(`/user/Chat?userId=${book.userId}`);
+                        } else {
+                          navigate('/user/Chat');
+                        }
+                      }}
                       className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-200 text-[#2F5792] hover:bg-slate-50 font-bold text-xs shadow-sm hover:shadow transition-all duration-300 cursor-pointer hover:border-slate-300"
                     >
                       <MessageSquareText className="w-4 h-4" />

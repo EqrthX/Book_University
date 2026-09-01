@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import socket from "../../util/socket.socket.js";
 import axios from '../../util/axios.js';
 import { UserRound, Menu, Handshake, Paperclip, X, Send, MessageSquare } from 'lucide-react';
@@ -8,6 +9,8 @@ import { getImageUrl } from '../../util/image.js';
 
 const ChatPage = () => {
   const { user, loading } = useAuth();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [showUsers, setShowUsers] = useState([]);
@@ -32,8 +35,24 @@ const ChatPage = () => {
       
       const fetchUsers = async () => {
         try {
-          const usersRes = await axios.get('/messages/show-all-users', { withCredentials: true });
-          setShowUsers(usersRes.data.users || []);
+          const targetIdFromQuery = searchParams.get("userId") || location.state?.userId;
+          const usersRes = await axios.get('/messages/show-all-users', {
+            params: targetIdFromQuery ? { userId: targetIdFromQuery } : {},
+            withCredentials: true
+          });
+          const userList = usersRes.data.users || [];
+          setShowUsers(userList);
+
+          if (targetIdFromQuery) {
+            const targetId = Number(targetIdFromQuery);
+            const targetUser = userList.find((u) => u.id === targetId);
+            if (targetUser) {
+              setSelectedUser(targetUser.id);
+              setNameUser(targetUser.fullName);
+            } else if (targetId !== user.id) {
+              setSelectedUser(targetId);
+            }
+          }
         } catch (error) {
           console.error("Error fetching chat users:", error);
         }
@@ -44,7 +63,7 @@ const ChatPage = () => {
         socket.off("connect", handleConnect);
       };
     }
-  }, [user]);
+  }, [user, searchParams, location.state]);
 
   // Listener for incoming socket messages
   useEffect(() => {

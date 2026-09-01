@@ -7,8 +7,9 @@ export const showAllUsersToChat = async (req, res) => {
         const limit = req.query.limit ? parseInt(req.query.limit, 10) : 50;
         const page = req.query.page ? parseInt(req.query.page, 10) : 1;
         const offset = req.query.offset ? parseInt(req.query.offset, 10) : (page - 1) * limit;
+        const targetUserId = req.query.targetUserId || req.query.userId;
 
-        const rows = await messagesService.getAllUsersToChat(userId, limit, offset);
+        const rows = await messagesService.getAllUsersToChat(userId, limit, offset, targetUserId);
 
         return res.status(200).json({
             message: "แสดงผู้ใช้งานทั้งหมด",

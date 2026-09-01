@@ -2,11 +2,11 @@ import { User, Message } from "../models/index.js";
 import { Op } from "sequelize";
 
 // ดึงผู้ใช้งานทั้งหมดที่เป็นนักเรียน ยกเว้นตัวเอง
-export const getAllUsersToChat = async (userId, limit = 50, offset = 0) => {
+export const getAllUsersToChat = async (userId, limit = 50, offset = 0, targetUserId = null) => {
     const lim = Math.max(1, parseInt(limit, 10) || 50);
     const off = Math.max(0, parseInt(offset, 10) || 0);
 
-    return await User.findAll({
+    const users = await User.findAll({
         where: {
             user_role: "student",
             id: { [Op.ne]: userId }
@@ -15,6 +15,18 @@ export const getAllUsersToChat = async (userId, limit = 50, offset = 0) => {
         offset: off,
         raw: true
     });
+
+    if (targetUserId) {
+        const targetIdNum = parseInt(targetUserId, 10);
+        if (targetIdNum && targetIdNum !== userId && !users.some(u => u.id === targetIdNum)) {
+            const targetUser = await User.findByPk(targetIdNum, { raw: true });
+            if (targetUser) {
+                users.unshift(targetUser);
+            }
+        }
+    }
+
+    return users;
 };
 
 // บันทึกข้อความการสนทนาใหม่
