@@ -37,6 +37,17 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const loginGoogle = async () => {
+        setLoading(true)
+        try {
+            window.location.href = 'http://localhost:5001/api/auth/google';
+            console.log(res);
+
+        } catch (error) {
+            throw error
+        }
+    }
+
     const logoutUser = async () => {
         setLoading(true);
         try {
@@ -50,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login: loginUser, logout: logoutUser, checkAuth }}>
+        <AuthContext.Provider value={{ user, loading, login: loginUser, logout: logoutUser, checkAuth, loginGoogle }}>
             {children}
         </AuthContext.Provider>
     );

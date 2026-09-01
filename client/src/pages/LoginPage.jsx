@@ -8,18 +8,18 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { User, Lock, BookOpen } from "lucide-react";
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, loginGoogle } = useAuth();
   const [values, setValues] = useState({
     studentId: "",
     password: ""
-  }); 
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setValues({...values, [e.target.name]: e.target.value });
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -27,7 +27,7 @@ const LoginPage = () => {
     setIsLoading(true);
     setErrorMessage("");
 
-    if(!values.studentId || !values.password) {
+    if (!values.studentId || !values.password) {
       setErrorMessage("กรุณากรอกข้อมูลให้ครบ");
       setIsLoading(false);
       return;
@@ -37,14 +37,14 @@ const LoginPage = () => {
       const user = await login(values.studentId, values.password);
       const getRole = user.user_role || user.role;
 
-      if(getRole === "admin") {
+      if (getRole === "admin") {
         navigate('/admin/AdminHomepage');
-      } else if(getRole === "student") {
+      } else if (getRole === "student") {
         navigate('/user/Homepage');
       } else {
         setErrorMessage("ไม่พบสิทธิ์ของผู้ใช้บัญชีนี้");
       }
-      
+
       toast.success("เข้าสู่ระบบสำเร็จ");
     } catch (error) {
       const serverError = error.response?.data?.message || error.response?.data?.error;
@@ -59,10 +59,13 @@ const LoginPage = () => {
     }
   };
 
+  const handleGoogle = async (e) => {
+    loginGoogle()
+  }
   return (
     <div className="w-full min-h-screen bg-[#0d1527] flex flex-col relative overflow-hidden font-sans text-slate-100">
       {/* Background Graphic Patterns */}
-      <div 
+      <div
         className="absolute inset-0 z-0 bg-cover bg-center opacity-10"
         style={{ backgroundImage: `url(${BGUni})` }}
       />
@@ -71,7 +74,7 @@ const LoginPage = () => {
 
       {/* Header Navbar */}
       <nav className="bg-[#0f1b35]/80 backdrop-blur-md w-full h-[80px] flex items-center justify-between px-6 relative z-10 border-b border-white/5 shadow-lg">
-        <img src={BannerUni} className="h-12 w-auto object-contain" alt="UTCC Banner"/>
+        <img src={BannerUni} className="h-12 w-auto object-contain" alt="UTCC Banner" />
         <div className="flex items-center space-x-2 text-slate-400">
           <BookOpen className="w-5 h-5 text-blue-500" />
           <span className="font-semibold tracking-wide text-sm">UTCC Bookstore</span>
@@ -81,7 +84,7 @@ const LoginPage = () => {
       {/* Centered Login Card */}
       <div className="flex-1 flex items-center justify-center p-6 relative z-10">
         <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-3xl p-8 md:p-10 transition-all duration-300">
-          
+
           <div className="text-center mb-8">
             <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
               เข้าสู่ระบบ
@@ -94,7 +97,7 @@ const LoginPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            
+
             {/* Student ID Field */}
             <div className="flex flex-col gap-2">
               <label htmlFor="studentId" className="text-sm font-bold uppercase tracking-wider text-slate-300">
@@ -102,7 +105,7 @@ const LoginPage = () => {
               </label>
               <div className="relative flex items-center">
                 <User className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
-                <input 
+                <input
                   className="bg-white/5 w-full pl-12 pr-4 py-3.5 border border-white/10 rounded-xl text-slate-100 text-base placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
                   id="studentId"
                   name="studentId"
@@ -123,7 +126,7 @@ const LoginPage = () => {
               </div>
               <div className="relative flex items-center">
                 <Lock className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
-                <input 
+                <input
                   className="bg-white/5 w-full pl-12 pr-4 py-3.5 border border-white/10 rounded-xl text-slate-100 text-base placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 shadow-inner"
                   id="password"
                   name="password"
@@ -167,10 +170,7 @@ const LoginPage = () => {
           <button
             type="button"
             onClick={() => {
-              // TODO: Implement Google OAuth 2.0 redirection or SDK sign-in flow here.
-              // Example backend redirect:
-              // window.location.href = `${axios.defaults.baseURL}/auth/google`;
-              toast.success("ปุ่มล็อกอินด้วย Google (OAuth Scaffold) ถูกกดแล้ว! กรุณาเพิ่มการเชื่อมต่อ OAuth ใน LoginPage.jsx");
+              handleGoogle()
             }}
             className="w-full flex items-center justify-center gap-3 py-3 border border-white/10 hover:bg-white/5 rounded-xl text-slate-200 hover:text-white transition-all font-bold text-sm active:scale-98 cursor-pointer"
           >
