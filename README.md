@@ -33,7 +33,7 @@
 
 เพื่อความสะดวกในการตรวจและทดสอบระบบ คุณสามารถทดลองใช้งานแอปพลิเคชันเวอร์ชันที่อัปโหลดขึ้นเซิร์ฟเวอร์ออนไลน์ได้ทันทีโดยไม่ต้อง Setup ฐานข้อมูลลงบนเครื่องโลคอล:
 
-* 🌐 **เว็บไซต์หลัก (Frontend):** [https://book-university-frontend.vercel.app](https://your-vercel-domain-here.vercel.app) *(เปลี่ยนเป็น URL หน้าเว็บจริงของคุณ)*
+* 🌐 **เว็บไซต์หลัก (Frontend):** [https://book-university-omega.vercel.app](https://your-vercel-domain-here.vercel.app) *(เปลี่ยนเป็น URL หน้าเว็บจริงของคุณ)*
 * 🖥️ **เซิร์ฟเวอร์หลังบ้าน (Backend API):** [https://book-university-backend.railway.app](https://your-railway-domain-here.railway.app) *(เปลี่ยนเป็น URL หลังบ้านจริงของคุณ)*
 
 ### 🔑 บัญชีผู้ใช้งานสำหรับทดลองระบบ (Demo Credentials)
